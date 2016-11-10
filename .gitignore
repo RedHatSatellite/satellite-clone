@@ -1,0 +1,5 @@
+*.pyc
+*.retry
+*.tar.gz
+roles/sat6repro/files/*
+!roles/sat6repro/files/.gitkeep

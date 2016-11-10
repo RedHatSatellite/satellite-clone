@@ -1,0 +1,109 @@
+---
+- include_vars: main.yml
+
+# Check free space in root
+- name: Identify free space in root partition
+  shell: df -h | grep 'root'| awk '{print $4}' | cut -d'G' -f1
+  register: root_free_space
+- debug: msg="Free space in root partition is {{ root_free_space.stdout }}GB and required free space is {{ required_root_free_space }}GB"
+- name: Check if root has enough space
+  fail: msg="Your root partition should atleast have {{ required_root_free_space }}GB but it contains only {{ root_free_space.stdout }}GB"
+  when: root_free_space.stdout | int <= required_root_free_space | int
+
+# turn off firewall
+- name: turn off firewalld - rhel7
+  service: name=firewalld enabled=no state=stopped
+  when: ansible_distribution_major_version == "7"
+- name: turn off firewall - rhel6
+  command: "{{ item }}"
+  when: ansible_distribution_major_version == "6"
+  with_items:
+    - service iptables stop
+    - chkconfig iptables off
+
+# Update hostname
+- name: set host_name
+  hostname: name={{ hostname }}
+- name: check /etc/hostname
+  lineinfile: dest=/etc/hostname line={{ hostname }}
+  when: ansible_distribution_major_version == "7"
+- name: install libselinux-python for rhel6
+  yum: name=libselinux-python state=latest
+- name: create /etc/hosts
+  template: src=hosts.j2 dest=/etc/hosts
+- name: register host
+
+# Register/subscribe the VM
+  command: subscription-manager register --force --activationkey={{ activationkey }} --org {{ org }}
+- name: disable all repos
+  command: subscription-manager repos --disable "*"
+- name: Enable required repos
+  command: subscription-manager repos --enable rhel-{{ rhelversion }}-server-rpms --enable rhel-server-rhscl-{{ rhelversion }}-rpms --enable rhel-{{ rhelversion }}-server-satellite-{{ satelliteversion }}-rpms
+
+# Install vim for easy editing of config files later
+- name: Install vim
+  yum: name=vim state=latest
+
+# - name: repartition root to have more storage
+#   command: "{{ item }}"
+#   with_items:
+#     - umount /home
+#     - lvremove -f /dev/mapper/*home
+#     - sed -i '/home/d' /etc/fstab
+#     - lvresize -l +100%FREE /dev/mapper/*root
+#     - if uname -r | grep -q el6; then resize2fs -f /dev/mapper/*root; else xfs_growfs / && mount / -o inode64,remount; fi
+
+# Install Satellite packages
+- name: Install Satellite 6.1 packages
+  yum: name=katello state=latest
+  when: satelliteversion == 6.1
+- name: Install Satellite 6.2 packages
+  yum: name=satellite state=latest
+  when: satelliteversion == 6.2
+
+# Download backup tar files
+- name: Download backup data - config files
+  copy: src="{{ config_files_tar_file_name }}" dest=/tmp/config_files.tar.gz
+- name: Download backup data - pgsql
+  copy: src="{{ pgsql_data_tar_file_name }}" dest=/tmp/pgsql_data.tar.gz
+- name: Download backup data - mongod
+  copy: src="{{ mongo_data_tar_file_name }}" dest=/tmp/mongo_data.tar.gz
+
+# Run Satellite installer
+- name: untar config files
+  command: tar --selinux --overwrite -xvf /tmp/config_files.tar.gz  -C /
+- name: run Satellite 6.1 installer
+  command: katello-installer
+  when: satelliteversion == 6.1
+- name: run Satellite 6.2 installer
+  command: satellite-installer --scenario satellite
+  when: satelliteversion == 6.2
+
+# Restore postgresql and mongod
+- name: Restore postgresql and mongod data
+  command: "{{ item }}"
+  with_items:
+    - katello-service stop
+    - service postgresql stop
+    - tar --selinux --overwrite -xvf /tmp/pgsql_data.tar.gz -C /
+    - service postgresql start
+    - tar --selinux --overwrite -xvf /tmp/mongo_data.tar.gz -C /
+    - service mongod start
+    - sudo -u apache pulp-manage-db
+
+- name: Restart katello-service and test satellite
+  command: "{{ item }}"
+  with_items:
+    - katello-service start
+    - hammer ping
+
+- name: Reset admin password
+  command: foreman-rake permissions:reset password=changeme
+
+# - name: Reset katello index (Note: this might take hours!!!!!)
+#   command: foreman-rake katello:reindex --trace
+
+- name: update katello assets
+  file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
+- name: update katello bastion assets
+  file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
