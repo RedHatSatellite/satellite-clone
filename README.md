@@ -16,7 +16,7 @@ Satellite VM requirements:
 
 Workstation requirements:
 ------------------------
-3. Install `ansible` package in your workstation. For Red Hat boxes:
+3. Install `ansible` package in your workstation. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
 
     ```
      # yum install -y ansible
