@@ -3,3 +3,6 @@
 *.tar.gz
 roles/sat6repro/files/*
 !roles/sat6repro/files/.gitkeep
+
+#Log files
+change_hostname.log

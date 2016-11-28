@@ -1,0 +1,3 @@
+---
+# vars file for change_hostname
+NEW_HOSTNAME: changeme
