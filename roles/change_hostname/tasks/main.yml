@@ -1,0 +1,17 @@
+---
+# tasks file for change_hostname
+- include_vars: main.yml
+
+- name: Copy the ruby script
+  copy: src=change_hostname.rb dest=/tmp/change_hostname.rb owner=root group=root mode=755
+
+- debug: msg="This script may take a long time.  Once the execution starts you can tail changehostname.log to see what is going on."
+
+- name: Execute script
+  command: /tmp/change_hostname.rb {{ NEW_HOSTNAME }}
+  register: output
+
+- name: copy logs to current directory - change_hostname.log
+  local_action: copy content={{ output.stdout }} dest=./change_hostname.log
+
+- debug: msg="Script run completed. Look at changehostname.log for more information."

@@ -1,6 +1,8 @@
 This project can be used to quickly setup Satellite 6.1 or 6.2 install with the backup Satellite data.
 
-## Pre-requisites:
+## RUN CLONE PLAYBOOK:
+
+### Pre-requisites:
 
 ### Satellite VM requirements:
 
@@ -32,7 +34,7 @@ This project can be used to quickly setup Satellite 6.1 or 6.2 install with the 
 9. Run the ansible playbook:
 
     ```console
-      # ansible-playbook -i inventory deploy-playbook.yml
+      # ansible-playbook -i inventory deploy-clone-playbook.yml
     ```
 **Note:** The playbook run installs the Satellite and may may take a while to complete.
 
@@ -51,3 +53,12 @@ This project can be used to quickly setup Satellite 6.1 or 6.2 install with the 
 9. Untar pgsql, mongo data tar files. Restart required services.
 10. Update the Satellite default password for admin to `changeme`.
 11. Fix the katello assets link which point to an invalid path.
+
+
+## RUN HOSTNAME CHANGE PLAYBOOK:
+1. Update the required sections in `roles/change_hostname/vars/main.yml`.
+2. Update the `inventory` file under the root of this project to add your Satellite VM's ip address.
+3. Run the ansible playbook:
+    ```console
+      # ansible-playbook -i inventory deploy-hostname-playbook.yml
+    ```
