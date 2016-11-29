@@ -105,5 +105,7 @@
 
 - name: update katello assets
   file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
+  when: satelliteversion == 6.1
 - name: update katello bastion assets
   file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
+  when: satelliteversion == 6.1
