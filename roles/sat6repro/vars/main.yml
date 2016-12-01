@@ -26,3 +26,6 @@ org: 111111
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
 required_root_free_space: 75
+
+# Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes
+disable_firewall: false
