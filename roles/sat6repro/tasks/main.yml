@@ -64,14 +64,18 @@
 # Download backup tar files
 - name: Download backup data - config files
   copy: src="{{ config_files_tar_file_name }}" dest=/tmp/config_files.tar.gz
+  when: perform_restore
 - name: Download backup data - pgsql
   copy: src="{{ pgsql_data_tar_file_name }}" dest=/tmp/pgsql_data.tar.gz
+  when: perform_restore
 - name: Download backup data - mongod
   copy: src="{{ mongo_data_tar_file_name }}" dest=/tmp/mongo_data.tar.gz
+  when: perform_restore
 
 # Run Satellite installer
 - name: untar config files
   command: tar --selinux --overwrite -xvf /tmp/config_files.tar.gz  -C /
+  when: perform_restore
 - name: run Satellite 6.1 installer
   command: katello-installer
   when: satelliteversion == 6.1
@@ -90,6 +94,7 @@
     - tar --selinux --overwrite -xvf /tmp/mongo_data.tar.gz -C /
     - service mongod start
     - sudo -u apache pulp-manage-db
+  when: perform_restore
 
 - name: Restart katello-service and test satellite
   command: "{{ item }}"

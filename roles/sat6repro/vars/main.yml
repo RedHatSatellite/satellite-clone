@@ -13,6 +13,7 @@ satelliteversion: 6.1
 
 # Place the Satellite backup files only in satellite-clone/roles/sat6repro/files folder.
 # NOTE: Just type the file names here and don't include the path names.
+perform_restore: true
 config_files_tar_file_name: config_files.tar.gz
 pgsql_data_tar_file_name: pgsql_data.tar.gz
 mongo_data_tar_file_name: mongo_data.tar.gz
