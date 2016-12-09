@@ -44,15 +44,6 @@
 - name: Install vim
   yum: name=vim state=latest
 
-# - name: repartition root to have more storage
-#   command: "{{ item }}"
-#   with_items:
-#     - umount /home
-#     - lvremove -f /dev/mapper/*home
-#     - sed -i '/home/d' /etc/fstab
-#     - lvresize -l +100%FREE /dev/mapper/*root
-#     - if uname -r | grep -q el6; then resize2fs -f /dev/mapper/*root; else xfs_growfs / && mount / -o inode64,remount; fi
-
 # Install Satellite packages
 - name: Install Satellite 6.1 packages
   yum: name=katello state=latest
