@@ -15,6 +15,7 @@
 
 - name: Restore pulp data (this may take a long time!)
   command: tar --selinux --overwrite -xvf /tmp/pulp_data.tar -C /
+  when: include_pulp_data
 
 - name: Start mongod
   service: name=mongod state=started

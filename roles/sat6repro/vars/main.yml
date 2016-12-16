@@ -17,13 +17,17 @@ perform_restore: true
 config_files_tar_file_name: config_files.tar.gz
 pgsql_data_tar_file_name: pgsql_data.tar.gz
 mongo_data_tar_file_name: mongo_data.tar.gz
+
+# Restoring a pulp_data.tar file from a backup is optional. Change include_pulp_data to false to skip.
+# If you skip this step, repositories will still be set up, but will be unsynced.
+# Any manually uploaded content will have to be re-uploaded.
+include_pulp_data: false
 pulp_data_tar_file_name: pulp_data.tar
 
 
 # Registration info - Credentials to register your host to RH portal
 activationkey: changeme
 org: 111111
-pool: 111111
 
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
