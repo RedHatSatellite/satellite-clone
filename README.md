@@ -48,7 +48,11 @@ Now you can proceed to any of the following tasks:
 #### On the Control node:
 
 1. Download the data backup tar files - config, pgsql, mongodb in your workstation under the project folder - [satellite-clone/roles/sat6repro/files] (roles/sat6repro/files) so Ansible can find them.
-2. Update the required sections in [roles/sat6repro/vars/main.yml] (roles/sat6repro/vars/main.yml).
+2. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.
+
+   ```console
+     # cp roles/sat6repro/vars/main.sample.yml roles/sat6repro/vars/main.yml
+   ```
 3. Update the [inventory] (inventory) file under the root of this project to add the IP address of the blank host you are cloning to. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
 4. Run the ansible playbook:
 
