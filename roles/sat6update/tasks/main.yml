@@ -1,0 +1,30 @@
+---
+# Verified on:
+# Ansible Control node: Fedora 25
+# Ansible version: ansible-2.2.0.0-3.fc25.noarch
+# Satellite Version: 6.2.6
+# Satellite platform: RHEL 7.3
+
+# NOTE: THIS SHOULD ONLY BE USED FOR SATELLITE 6.2.X VERSIONS.
+
+- name: Stop katello-service
+  command: katello-service stop
+
+- name: Update yum
+  yum: name=* state=latest
+
+- name: Reboot Satellite6
+  shell: 'sleep 2 && shutdown -r now'
+  async: 1
+  poll: 0
+  ignore_errors: yes
+  when: reboot == "yes"
+
+- name: Waiting for server to come back
+  become: false
+  local_action: wait_for host={{ inventory_hostname }} port=22
+                search_regex=OpenSSH state=started delay=5
+  when: reboot == "yes"
+
+- name: Upgrade Satellite
+  command: satellite-installer --scenario satellite --upgrade
