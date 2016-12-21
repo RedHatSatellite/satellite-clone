@@ -3,7 +3,7 @@
 
 # Satellite host info
 
-# NOTE: Provide the *backed up* Satellite hostname only.  Using any other hostname will result in installation error.
+# NOTE: Provide the *backed up* Satellite hostname fqdn only.  Using any other hostname will result in installation error.
 hostname: satellite.example.com
 # rhel version of your VM. For rhel 7.x flavors, use 7, For rhel 6.x flavors, use 6.
 rhelversion: 7
@@ -18,11 +18,16 @@ config_files_tar_file_name: config_files.tar.gz
 pgsql_data_tar_file_name: pgsql_data.tar.gz
 mongo_data_tar_file_name: mongo_data.tar.gz
 
+# Restoring a pulp_data.tar file from a backup is optional. Change include_pulp_data to false to skip.
+# If you skip this step, repositories will still be set up, but will be unsynced.
+# Any manually uploaded content will have to be re-uploaded.
+include_pulp_data: false
+pulp_data_tar_file_name: pulp_data.tar
+
 
 # Registration info - Credentials to register your host to RH portal
-activationkey: ak1
+activationkey: changeme
 org: 111111
-
 
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.

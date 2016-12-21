@@ -1,0 +1,24 @@
+- name: Stop katello services
+  command: katello-service stop
+
+- name: Stop postgresql
+  service: name=postgresql state=stopped
+
+- name: Restore postgresql data
+  command: tar --selinux --overwrite -xvf /tmp/pgsql_data.tar.gz -C /
+
+- name: Start postgresql
+  service: name=postgresql state=started
+
+- name: Restore mongo data
+  command: tar --selinux --overwrite -xvf /tmp/mongo_data.tar.gz -C /
+
+- name: Restore pulp data (this may take a long time!)
+  command: tar --selinux --overwrite -xvf /tmp/pulp_data.tar -C /
+  when: include_pulp_data
+
+- name: Start mongod
+  service: name=mongod state=started
+
+- name: migrate pulp db
+  command: sudo -u apache pulp-manage-db

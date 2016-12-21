@@ -28,6 +28,7 @@ Ideally, you need two hosts to run this project:
 
 Now you can proceed to any of the following tasks:
 
+<!-- Do not change link names as they are linked to from external sites! -->
  * [Cloning a Satellite host](#cloning-a-satellite-host)
  * [Changing the hostname of a Satellite host](#changing-the-hostname-of-a-satellite-host)
 
@@ -53,6 +54,8 @@ Now you can proceed to any of the following tasks:
 
   1. The playbook run installs the Satellite and may may take a while to complete.
   2. To view the sequence of steps performed by this playbook see the [readme] (roles/sat6repro/README.md#sequence-of-steps-performed-by-this-playbook) section of the sat6repro role.
+  3. The playbook will reset the admin password to "changeme"
+  4. The installer will be run with `--foreman-proxy-dns false --foreman-proxy-dhcp false` to avoid configuration errors during the install. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
 
 ## Changing the Hostname of a Satellite host
 ### **NOTE: This script must be used for Satellite 6.2 only**
