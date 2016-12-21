@@ -10,3 +10,4 @@ change_hostname.log
 
 #Varies per deployment
 inventory
+roles/sat6repro/vars/main.yml
