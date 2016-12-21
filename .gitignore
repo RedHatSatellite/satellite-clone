@@ -7,3 +7,6 @@ roles/sat6repro/files/*
 
 #Log files
 change_hostname.log
+
+#Varies per deployment
+inventory
