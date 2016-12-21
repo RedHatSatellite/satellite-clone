@@ -53,7 +53,7 @@ Now you can proceed to any of the following tasks:
 4. Run the ansible playbook:
 
     ```console
-      # ansible-playbook -i inventory deploy-clone-playbook.yml
+      # ansible-playbook -i inventory satellite-clone-playbook.yml
     ```
   **Note:**
 
@@ -73,7 +73,7 @@ Now you can proceed to any of the following tasks:
 3. Run the ansible playbook:
 
     ```console
-      # ansible-playbook -i inventory deploy-hostname-playbook.yml
+      # ansible-playbook -i inventory satellite-hostname-playbook.yml
     ```
 4. If you have a capsule you will need to reregister it with RHSM and then run the following (replacing `<capsule-hostname>` with your capsule's hostname):
 
