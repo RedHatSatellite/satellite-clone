@@ -3,7 +3,7 @@
 
 # Check free space in root
 - name: Identify free space in root partition
-  shell: df -h | grep 'root'| awk '{print $4}' | cut -d'G' -f1
+  shell: df -h | grep '/$'| awk '{print $4}' | cut -d'G' -f1
   register: root_free_space
 - debug: msg="Free space in root partition is {{ root_free_space.stdout }}GB and required free space is {{ required_root_free_space }}GB"
 - name: Check if root has enough space
