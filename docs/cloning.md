@@ -12,7 +12,7 @@
 
   **Note** The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in [roles/sat6repro/vars/main.yml] (roles/sat6repro/vars/main.yml)
 
-#### On the Control node:
+#### On the Control node
 
 1. Move the data backup tar files - config, pgsql, mongodb to the Control Node  under the project folder - [satellite-clone/roles/sat6repro/files] (roles/sat6repro/files) so Ansible can find them.
 2. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.

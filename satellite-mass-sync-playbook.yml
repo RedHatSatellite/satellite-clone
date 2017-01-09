@@ -1,0 +1,4 @@
+- hosts: satellite6
+  remote_user: root
+  roles:
+    - mass-sync
