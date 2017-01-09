@@ -50,9 +50,9 @@ Now you can proceed to any of the following tasks:
 
 *Note:* The cloning playbook will work with or without the pulp_data.tar file from the backup.
 
-#### On the new blank host
+#### On the Destination node (blank host)
 
-1. Make sure that the blank host has adequate space and also make sure that the root partition has all the storage space. You may utilize this [script] (https://gist.githubusercontent.com/sthirugn/cdc34006ae280c344a15a474f7e35918/raw/28c33aa6ccf7ce39cad5692d44702b839023941a/reallocate.sh) if needed.
+1. Make sure that the Destination node has adequate space and also make sure that the root partition has all the storage space. You may utilize this [script] (https://gist.githubusercontent.com/sthirugn/cdc34006ae280c344a15a474f7e35918/raw/28c33aa6ccf7ce39cad5692d44702b839023941a/reallocate.sh) if needed.
 
   **Note** The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in [roles/sat6repro/vars/main.yml] (roles/sat6repro/vars/main.yml)
 
@@ -64,7 +64,8 @@ Now you can proceed to any of the following tasks:
    ```console
      # cp roles/sat6repro/vars/main.sample.yml roles/sat6repro/vars/main.yml
    ```
-3. Update the [inventory] (inventory) file under the root of this project to add the IP address of the blank host you are cloning to. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
+3. Add the IP address of the Destination node to the copied inventory file. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
+
 4. Run the ansible playbook:
 
     ```console
