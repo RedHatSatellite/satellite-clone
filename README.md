@@ -15,6 +15,11 @@ Ideally, you need two hosts to run this project:
 2. Make sure that the Control node can connect to the Satellite host via paswordless ssh.
 
 #### On the Control node:
+
+*Supported versions*
+- RHEL 6
+- RHEL 7
+
 1. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
 
   ```console
@@ -39,6 +44,12 @@ Now you can proceed to any of the following tasks:
 
 ## Cloning a Satellite host
 
+#### Prerequisites
+
+1. You will need files from a katello-backup (`katello-backup` on the `Satellite host`).
+
+*Note:* The cloning playbook will work with or without the pulp_data.tar file from the backup.
+
 #### On the new blank host
 
 1. Make sure that the blank host has adequate space and also make sure that the root partition has all the storage space. You may utilize this [script] (https://gist.githubusercontent.com/sthirugn/cdc34006ae280c344a15a474f7e35918/raw/28c33aa6ccf7ce39cad5692d44702b839023941a/reallocate.sh) if needed.
@@ -47,7 +58,7 @@ Now you can proceed to any of the following tasks:
 
 #### On the Control node:
 
-1. Download the data backup tar files - config, pgsql, mongodb in your workstation under the project folder - [satellite-clone/roles/sat6repro/files] (roles/sat6repro/files) so Ansible can find them.
+1. Move the data backup tar files - config, pgsql, mongodb to the Control Node  under the project folder - [satellite-clone/roles/sat6repro/files] (roles/sat6repro/files) so Ansible can find them.
 2. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.
 
    ```console
@@ -61,7 +72,7 @@ Now you can proceed to any of the following tasks:
     ```
   **Note:**
 
-  1. The playbook run installs the Satellite and may may take a while to complete.
+  1. The playbook installs Satellite and may may take a while to complete.
   2. To view the sequence of steps performed by this playbook see the [readme] (roles/sat6repro/README.md#sequence-of-steps-performed-by-this-playbook) section of the sat6repro role.
   3. The playbook will reset the admin password to "changeme"
   4. The installer will be run with `--foreman-proxy-dns false --foreman-proxy-dhcp false` to avoid configuration errors during the install. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
