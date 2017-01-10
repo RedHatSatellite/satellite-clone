@@ -91,11 +91,14 @@
 - include: restore.yml
   when: perform_restore
 
-- name: Restart katello-service and test satellite
-  command: "{{ item }}"
-  with_items:
-    - katello-service start
-    - hammer ping
+- name: Restart katello-service
+  command: katello-service start
+
+- name: Wait for foreman-tasks service to start
+  pause: minutes=5
+
+- name: Test Satellite
+  command: hammer ping
 
 - name: Reset admin password
   command: foreman-rake permissions:reset password=changeme
