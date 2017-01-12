@@ -28,7 +28,7 @@ Ideally, you need two hosts to run this project:
 2. git clone this project.
 
   ```console
-     # git clone git@github.com:RedHatSatellite/satellite-clone.git
+     # git clone https://github.com/RedHatSatellite/satellite-clone.git
   ```
 3. Create an inventory file named `inventory` (by copying `inventory.sample`) and udpate it as necessary:
 
