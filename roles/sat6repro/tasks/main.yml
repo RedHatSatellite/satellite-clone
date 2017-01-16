@@ -54,8 +54,6 @@
   yum: name=satellite state=latest
   when: satelliteversion == 6.2
 
-- name: "Install rsync on the Ansible Control Node"
-  local_action: yum name=rsync state=latest
 - name: "Install rsync on empty host"
   yum: name=rsync state=latest
 

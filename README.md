@@ -20,11 +20,17 @@ Ideally, you need two hosts to run this project:
 - RHEL 6
 - RHEL 7
 
-1. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
+1. Installation of required packages:
+   a. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
 
-  ```console
-     # yum install -y ansible
-  ```
+      ```console
+        # yum install -y ansible
+      ```
+   b. Since the playbook uses `synchronize` module, install `rsync` package on the Ansible Control node.
+
+      ```console
+        # yum install -y rsync
+      ```
 2. git clone this project.
 
   ```console
@@ -41,6 +47,7 @@ Now you can proceed to any of the following tasks:
 <!-- Do not change link names as they are linked to from external sites! -->
  * [Cloning a Satellite host](#cloning-a-satellite-host)
  * [Changing the hostname of a Satellite host](#changing-the-hostname-of-a-satellite-host)
+ * [Update Satellite to a new minor version](#update-satellite-to-a-new-minor-version)
 
 ## Cloning a Satellite host
 
