@@ -1,14 +1,9 @@
 ---
 - include_vars: main.yml
 
-# Check free space in root
-- name: Identify free space in root partition
-  shell: df -h | grep '/$'| awk '{print $4}' | cut -d'G' -f1
-  register: root_free_space
-- debug: msg="Free space in root partition is {{ root_free_space.stdout }}GB and required free space is {{ required_root_free_space }}GB"
-- name: Check if root has enough space
-  fail: msg="Your root partition should atleast have {{ required_root_free_space }}GB but it contains only {{ root_free_space.stdout }}GB"
-  when: root_free_space.stdout | int <= required_root_free_space | int
+# include pre_install_check
+- include: pre_install_check.yml
+  when: run_pre_install_check
 
 # turn off firewall
 - name: turn off firewalld - rhel7
