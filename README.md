@@ -20,7 +20,13 @@ Ideally, you need two hosts to run this project:
 - RHEL 6
 - RHEL 7
 
-1. Installation of required packages:
+1. git clone this project.
+
+   ```console
+     # git clone https://github.com/RedHatSatellite/satellite-clone.git
+   ```
+   NOTE: Optionally you may utilize the script [control_node_setup.sh] (./helpers/control_node_setup.sh) to perform some of the following mentioned steps.  The instructions to use this script are documented in the script itself.
+2. Installation of required packages:
    a. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
 
       ```console
@@ -31,19 +37,15 @@ Ideally, you need two hosts to run this project:
       ```console
         # yum install -y rsync
       ```
-2. git clone this project.
-
-  ```console
-     # git clone https://github.com/RedHatSatellite/satellite-clone.git
-  ```
 3. Create an inventory file named `inventory` (by copying `inventory.sample`) and update it as necessary:
 
-  ```console
-    # cp inventory.sample inventory
-  ```
+   ```console
+     # cp inventory.sample inventory
+   ```
 
 Now you can proceed to any of the following tasks:
 
+<!-- Do not change link names as they are linked to from external sites! -->
  * [Cloning a Satellite host](docs/cloning.md)
  * [Changing the hostname of a Satellite host](docs/hostname-change.md)
  * [Update Satellite to a new minor version](docs/minor-update.md)
