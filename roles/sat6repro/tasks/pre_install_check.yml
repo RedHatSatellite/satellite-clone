@@ -1,0 +1,14 @@
+---
+- name: find root partition's free space
+  when: item.mount == "/"
+  set_fact: root_free_space="{{ (item.size_available | int) / 1000000000}}"
+  with_items: "{{ hostvars[inventory_hostname] ['ansible_mounts'] }}"
+- debug:
+    msg: "Free space in root partition is {{ root_free_space }}GB and required
+          free space is atleast {{ required_root_free_space }}GB. ***NOTE:***
+          If you have more pulp data, it is your responsibility to check for
+          the required free space.  Perhaps you can increase the
+          required_root_free_space variable to a desired high value."
+- name: Check if root has enough space
+  fail: msg="Your root partition should atleast have {{ required_root_free_space }}GB but it contains only {{ root_free_space }}GB"
+  when: root_free_space | int <= required_root_free_space | int

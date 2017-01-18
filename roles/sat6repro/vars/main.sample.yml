@@ -39,3 +39,6 @@ disable_firewall: false
 # Run katello-reindex - This setting can optionally be used to run katello reindex after the Satellite install.
 # Note: If you are planning to clone your Satellite 6.1 and immediately upgrade to 6.2, you may choose to skip this step.
 run_katello_reindex: false
+
+# Run pre_install_check
+run_pre_install_check: true
