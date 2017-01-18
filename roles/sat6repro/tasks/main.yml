@@ -5,6 +5,10 @@
 - include: pre_install_check.yml
   when: run_pre_install_check
 
+# Install libselinux package
+- name: install libselinux-python for rhel6
+  yum: name=libselinux-python state=latest
+
 # turn off firewall
 - name: turn off firewalld - rhel7
   service: name=firewalld enabled=no state=stopped
@@ -32,10 +36,6 @@
   command: subscription-manager repos --disable "*"
 - name: Enable required repos
   command: subscription-manager repos --enable rhel-{{ rhelversion }}-server-rpms --enable rhel-server-rhscl-{{ rhelversion }}-rpms --enable rhel-{{ rhelversion }}-server-satellite-{{ satelliteversion }}-rpms
-
-# Install libselinux package
-- name: install libselinux-python for rhel6
-  yum: name=libselinux-python state=latest
 
 # Install vim for easy editing of config files later
 - name: Install vim
