@@ -5,16 +5,16 @@
   service: name=postgresql state=stopped
 
 - name: Restore postgresql data
-  command: tar --selinux --overwrite -xvf /tmp/pgsql_data.tar.gz -C /
+  command: tar --selinux --overwrite -xvf {{ backup_dir }}/pgsql_data.tar.gz -C /
 
 - name: Start postgresql
   service: name=postgresql state=started
 
 - name: Restore mongo data
-  command: tar --selinux --overwrite -xvf /tmp/mongo_data.tar.gz -C /
+  command: tar --selinux --overwrite -xvf {{ backup_dir }}/mongo_data.tar.gz -C /
 
 - name: Restore pulp data (this may take a long time!)
-  command: tar --selinux --overwrite -xvf /tmp/pulp_data.tar -C /
+  command: tar --selinux --overwrite -xvf {{ backup_dir }}/pulp_data.tar -C /
   when: include_pulp_data
 
 - name: Start mongod

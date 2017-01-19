@@ -12,16 +12,17 @@
 
   **Note** The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in [roles/sat6repro/vars/main.yml] (roles/sat6repro/vars/main.yml)
 
+2. Place the backup files in a folder on the Destination node. Also remember this folder path, as this needs to be updated in Control node config file (`backup_dir` variable in `roles/sat6repro/vars/main.yml`) later.
+
 #### On the Control node:
 
-1. Move the data backup tar files - config, pgsql, mongodb to the Control Node  under the project folder - [satellite-clone/roles/sat6repro/files] (roles/sat6repro/files) so Ansible can find them.
-2. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.
+1. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.
 
    ```console
      # cp roles/sat6repro/vars/main.sample.yml roles/sat6repro/vars/main.yml
    ```
+2. Update the folder path of the backup files on the Destination node in `backup_dir` variable in `roles/sat6repro/vars/main.yml`.
 3. Add the IP address of the Destination node to the copied inventory file. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
-
 4. Run the ansible playbook:
 
     ```console
@@ -33,5 +34,3 @@
   2. To view the sequence of steps performed by this playbook see the [readme] (roles/sat6repro/README.md#sequence-of-steps-performed-by-this-playbook) section of the sat6repro role.
   3. The playbook will reset the admin password to "changeme"
   4. The installer will be run with `--foreman-proxy-dns false --foreman-proxy-dhcp false` to avoid configuration errors during the install. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
-
-

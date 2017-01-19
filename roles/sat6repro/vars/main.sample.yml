@@ -10,22 +10,33 @@ rhelversion: 7
 # Satellite version.  Use 6.1 or 6.2
 satelliteversion: 6.1
 
-
-# Place the Satellite backup files only in satellite-clone/roles/sat6repro/files folder.
-# NOTE: Just type the file names here and don't include the path names.
+# Restoring of saved backup data is optional.
+# If `perform_restore` is set to true:
+#   - Restore of saved backup data is performed.  Make sure to also udpate `backup_dir` below.
+# If `perform_restore` is set to false:
+#   - This gives you an opportunity to install just Satellite without restoring backup data.
+#   - Warning: This beats the purpose of using the satellite-clone utility, but gives you an opportunity to play with a fresh Satellite install.
 perform_restore: true
-config_files_tar_file_name: config_files.tar.gz
-pgsql_data_tar_file_name: pgsql_data.tar.gz
-mongo_data_tar_file_name: mongo_data.tar.gz
 
-# Restoring a pulp_data.tar file from a backup is optional. Change include_pulp_data to false to skip.
-# If you skip this step, repositories will still be set up, but will be unsynced.
-# Any manually uploaded content will have to be re-uploaded.
-include_pulp_data: false
-pulp_data_tar_file_name: pulp_data.tar
+# The backup folder on your Destination node.
+# NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
+# WARNING:
+#    1. The backup files *must* be named exactly as mentioned below. If the file names don't match, the script will stop with an error.
+#       a. config_files.tar.gz
+#       b. pgsql_data.tar.gz
+#       c. mongo_data.tar.gz
+#    2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
+backup_dir: /backup
 
+# Restoring a pulp_data.tar file from a backup is optional.
+# If `include_pulp_data` is set to false:
+#   - repositories will still be set up, but will be unsynced.
+#   - Any manually uploaded content will have to be re-uploaded.
+# If `include_pulp_data` is set to true:
+#   - you must have `pulp_data.tar` file in the path specified `backup_dir` variable. Otherwise, the script will stop with an error.
+include_pulp_data: true
 
-# Registration info - Credentials to register your host to RH portal
+# Registration info - Credentials to register your host to RH portal.
 activationkey: changeme
 org: 111111
 
@@ -33,7 +44,7 @@ org: 111111
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
 required_root_free_space: 75
 
-# Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes
+# Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes.
 disable_firewall: false
 
 # Run katello-reindex - This setting can optionally be used to run katello reindex after the Satellite install.
