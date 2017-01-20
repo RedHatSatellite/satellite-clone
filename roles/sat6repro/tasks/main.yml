@@ -78,8 +78,12 @@
 - name: untar config files
   command: tar --selinux --overwrite -xvf /tmp/config_files.tar.gz  -C /
   when: perform_restore
+- name: Identify the default dhcp interface
+  shell: route | grep -m 1 '^default' | awk '{print $8}'
+  register: dhcp_interface
+  when: satelliteversion == 6.1
 - name: run Satellite 6.1 installer
-  command: katello-installer
+  command: katello-installer --capsule-dhcp-interface {{ dhcp_interface.stdout }}
   when: satelliteversion == 6.1
 - name: run Satellite 6.2 installer
   command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false
