@@ -15,7 +15,7 @@
 
 #### On the Destination node (blank host)
 
-1. Make sure that the Destination node has adequate space and also make sure that the root partition has all the storage space. You may utilize this [script] (https://gist.githubusercontent.com/sthirugn/cdc34006ae280c344a15a474f7e35918/raw/d6382b8ffabcd9b2a5ab07150201388abfb7e01f/reallocate.sh) if needed.
+1. Make sure that the Destination node has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh] (../helpers/reallocate.sh) if needed.
 
   **Note** The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `roles/sat6repro/vars/main.yml`
 
