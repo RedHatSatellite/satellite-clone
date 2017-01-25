@@ -5,8 +5,6 @@
 
 # NOTE: Provide the *backed up* Satellite hostname fqdn only.  Using any other hostname will result in installation error.
 hostname: satellite.example.com
-# rhel version of your VM. For rhel 7.x flavors, use 7, For rhel 6.x flavors, use 6.
-rhelversion: 7
 # Satellite version.  Use 6.1 or 6.2
 satelliteversion: 6.1
 
