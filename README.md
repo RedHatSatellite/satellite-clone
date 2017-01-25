@@ -26,12 +26,7 @@ Ideally, you need two hosts to run this project:
       ```console
         # yum install -y ansible
       ```
-   b. Since the playbook uses `synchronize` module, install `rsync` package on the Ansible Control node.
-
-      ```console
-        # yum install -y rsync
-      ```
-2. git clone this project.
+2. Git clone this project.
 
   ```console
      # git clone https://github.com/RedHatSatellite/satellite-clone.git
