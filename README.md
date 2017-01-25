@@ -20,17 +20,17 @@ Ideally, you need two hosts to run this project:
 - RHEL 6
 - RHEL 7
 
-1. Installation of required packages:
-   a. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
+1. git clone this project.
 
-      ```console
-        # yum install -y ansible
-      ```
-2. Git clone this project.
-
-  ```console
+   ```console
      # git clone https://github.com/RedHatSatellite/satellite-clone.git
-  ```
+   ```
+   NOTE: Optionally you may utilize the script [control_node_setup.sh] (../helpers/control_node_setup.sh) to perform step 2 below.  The instructions to use this script are documented in the script itself.
+2. Install `ansible` package on the Control node. For RHEL boxes, [access to EPEL] (https://access.redhat.com/solutions/3358) is required.
+
+   ```console
+     # yum install -y ansible
+   ```
 3. Create an inventory file named `inventory` (by copying `inventory.sample`) and update it as necessary:
 
   ```console
