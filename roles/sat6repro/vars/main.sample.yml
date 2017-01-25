@@ -39,6 +39,11 @@ include_pulp_data: true
 # Registration info - Credentials to register your host to RH portal.
 activationkey: changeme
 org: 111111
+# WARNING:
+# If register_to_portal is set to false:
+#   - the host will not be registered to RH portal.
+#   - it is the responsibility of the user to make the required repos available.  Otherwise, the script will stop with an error.
+register_to_portal: true
 
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.

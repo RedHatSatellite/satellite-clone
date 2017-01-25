@@ -8,6 +8,7 @@
 # Register/subscribe the VM
 - name: register host
   command: subscription-manager register --force --activationkey={{ activationkey }} --org {{ org }}
+  when: register_to_portal
 - name: disable all repos
   command: subscription-manager repos --disable "*"
 - name: Enable required repos
