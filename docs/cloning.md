@@ -3,8 +3,9 @@
  **Important Notes:**
 
   - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
-  - The playbook will reset the admin password to "changeme"
+  - The playbook will reset the admin password to "changeme".
   - The playbook installs Satellite and may may take a while to complete.
+  - Make sure that the destination node has the same OS version as the original Satellite from which the backup data was generated.
 
 #### Prerequisites
 
@@ -34,4 +35,3 @@
     ```console
       # ansible-playbook -i inventory satellite-clone-playbook.yml
     ```
- 
