@@ -1,5 +1,11 @@
 ## Cloning a Satellite host
 
+ **Important Notes:**
+
+  - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
+  - The playbook will reset the admin password to "changeme"
+  - The playbook installs Satellite and may may take a while to complete.
+
 #### Prerequisites
 
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite host`).
@@ -28,9 +34,4 @@
     ```console
       # ansible-playbook -i inventory satellite-clone-playbook.yml
     ```
-  **Note:**
-
-  1. The playbook installs Satellite and may may take a while to complete.
-  2. To view the sequence of steps performed by this playbook see the [readme] (roles/sat6repro/README.md#sequence-of-steps-performed-by-this-playbook) section of the sat6repro role.
-  3. The playbook will reset the admin password to "changeme"
-  4. The installer will be run with `--foreman-proxy-dns false --foreman-proxy-dhcp false` to avoid configuration errors during the install. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
+ 

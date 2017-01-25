@@ -54,10 +54,10 @@
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz  -C /
   when: perform_restore
 - name: run Satellite 6.1 installer
-  command: katello-installer
+  command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
   when: satelliteversion == 6.1
 - name: run Satellite 6.2 installer
-  command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false
+  command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false --foreman-proxy-tftp false
   when: satelliteversion == 6.2
 
 # restore backup data
