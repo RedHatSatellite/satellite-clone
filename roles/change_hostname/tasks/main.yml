@@ -1,17 +1,27 @@
 ---
-# tasks file for change_hostname
-- include_vars: main.yml
+- name: "check that variables are updated"
+  fail: msg="Please update the variables in roles/change_hostname/vars/main.yml"
+  when:
+    - new_hostname == "changeme"
+    - admin_username == "changeme"
+    - admin_password == "changeme"
 
-- name: Copy the ruby script
-  copy: src=change_hostname.rb dest=/tmp/change_hostname.rb owner=root group=root mode=755
+# need to change from my fork when https://github.com/Katello/katello-packaging/pull/323/files is merged
+- name: download katello-change-hostname script
+  get_url:
+    url: https://raw.githubusercontent.com/Katello/katello-packaging/master/katello/katello-change-hostname
+    dest: /tmp/katello-change-hostname
+    mode: 0755
 
-- debug: msg="This script may take a long time.  Once the execution starts you can tail changehostname.log to see what is going on."
+- name: run hostname change script
+  shell: yes | /tmp/katello-change-hostname {{ new_hostname }} --username {{ admin_username }} --password {{ admin_password }}
+  register: run_hostname_change
 
-- name: Execute script
-  shell: yes | /tmp/change_hostname.rb {{ NEW_HOSTNAME }}
-  register: output
+- name: copy logs
+  local_action: copy content={{ run_hostname_change.stdout }} dest=./logs/change_hostname.log
 
-- name: copy logs to current directory - change_hostname.log
-  local_action: copy content={{ output.stdout }} dest=./change_hostname.log
+- debug: msg="Hostname change completed successfully. Look at logs/change-hostname.log (in satellite-clone root directory) for further post-script instructions"
+  when: run_hostname_change | success
 
-- debug: msg="Hostname change completed. Look at changehostname.log for more information and further instructions to re-register capsules"
+- debug: msg="Hostname change failed. Check logs/change-hostname.log (in satellite-clone root directory) for details"
+  when: run_hostname_change | failed
