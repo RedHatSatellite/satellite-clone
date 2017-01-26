@@ -1,0 +1,1 @@
+- script: /roles/mass_repo_resync/scripts/mass_resync.rb {{ admin_username }} {{ admin_password }}

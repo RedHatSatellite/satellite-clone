@@ -31,7 +31,7 @@ Ideally, you need two hosts to run this project:
   ```console
      # git clone https://github.com/RedHatSatellite/satellite-clone.git
   ```
-3. Create an inventory file named `inventory` (by copying `inventory.sample`) and update it as necessary:
+3. Create an inventory file named `inventory` (by copying `inventory.sample`) and update it with the Destination node's IP address:
 
   ```console
     # cp inventory.sample inventory
@@ -42,3 +42,4 @@ Now you can proceed to any of the following tasks:
  * [Cloning a Satellite host](docs/cloning.md)
  * [Changing the hostname of a Satellite host](docs/hostname-change.md)
  * [Update Satellite to a new minor version](docs/minor-update.md)
+ * [Sync all repos on a Satellite](docs/mass-sync.md)

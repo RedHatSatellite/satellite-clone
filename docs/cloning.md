@@ -21,7 +21,7 @@
 
 2. Place the backup files in a folder on the Destination node. Also remember this folder path, as this needs to be updated in Control node config file (`backup_dir` variable in `roles/sat6repro/vars/main.yml`) later.
 
-#### On the Control node:
+#### On the Control node
 
 1. Create file `roles/sat6repro/vars/main.yml` (by copying `roles/sat6repro/vars/main.sample.yml`) and update it as necessary.
 
