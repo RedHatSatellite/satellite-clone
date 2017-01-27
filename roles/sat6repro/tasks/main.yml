@@ -99,4 +99,7 @@
 
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reindex --trace
-  when: run_katello_reindex or not include_pulp_data
+  when: run_katello_reindex or not include_pulp_data and satelliteversion == 6.1
+- name: Reset katello index - Note that this might take hours
+  command: foreman-rake katello:reimport --trace
+  when: run_katello_reindex or not include_pulp_data and satelliteversion == 6.2
