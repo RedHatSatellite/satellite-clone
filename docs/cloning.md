@@ -6,6 +6,7 @@
   - The playbook will reset the admin password to "changeme".
   - The playbook installs Satellite and may may take a while to complete.
   - Make sure that the destination node has the same OS version as the original Satellite from which the backup data was generated.
+  - If you are using NFS for storage and your pulp backup tar file is large (>150 gb), you might see memory errors while untaring pulp data.  In this case you can optionally choose to skip pulp restore (by setting `include_pulp_data` to `false` in `roles/sat6repro/vars/main.yml`)
 
 #### Prerequisites
 
