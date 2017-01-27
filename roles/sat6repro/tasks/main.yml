@@ -55,6 +55,11 @@
   yum: name=satellite state=latest
   when: satelliteversion == 6.2
 
+# Workaround for Issue #72 -  satellite-clone playbook fails if /etc/katello-installer isn't present.
+- name: Create /etc/katello-installer folder
+  file: path=/etc/katello-installer state=directory mode=0755
+  when: satelliteversion == 6.2
+
 # Run Satellite installer
 - name: untar config files
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz  -C /
