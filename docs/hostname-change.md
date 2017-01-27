@@ -1,4 +1,4 @@
-## Changing the Hostname of a Satellite host
+## Changing the Hostname of a Satellite server
 
 ### **Important warnings - read before running this playbook**
  - This script must be used for Satellite 6.2 only

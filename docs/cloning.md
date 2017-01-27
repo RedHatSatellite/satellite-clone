@@ -1,4 +1,4 @@
-## Cloning a Satellite host
+## Cloning a Satellite server
 
  **Important Notes:**
 
@@ -9,7 +9,7 @@
 
 #### Prerequisites
 
-1. You will need files from a katello-backup (`katello-backup` on the `Satellite host`).
+1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
 
 *Note:* The cloning playbook will work with or without the pulp_data.tar file from the backup.
 

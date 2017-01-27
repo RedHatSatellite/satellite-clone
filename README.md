@@ -2,17 +2,20 @@
 Satellite-clone contains simple Ansible playbooks that can be used to perform any of the following tasks:
 * Setup Satellite 6.1 or 6.2 install with the Satellite backup data.
 * Change the hostname on an existing Satellite install.
+* Perform a minor upgrade of an existing Satellite.
 
 ## Getting Started
 Ideally, you need two hosts to run this project:
 
 1. Ansible Control node (referred to as `Control node` in the rest of this document) is the host from which this ansible project is run.
-2. A `Satellite host` (for hostname change) or a `blank host` (to clone existing Satellite 6.1 or 6.2)
+2. Destination node - This must be one of the following:
+    - A blank machine - to clone an existing Satellite Server.
+    - A Satellite server - for a hostname change or for Updating Satellite.
 
 **Note**
 
-1. You can get away with using one host by optionally choosing to use the `Satellite host` as the `Control node`.
-2. Make sure that the Control node can connect to the Satellite host via paswordless ssh.
+1. You can get away with using one host by optionally choosing to use the `Destination node` as the `Control node`.
+2. Make sure that the `Control node` can connect to the `Destination node` via paswordless ssh.
 
 #### On the Control node:
 
@@ -39,6 +42,6 @@ Ideally, you need two hosts to run this project:
 
 Now you can proceed to any of the following tasks:
 
- * [Cloning a Satellite host](docs/cloning.md)
- * [Changing the hostname of a Satellite host](docs/hostname-change.md)
+ * [Cloning a Satellite server](docs/cloning.md)
+ * [Changing the hostname of a Satellite server](docs/hostname-change.md)
  * [Update Satellite to a new minor version](docs/minor-update.md)
