@@ -36,7 +36,10 @@ backup_dir: /backup
 #   - you must have `pulp_data.tar` file in the path specified `backup_dir` variable. Otherwise, the script will stop with an error.
 include_pulp_data: true
 
-# Registration info - Credentials to register your host to RH portal.
+# Registration info - Credentials to register your Satellite to Red Hat portal
+# You will need an activation key with a Satellite subscription
+# Activation keys can be created at https://access.redhat.com
+# For more information: https://access.redhat.com/management/activation_keys/new
 activationkey: changeme
 org: 111111
 
