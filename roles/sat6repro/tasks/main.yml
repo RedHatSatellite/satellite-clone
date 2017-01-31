@@ -1,6 +1,17 @@
 ---
 - include_vars: main.yml
 
+# Identify hostname from backup config file
+- name: Identify the hostname from the backup config tar file
+  shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'
+  register: backup_hostname_result
+- name: Check that the hostname is not none
+  fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ backup_hostname_result.stdout }}) doesn't look right"
+  when: backup_hostname_result.stderr
+- name: set hostname
+  set_fact:
+    hostname: "{{ backup_hostname_result.stdout }}"
+
 # include pre_install_check
 - include: pre_install_check.yml
   when: run_pre_install_check

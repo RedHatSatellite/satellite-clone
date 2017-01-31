@@ -2,6 +2,7 @@
 
  **Important Notes:**
 
+  - The playbook will update the cloned Satellite hostname to match the hostname of the original Satellite from which the backup is generated.
   - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
   - The playbook will reset the admin password to "changeme".
   - The playbook installs Satellite and may may take a while to complete.
