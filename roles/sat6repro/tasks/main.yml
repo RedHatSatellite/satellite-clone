@@ -63,7 +63,6 @@
 # Run Satellite installer
 - name: untar config files
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz  -C /
-  when: perform_restore
 - name: run Satellite 6.1 installer
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
   when: satelliteversion == 6.1
@@ -73,7 +72,6 @@
 
 # restore backup data
 - include: restore.yml
-  when: perform_restore
 
 - name: Restart katello-service
   command: katello-service start
