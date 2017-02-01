@@ -42,6 +42,6 @@ Ideally, you need two hosts to run this project:
 
 Now you can proceed to any of the following tasks:
 
- * [Cloning a Satellite server](docs/cloning.md)
- * [Changing the hostname of a Satellite server](docs/hostname-change.md)
- * [Update Satellite to a new minor version](docs/minor-update.md)
+ * [Cloning a Satellite server](docs/satellite-clone.md)
+ * [Changing the hostname of a Satellite server](docs/satellite-hostname.md)
+ * [Update Satellite to a new minor version](docs/satellite-update.md)

@@ -2,11 +2,11 @@
 *.retry
 *.tar.gz
 *.swp
-roles/sat6repro/files/*
-!roles/sat6repro/files/.gitkeep
+roles/satellite-clone/files/*
+!roles/satellite-clone/files/.gitkeep
 
 #Log files
-change_hostname.log
+satellite-hostname.log
 
 #Varies per deployment
 inventory
