@@ -1,6 +1,4 @@
 ---
-- include_vars: main.yml
-
 # Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
   shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'
@@ -15,6 +13,13 @@
 # include pre_install_check
 - include: pre_install_check.yml
   when: run_pre_install_check
+
+- name: "check that variables are updated"
+  fail: msg="Please update the variables in satellite-clone-vars.yml (after copying satellite-clone-vars.sample.yml)"
+  when:
+    - hostname == "satellite.example.com"
+    - activationkey == "changeme"
+    - org == "111111"
 
 # Register/subscribe the VM
 - name: register host
@@ -62,25 +67,25 @@
 # Install Satellite packages
 - name: Install Satellite 6.1 packages
   yum: name=katello state=latest
-  when: satelliteversion == 6.1
+  when: satellite_version == 6.1
 - name: Install Satellite 6.2 packages
   yum: name=satellite state=latest
-  when: satelliteversion == 6.2
+  when: satellite_version == 6.2
 
 # Workaround for Issue #72 -  satellite-clone playbook fails if /etc/katello-installer isn't present.
 - name: Create /etc/katello-installer folder
   file: path=/etc/katello-installer state=directory mode=0755
-  when: satelliteversion == 6.2
+  when: satellite_version == 6.2
 
 # Run Satellite installer
 - name: untar config files
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz  -C /
 - name: run Satellite 6.1 installer
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
-  when: satelliteversion == 6.1
+  when: satellite_version == 6.1
 - name: run Satellite 6.2 installer
   command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false --foreman-proxy-tftp false
-  when: satelliteversion == 6.2
+  when: satellite_version == 6.2
 
 # restore backup data
 - include: restore.yml
@@ -99,17 +104,17 @@
 
 - name: update katello assets
   file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
-  when: satelliteversion == 6.1
+  when: satellite_version == 6.1
 - name: update katello bastion assets
   file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
-  when: satelliteversion == 6.1
+  when: satellite_version == 6.1
 
 - include: reset_pulp_data.yml
   when: not include_pulp_data
 
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reindex --trace
-  when: run_katello_reindex or not include_pulp_data and satelliteversion == 6.1
+  when: run_katello_reindex or not include_pulp_data and satellite_version == 6.1
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reimport --trace
-  when: run_katello_reindex or not include_pulp_data and satelliteversion == 6.2
+  when: run_katello_reindex or not include_pulp_data and satellite_version == 6.2

@@ -1,22 +1,32 @@
 ---
-# vars file for satellite-clone
-
-# Satellite host info
-
+############## required variables ####################
+#
 # NOTE: Provide the *backed up* Satellite hostname fqdn only.  Using any other hostname will result in installation error.
 hostname: satellite.example.com
 # rhel version of your VM. For rhel 7.x flavors, use 7, For rhel 6.x flavors, use 6.
-rhelversion: 7
+rhel_version: 7
 # Satellite version.  Use 6.1 or 6.2
-satelliteversion: 6.1
+satellite_version: 6.2
 
+# Registration info - Credentials to register your Satellite to Red Hat portal
+# You will need an activation key with a Satellite subscription
+# Activation keys can be created at https://access.redhat.com
+# For more information: https://access.redhat.com/management/activation_keys/new
+activationkey: changeme
+org: 111111
+
+
+
+############## optional variables ####################
+#
 # Restoring of saved backup data is optional.
 # If `perform_restore` is set to true:
 #   - Restore of saved backup data is performed.  Make sure to also udpate `backup_dir` below.
 # If `perform_restore` is set to false:
 #   - This gives you an opportunity to install just Satellite without restoring backup data.
 #   - Warning: This beats the purpose of using the satellite-clone utility, but gives you an opportunity to play with a fresh Satellite install.
-perform_restore: true
+# uncomment the following line to override this option (defaults to true)
+#perform_restore: true
 
 # The backup folder on your Destination node.
 # NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
@@ -26,7 +36,9 @@ perform_restore: true
 #       b. pgsql_data.tar.gz
 #       c. mongo_data.tar.gz
 #    2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
-backup_dir: /backup
+#
+# uncomment the following line to override this option (defaults to /backup)
+#backup_dir: /backup
 
 # Restoring a pulp_data.tar file from a backup is optional.
 # If `include_pulp_data` is set to false:
@@ -34,26 +46,32 @@ backup_dir: /backup
 #   - Any manually uploaded content will have to be re-uploaded.
 # If `include_pulp_data` is set to true:
 #   - you must have `pulp_data.tar` file in the path specified `backup_dir` variable. Otherwise, the script will stop with an error.
-include_pulp_data: true
-
-# Registration info - Credentials to register your Satellite to Red Hat portal
-# You will need an activation key with a Satellite subscription
-# Activation keys can be created at https://access.redhat.com
-# For more information: https://access.redhat.com/management/activation_keys/new
-activationkey: changeme
-org: 111111
+#
+# uncomment the following line to override this option (defaults to true)
+#include_pulp_data: true
 
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
-required_root_free_space: 75
+#
+# uncomment the following line to override this option (defaults to 75)
+#required_root_free_space: 75
 
 # Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes.
-disable_firewall: false
+# uncomment the following line to override this option (defaults to false)
+#disable_firewall: false
 
 # Run katello-reindex - This setting can optionally be used to run katello reindex after the Satellite install.
 # Note: If you are planning to clone your Satellite 6.1 and immediately upgrade to 6.2, you may choose to skip this step.
 # A reindex will run automatically if you set include_pulp_data to false
-run_katello_reindex: false
+# uncomment the following line to override this option (defaults to false)
+#run_katello_reindex: false
 
 # Run pre_install_check
-run_pre_install_check: true
+# uncomment the following line to override this option (defaults to true)
+#run_pre_install_check: true
+
+# If register_to_portal is set to false:
+#   - the host will not be registered to RH portal.
+#   - it is the responsibility of the user to make the required repos available.  Otherwise, the script will stop with an error.
+# uncomment the following line to override this option (defaults to true)
+#register_to_portal: true

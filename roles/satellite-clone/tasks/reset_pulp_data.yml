@@ -6,8 +6,8 @@
 
 - name: reset pulp data in 6.2
   command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::PuppetModule.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all" | foreman-rake console
-  when: satelliteversion == 6.2
+  when: satellite_version == 6.2
 
 - name: reset pulp data in 6.1
   command: echo "Katello::Erratum.all.destroy_all" | foreman-rake console
-  when: satelliteversion == 6.1
+  when: satellite_version == 6.1
