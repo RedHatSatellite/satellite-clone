@@ -1,6 +1,6 @@
 ---
 - name: "check that variables are updated"
-  fail: msg="Please update the variables in roles/satellite-hostname/vars/main.yml"
+  fail: msg="Please update the variables in satellite-hostname-vars.yml"
   when:
     - new_hostname == "changeme"
     - admin_username == "changeme"

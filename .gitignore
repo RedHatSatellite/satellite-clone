@@ -2,11 +2,10 @@
 *.retry
 *.tar.gz
 *.swp
-roles/satellite-clone/files/*
-!roles/satellite-clone/files/.gitkeep
-
 #Log files
 satellite-hostname.log
 
 #Varies per deployment
 inventory
+satellite-clone-vars.yml
+satellite-hostname-vars.yml

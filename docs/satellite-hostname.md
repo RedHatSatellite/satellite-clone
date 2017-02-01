@@ -5,7 +5,7 @@
  - All capsules and satellite clients will have to be re-registered with Red Hat Subscription mananger, and capsules will have to be reinstalled after running this playbook
 
 #### On the Control node
-1. Create file `roles/satellite-hostname/vars/main.yml` by copying `roles/satellite-hostname/vars/main.sample.yml` and update it as necessary.
+1. Create file `satellite-hostname-vars.yml` by copying `satellite-hostname-vars.sample.yml` and update it as necessary.
 2. Update the `inventory` file under the root of this project to add your Satellite machine's ip address. If executing the playbook on localhost, add `ansible_connection=local` after the IP address
 3. Run the ansible playbook:
 

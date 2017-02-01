@@ -1,52 +1,15 @@
 ---
-# vars file for satellite-clone
-
-# Satellite host info
-
-# Satellite version.  Use 6.1 or 6.2
-satelliteversion: 6.1
-
-# The backup folder on your Destination node.
-# NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
-# WARNING:
-#    1. The backup files *must* be named exactly as mentioned below. If the file names don't match, the script will stop with an error.
-#       a. config_files.tar.gz
-#       b. pgsql_data.tar.gz
-#       c. mongo_data.tar.gz
-#    2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
-backup_dir: /backup
-
-# Restoring a pulp_data.tar file from a backup is optional.
-# If `include_pulp_data` is set to false:
-#   - repositories will still be set up, but will be unsynced.
-#   - Any manually uploaded content will have to be re-uploaded.
-# If `include_pulp_data` is set to true:
-#   - you must have `pulp_data.tar` file in the path specified `backup_dir` variable. Otherwise, the script will stop with an error.
-include_pulp_data: true
-
-# Registration info - Credentials to register your Satellite to Red Hat portal
-# You will need an activation key with a Satellite subscription
-# Activation keys can be created at https://access.redhat.com
-# For more information: https://access.redhat.com/management/activation_keys/new
+# more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
+hostname: satellite.example.com
+rhel_version: 7
+satellite_version: 6.1
 activationkey: changeme
 org: 111111
-# WARNING:
-# If register_to_portal is set to false:
-#   - the host will not be registered to RH portal.
-#   - it is the responsibility of the user to make the required repos available.  Otherwise, the script will stop with an error.
-register_to_portal: true
-
-# Misc info
-# This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
+perform_restore: true
+backup_dir: /backup
+include_pulp_data: true
 required_root_free_space: 75
-
-# Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes.
 disable_firewall: false
-
-# Run katello-reindex - This setting can optionally be used to run katello reindex after the Satellite install.
-# Note: If you are planning to clone your Satellite 6.1 and immediately upgrade to 6.2, you may choose to skip this step.
-# A reindex will run automatically if you set include_pulp_data to false
 run_katello_reindex: false
-
-# Run pre_install_check
 run_pre_install_check: true
+register_to_portal: true
