@@ -1,9 +1,11 @@
+#System files
 *.pyc
 *.retry
 *.tar.gz
 *.swp
+
 #Log files
-satellite-hostname.log
+logs/satellite-hostname.log
 
 #Varies per deployment
 inventory

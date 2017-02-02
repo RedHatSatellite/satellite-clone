@@ -3,17 +3,18 @@
  **Important Notes:**
 
   - The playbook will update the cloned Satellite hostname to match the hostname of the original Satellite from which the backup is generated.
-  - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings.
+  - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings after the playbook run.
   - The playbook will reset the admin password to "changeme".
-  - The playbook installs Satellite and may may take a while to complete.
-  - Make sure that the destination node has the same OS version as the original Satellite from which the backup data was generated.
+  - The playbook run may may take a while to complete.
+  - The destination node must have the same OS version as the original Satellite from which the backup data was generated.
+    *Note:* You can optionally choose to clone a rhel6 Satellite server to a rhel7 machine.  In this case, you must update the variable `rhel_migration` to true as explained later in this document. Please note that this scenario is supported only for *Satellite 6.2*.
   - If you are using NFS for storage and your pulp backup tar file is large (>150 gb), you might see memory errors while untaring pulp data.  In this case you can optionally choose to skip pulp restore (by setting `include_pulp_data` to `false` in `satellite-clone-vars.yml`)
 
 #### Prerequisites
 
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
-
-*Note:* The cloning playbook will work with or without the pulp_data.tar file from the backup.
+   - The playbook will work with or without the pulp_data.tar file from the backup.
+   - *Note:* For cloning a rhel6 Satellite server to a rhel7 machine: In addition to katello-backup created files, you also need foreman.dump and candlepin.dump.  You may utilize the included script [satellite-clone/helpers/postgresql_dump.sh)(../helpers/postgresql_dump.sh) if needed.
 
 #### On the Destination node (blank host)
 
@@ -31,8 +32,9 @@
      # cp satellite-clone-vars.sample.yml satellite-clone-vars.yml
    ```
 2. Update the folder path of the backup files on the Destination node in `backup_dir` variable in `satellite-clone-vars.yml`.
-3. Add the IP address of the Destination node to the copied inventory file. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
-4. Run the ansible playbook:
+3. For cloning a rhel6 Satellite server to a rhel7 machine, update the variable `rhel_migration` to true.
+4. Add the IP address of the Destination node to the copied inventory file. If executing the playbook on localhost, add `ansible_connection=local` after the IP address.
+5. Run the ansible playbook:
 
     ```console
       # ansible-playbook -i inventory satellite-clone-playbook.yml

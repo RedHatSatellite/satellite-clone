@@ -1,0 +1,24 @@
+---
+- name: Fail if the destination host is not rhel7 (for migration only)
+  fail: msg="For migration, the destination host must be rhel 7.  The supplied host has the major version {{ ansible_distribution_major_version }}"
+  when: ansible_distribution_major_version != "7"
+
+- name: Check the presence of foreman dump for satellite-migration (for migration only)
+  stat:
+    path: '{{ backup_dir }}/foreman.dump'
+    get_checksum: False
+    get_md5: False
+  register: foreman_dump_result
+- name: Fail if the foreman dump file is not present or not accessible (for migration only)
+  fail: msg="{{ backup_dir }}/foreman.dump is not present or not accessible"
+  when: not foreman_dump_result.stat.exists
+
+- name: Check the presence of candlepin dump for satellite-migration (for migration only)
+  stat:
+    path: '{{ backup_dir }}/candlepin.dump'
+    get_checksum: False
+    get_md5: False
+  register: candlepin_dump_result
+- name: Fail if the candlepin dump file is not present or not accessible (for migration only)
+  fail: msg="{{ backup_dir }}/candlepin.dump is not present or not accessible"
+  when: not candlepin_dump_result.stat.exists
