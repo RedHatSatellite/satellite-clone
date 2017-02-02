@@ -1,4 +1,8 @@
 ---
+# include pre_install_check
+- include: pre_install_check.yml
+  when: run_pre_install_check
+
 # Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
   shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'
@@ -9,10 +13,6 @@
 - name: set hostname
   set_fact:
     hostname: "{{ backup_hostname_result.stdout }}"
-
-# include pre_install_check
-- include: pre_install_check.yml
-  when: run_pre_install_check
 
 - name: Check that mandatory variables are updated
   fail: msg="Please update the variables in satellite-clone-vars.yml (after copying satellite-clone-vars.sample.yml)"
@@ -74,9 +74,16 @@
   file: path=/etc/katello-installer state=directory mode=0755
   when: satellite_version == 6.2
 
+# Restore Config
+- name: untar config files (for cloning only)
+  command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz -C /
+  when: not rhel_migration
+- name: untar config files (for migration only)
+  # rhel7's /etc/httpd/conf.d/passenger.conf is not backward compatible with rhel6
+  command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz --exclude=etc/httpd/conf.d/passenger.conf -C /
+  when: rhel_migration
+
 # Run Satellite installer
-- name: untar config files
-  command: tar --selinux --overwrite -xvf {{ backup_dir }}/config_files.tar.gz  -C /
 - name: run Satellite 6.1 installer
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
   when: satellite_version == 6.1
@@ -115,3 +122,11 @@
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reimport --trace
   when: run_katello_reindex or not include_pulp_data and satellite_version == 6.2
+
+- name: Run installer upgrade (for migration only)
+  command: satellite-installer --upgrade
+  when: rhel_migration
+
+- debug:
+    msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
+          ****NOTE**** Your Satellite's password is updated to changeme"

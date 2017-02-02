@@ -62,3 +62,6 @@ org: changeme
 #   - it is the responsibility of the user to make the required repos available.  Otherwise, the script will stop with an error.
 # uncomment the following line to override this option (defaults to true)
 #register_to_portal: true
+
+# Set this to true if you want to clone a rhel6 Satellite server to a rhel7 machine (defaults to false)
+#rhel_migration: false

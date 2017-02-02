@@ -1,0 +1,14 @@
+- name: Stop postgresql
+  service: name=postgresql state=started
+
+- name: Drop postgresql foreman database
+  command: runuser - postgres -c "dropdb foreman"
+
+- name: Drop postgresql candlepin database
+  command: runuser - postgres -c "dropdb candlepin"
+
+- name: Restore postgresql foreman database
+  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/foreman.dump"
+
+- name: Restore postgresql candlepin database
+  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/candlepin.dump"

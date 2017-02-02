@@ -10,3 +10,4 @@ disable_firewall: false
 run_katello_reindex: false
 run_pre_install_check: true
 register_to_portal: true
+rhel_migration: false
