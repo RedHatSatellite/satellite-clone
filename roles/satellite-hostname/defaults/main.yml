@@ -1,4 +1,4 @@
 ---
-new_hostname: changeme
+new_hostname: changeme.example.com
 admin_username: changeme
 admin_password: changeme

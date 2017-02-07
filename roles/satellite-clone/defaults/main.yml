@@ -1,10 +1,8 @@
 ---
 # more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
-hostname: satellite.example.com
-rhel_version: 7
-satellite_version: 6.1
+satellite_version: 6.2
 activationkey: changeme
-org: 111111
+org: changeme
 perform_restore: true
 backup_dir: /backup
 include_pulp_data: true
