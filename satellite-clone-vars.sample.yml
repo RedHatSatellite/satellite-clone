@@ -15,15 +15,6 @@ org: changeme
 
 ############## optional variables ####################
 #
-# Restoring of saved backup data is optional.
-# If `perform_restore` is set to true:
-#   - Restore of saved backup data is performed.  Make sure to also udpate `backup_dir` below.
-# If `perform_restore` is set to false:
-#   - This gives you an opportunity to install just Satellite without restoring backup data.
-#   - Warning: This beats the purpose of using the satellite-clone utility, but gives you an opportunity to play with a fresh Satellite install.
-# uncomment the following line to override this option (defaults to true)
-#perform_restore: true
-
 # The backup folder on your Destination node.
 # NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
 # WARNING:
