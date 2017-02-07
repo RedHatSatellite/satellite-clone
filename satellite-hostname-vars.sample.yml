@@ -1,6 +1,6 @@
 ---
 # enter new FQDN here
-new_hostname: changeme
+new_hostname: changeme.example.com
 
 # satellite credentials
 admin_username: changeme
