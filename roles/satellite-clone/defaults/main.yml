@@ -3,7 +3,6 @@
 satellite_version: 6.2
 activationkey: changeme
 org: changeme
-perform_restore: true
 backup_dir: /backup
 include_pulp_data: true
 required_root_free_space: 75
