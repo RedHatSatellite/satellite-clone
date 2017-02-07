@@ -14,12 +14,9 @@
 - include: pre_install_check.yml
   when: run_pre_install_check
 
-- name: "check that variables are updated"
+- name: Check that mandatory variables are updated
   fail: msg="Please update the variables in satellite-clone-vars.yml (after copying satellite-clone-vars.sample.yml)"
-  when:
-    - hostname == "satellite.example.com"
-    - activationkey == "changeme"
-    - org == "111111"
+  when: (activationkey == "changeme") or (org == "changeme")
 
 # Register/subscribe the VM
 - name: register host
@@ -28,7 +25,7 @@
 - name: disable all repos
   command: subscription-manager repos --disable "*"
 - name: Enable required repos
-  command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satelliteversion }}-rpms
+  command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms
 
 # Install libselinux package
 - name: install libselinux-python for rhel6

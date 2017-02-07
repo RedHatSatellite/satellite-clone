@@ -1,10 +1,7 @@
 ---
 - name: "check that variables are updated"
   fail: msg="Please update the variables in satellite-hostname-vars.yml"
-  when:
-    - new_hostname == "changeme"
-    - admin_username == "changeme"
-    - admin_password == "changeme"
+  when: (new_hostname == "changeme.example.com") or (admin_username == "changeme") or ("admin_password == "changeme")
 
 # need to change from my fork when https://github.com/Katello/katello-packaging/pull/323/files is merged
 - name: download katello-change-hostname script
