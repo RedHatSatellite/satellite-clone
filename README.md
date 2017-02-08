@@ -45,3 +45,5 @@ Now you can proceed to any of the following tasks:
  * [Cloning a Satellite server](docs/satellite-clone.md)
  * [Changing the hostname of a Satellite server](docs/satellite-hostname.md)
  * [Update Satellite to a new minor version](docs/satellite-update.md)
+
+Please check our [FAQ section](docs/faqs.md) for frequently asked questions
