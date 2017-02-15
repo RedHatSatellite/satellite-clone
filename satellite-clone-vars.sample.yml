@@ -5,9 +5,17 @@
 satellite_version: 6.2
 
 # Registration info - Credentials to register your Satellite to Red Hat portal
-# You will need an activation key with a Satellite subscription
-# Activation keys can be created at https://access.redhat.com
-# For more information: https://access.redhat.com/management/activation_keys/new
+# - You will need an activation key with a Satellite subscription.
+# - For security reasons only Activationkey / Org combination is supported for now.
+# - If you don't know how to create Activation keys in https://access.redhat.com, refer
+#   to the knowledge base article https://access.redhat.com/articles/1378093.  In this
+#   document, there are separate sections for `Creating an Activation Key` and `Finding
+#   your Organization ID`.
+# - If you want to register your Destination node to the portal by yourself, you can
+#   do that and skip the registration part in the playbook run by setting `register_to_portal`
+#   to false in this config.
+# - `org` field below is the unique Red Hat ID for your organization in portal. It may
+#   look like `1111111`.
 activationkey: changeme
 org: changeme
 
