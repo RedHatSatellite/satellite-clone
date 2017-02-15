@@ -28,7 +28,7 @@
   command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms
 
 # Install libselinux package
-- name: install libselinux-python for rhel6
+- name: Ensure libselinux-python package is present (required by ansible)
   yum: name=libselinux-python state=latest
 
 # Remove epel-release package as it may cause error in satellite-installer run
