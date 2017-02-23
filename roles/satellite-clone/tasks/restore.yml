@@ -1,6 +1,10 @@
 - name: Stop katello services
   command: katello-service stop
 
+# Satellite 6.1 doesn't stop postgresql with katello-service stop
+- name: Stop postgresql
+  service: name=postgresql state=stopped
+
 - name: Restore postgresql data
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/pgsql_data.tar.gz -C /
   when: not rhel_migration
