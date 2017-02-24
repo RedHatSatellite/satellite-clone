@@ -1,0 +1,17 @@
+- name: drop foreman database
+  command: runuser - postgres -c "dropdb foreman"
+
+- name: drop candlepin database
+  command: runuser - postgres -c "dropdb candlepin"
+
+- name: restore foreman dump file
+  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/foreman.dump"
+
+- name: Restore candlepin dump file
+  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/candlepin.dump"
+
+- name: Drop old mongo database
+  command: echo 'db.dropDatabase();' | mongo pulp_database
+
+- name: Restore new mongo data
+  command: mongorestore --host localhost {{ backup_dir }}/mongo_dump/pulp_database/

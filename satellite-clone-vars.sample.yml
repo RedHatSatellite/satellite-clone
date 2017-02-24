@@ -31,16 +31,6 @@ org: changeme
 # uncomment the following line to override this option (defaults to /backup)
 #backup_dir: /backup
 
-# Restoring a pulp_data.tar file from a backup is optional.
-# If `include_pulp_data` is set to false:
-#   - repositories will still be set up, but will be unsynced.
-#   - Any manually uploaded content will have to be re-uploaded.
-# If `include_pulp_data` is set to true:
-#   - you must have `pulp_data.tar` file in the path specified `backup_dir` variable. Otherwise, the script will stop with an error.
-#
-# uncomment the following line to override this option (defaults to true)
-#include_pulp_data: true
-
 # Misc info
 # This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
 #

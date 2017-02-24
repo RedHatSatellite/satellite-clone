@@ -13,6 +13,12 @@
 #### Prerequisites ####
 
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
+   Required backup files:
+   - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
+   - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump
+   - rhel migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+
+   Additional Notes:
    - The playbook will work with or without the pulp_data.tar file from the backup.
    - For cloning RHEL 6 backup data to a RHEL 7 machine: In addition to katello-backup created files, you also need foreman.dump and candlepin.dump.  You may utilize the included script [satellite-clone/helpers/postgresql_dump.sh](../helpers/postgresql_dump.sh) if needed.
 
