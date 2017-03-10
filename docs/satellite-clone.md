@@ -9,6 +9,7 @@
   - The destination node must have the same OS version as the original Satellite from which the backup data was generated.
     *Note:* You can optionally choose to clone a rhel6 Satellite server to a rhel7 machine.  In this case, you must update the variable `rhel_migration` to true as explained later in this document. Please note that this scenario is supported only for *Satellite 6.2*.
   - If you are using NFS for storage and your pulp backup tar file is large (>150 gb), you might see memory errors while untaring pulp data.  In this case you can optionally choose to skip pulp restore (by setting `include_pulp_data` to `false` in `satellite-clone-vars.yml`)
+  - After running the playbook, existing manifests may have to be refreshed
 
 #### Prerequisites
 
