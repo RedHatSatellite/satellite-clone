@@ -3,6 +3,22 @@
 - include: pre_install_check.yml
   when: run_pre_install_check
 
+- name: check satellite version from the config files
+  command: tar zxf {{ backup_dir }}/config_files.tar.gz  etc/foreman-installer/scenarios.d/satellite-answers.yaml --to-stdout
+  register: satellite_answers
+  ignore_errors: true
+  no_log: true
+
+- name: set satellite_version to 6.2 if satellite_answers.yaml exists
+  set_fact:
+    satellite_version: 6.2
+  when: satellite_answers.rc == 0
+
+- name: set satellite_version to 6.1 if satellite_answers.yaml does not exist
+  set_fact:
+    satellite_version: 6.1
+  when: satellite_answers.rc != 0
+
 # Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
   shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'

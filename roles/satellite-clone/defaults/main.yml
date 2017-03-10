@@ -1,6 +1,5 @@
 ---
 # more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
-satellite_version: 6.2
 activationkey: changeme
 org: changeme
 backup_dir: /backup
