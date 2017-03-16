@@ -15,7 +15,7 @@
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
    Required backup files:
    - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-   - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump
+   - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
    - rhel migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
 
    Additional Notes:

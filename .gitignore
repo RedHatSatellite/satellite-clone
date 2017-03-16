@@ -3,6 +3,7 @@
 *.retry
 *.tar.gz
 *.swp
+*.swo
 
 #Log files
 logs/satellite-hostname.log

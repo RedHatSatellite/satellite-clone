@@ -21,12 +21,13 @@ org: changeme
 #
 # The backup folder on your Destination node.
 # NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
-# WARNING:
-#    1. The backup files *must* be named exactly as mentioned below. If the file names don't match, the script will stop with an error.
-#       a. config_files.tar.gz
-#       b. pgsql_data.tar.gz
-#       c. mongo_data.tar.gz
-#    2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
+#
+#   Required backup files:
+#   - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
+#   - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump
+#   - rhel migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+#
+#    If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
 #
 # uncomment the following line to override this option (defaults to /backup)
 #backup_dir: /backup

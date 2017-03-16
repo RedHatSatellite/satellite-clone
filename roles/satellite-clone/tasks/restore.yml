@@ -7,12 +7,12 @@
 
 - name: Restore postgresql data
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/pgsql_data.tar.gz -C /
-  when: not rhel_migration and mongo_data.stat.exists
+  when: not rhel_migration and pgsql_data.stat.exists
 
 - include: restore_postgresql_migration.yml
   when: rhel_migration
 
-- name: "Restore pulp data"
+- name: Restore pulp data
   command: "tar --selinux --overwrite -xvf {{ backup_dir }}/pulp_data.tar --exclude=var/lib/pulp/katello-export -C /"
   when: pulp_data.stat.exists
 
