@@ -8,6 +8,5 @@
 logs/satellite-hostname.log
 
 #Varies per deployment
-inventory
 satellite-clone-vars.yml
 satellite-hostname-vars.yml

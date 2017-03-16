@@ -8,7 +8,7 @@
   - The playbook run may may take a while to complete.
   - You can clone RHEL 6 backup data to a RHEL 7 machine.  In this case, you must update the variable `rhel_migration` to true as explained later in this document. Please note that this scenario is supported only for *Satellite 6.2*.
   - If you are using NFS for storage and your pulp backup tar file is large (>150 gb), you might see memory errors while untaring pulp data.  In this case you can optionally choose to skip pulp restore (by setting `include_pulp_data` to `false` in `satellite-clone-vars.yml`)
-  - After running the playbook, existing manifests may have to be refreshed 
+  - After running the playbook, existing manifests may have to be refreshed
 
 #### Prerequisites ####
 
@@ -28,11 +28,7 @@
 2. Place the backup files in a folder on the blank machine. This folder path is specified in the `backup_dir` variable in `satellite-clone-vars.yml`.
 3. Update the folder path of the backup files using the `backup_dir` variable in `satellite-clone-vars.yml`.
 4. If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable `rhel_migration` to true in `satellite-clone-vars.yml`.
-5. Add the IP address of the blank machine to the copied inventory file and add `ansible_connection=local` after the IP address.
-   ```
-     192.168.1.12 ansible_connection=local
-   ```
-6. Run the ansible playbook from the root directory of this project:
+5. Run the ansible playbook from the root directory of this project:
 
     ```console
       # ansible-playbook -i inventory satellite-clone-playbook.yml
