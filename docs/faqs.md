@@ -1,9 +1,9 @@
 # FAQs #
 
-##Cloning questions##
+## Cloning questions ##
 *about satellite-clone-playbook.yml*
 
-####Can I run Satellite Clone from a different machine?####
+#### Can I run Satellite Clone from a different machine? ####
 
 There are many options for where you can run Satellite Clone from, but we specify and test a simple "one machine" installation. RHEL 7 machines are supported as that is what we test on, but Satellite Clone can run on any machine that has ansible installed and can communicate with your blank target machine you are cloning to. Here are some scenarios:
 
@@ -15,13 +15,13 @@ There are many options for where you can run Satellite Clone from, but we specif
 
 We only support and test the 1st scenario (the "one machine" approach detailed in our docs). If you are going to try any of the alternative scenarios, it is at your own risk.
 
-####Can I clone Capsules?####
+#### Can I clone Capsules? ####
 
 Capsules are not able to be cloned at this time (Feb 2017). This is a planned feature.
 
-##Hostname change questions##
+## Hostname change questions ##
 *about satellite-hostname-playbook.yml*
 
-####Will my Capsules and/or Satellite clients still work after changing the hostname?####
+#### Will my Capsules and/or Satellite clients still work after changing the hostname? ####
 
 Unfortunately, they will not. You will have to re-register both capsules and clients, then re-install the capsules using newly generated certificates (`capsule-certs-generate`)
