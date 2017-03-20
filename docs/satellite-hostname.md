@@ -1,8 +1,10 @@
 ## Changing the Hostname of a Satellite server
 
 ### **Important warnings - read before running this playbook**
- - This script must be used for Satellite 6.2 only
- - All capsules and satellite clients will have to be re-registered with Red Hat Subscription mananger, and capsules will have to be reinstalled after running this playbook
+ - This script must be used for Satellite 6.2 only.
+ - After running this playbook:
+    - All capsules and satellite clients will have to be re-registered with Red Hat Subscription mananger.
+    - Capsules will have to be reinstalled.
 
 #### Instructions
 1. Create file `satellite-hostname-vars.yml` by copying `satellite-hostname-vars.sample.yml` in the root directory of this project and update it as necessary.
