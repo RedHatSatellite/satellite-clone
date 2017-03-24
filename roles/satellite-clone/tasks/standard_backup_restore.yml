@@ -1,3 +1,0 @@
----
-- name: Restore mongo data
-  command: "tar --selinux --overwrite -xvf {{ backup_dir }}/mongo_data.tar.gz -C /"

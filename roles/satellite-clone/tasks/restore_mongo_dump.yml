@@ -1,0 +1,5 @@
+- name: Drop old mongo database
+  command: echo 'db.dropDatabase();' | mongo pulp_database
+
+- name: Restore new mongo data
+  command: mongorestore --host localhost {{ backup_dir }}/mongo_dump/pulp_database/

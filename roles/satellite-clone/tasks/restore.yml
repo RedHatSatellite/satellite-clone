@@ -7,25 +7,23 @@
 
 - name: Restore postgresql data
   command: tar --selinux --overwrite -xvf {{ backup_dir }}/pgsql_data.tar.gz -C /
-  when: not rhel_migration and pgsql_data.stat.exists
+  when: standard_backup
 
-- include: restore_postgresql_migration.yml
-  when: rhel_migration
+- include: restore_psql_dump.yml
+  when: rhel_migration or online_backup
 
 - name: Restore pulp data
   command: "tar --selinux --overwrite -xvf {{ backup_dir }}/pulp_data.tar --exclude=var/lib/pulp/katello-export -C /"
   when: pulp_data.stat.exists
 
-- name: Start postgresql
-  service: name=postgresql state=started
-
-- include: standard_backup_restore.yml
+- name: Restore mongo data
+  command: "tar --selinux --overwrite -xvf {{ backup_dir }}/mongo_data.tar.gz -C /"
   when: standard_backup
 
 - name: Start mongod
   service: name=mongod state=started
 
-- include: online_backup_restore.yml
+- include: restore_mongo_dump.yml
   when: online_backup
 
 - name: migrate pulp db
