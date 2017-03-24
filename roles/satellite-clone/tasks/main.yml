@@ -133,10 +133,10 @@
 - include: reset_pulp_data.yml
   when: not pulp_data.stat.exists and not online_backup
 
-- name: Reset katello index - Note that this might take hours
+- name: Run katello reindex for satellite 6.1 - Note that this might take hours
   command: foreman-rake katello:reindex --trace
   when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.1
-- name: Reset katello index - Note that this might take hours
+- name: Run katello reimport for satellite 6.2 - Note that this might take hours
   command: foreman-rake katello:reimport --trace
   when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
 
