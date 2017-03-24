@@ -37,5 +37,5 @@
 5. Run the ansible playbook from the root directory of this project:
 
     ```console
-      # ansible-playbook -i inventory satellite-clone-playbook.yml
+      # ansible-playbook satellite-clone-playbook.yml
     ```

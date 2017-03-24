@@ -5,11 +5,11 @@
 To update without a reboot:
 
   ```console
-    # ansible-playbook -i inventory satellite-update-playbook.yml"
+    # ansible-playbook satellite-update-playbook.yml"
   ```
 
 To update with a reboot:
 
   ```console
-    # ansible-playbook -i inventory satellite-update-playbook.yml --extra-vars "reboot=yes"
+    # ansible-playbook satellite-update-playbook.yml --extra-vars "reboot=yes"
   ```
