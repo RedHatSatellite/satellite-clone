@@ -1,4 +1,4 @@
-- name: Stop postgresql
+- name: Start postgresql
   service: name=postgresql state=started
 
 - name: Drop postgresql foreman database

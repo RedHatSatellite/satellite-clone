@@ -1,0 +1,98 @@
+- name: Check for config tar file
+  stat:
+    path: '{{ backup_dir }}/config_files.tar.gz'
+    get_checksum: False
+    get_md5: False
+  register: config_data
+
+- name: Check for pgsql tar file
+  stat:
+    path: '{{ backup_dir }}/pgsql_data.tar.gz'
+    get_checksum: False
+    get_md5: False
+  register: pgsql_data
+
+- name: Check for pulp data file
+  stat:
+    path: '{{ backup_dir }}/pulp_data.tar'
+    get_checksum: False
+    get_md5: False
+  register: pulp_data
+
+- name: Check for foreman dump file
+  stat:
+    path: '{{ backup_dir }}/foreman.dump'
+    get_checksum: False
+    get_md5: False
+  register: foreman_dump
+
+- name: Check for candlepin dump file
+  stat:
+    path: "{{ backup_dir }}/candlepin.dump"
+    get_checksum: False
+    get_md5: False
+  register: candlepin_dump
+
+- name: Check for mongo backup file
+  stat:
+    path: "{{ backup_dir }}/mongo_data.tar.gz"
+    get_checksum: False
+    get_md5: False
+  register: mongo_data
+
+- name: Check for mongo dump folder
+  stat:
+    path: "{{ backup_dir }}/mongo_dump"
+    get_checksum: False
+    get_md5: False
+  register: mongo_dump
+
+- name: Fail if the config tar file is not present or not accessible
+  fail: msg="{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
+  when: not config_data.stat.exists
+
+- name: Set all backup types to False
+  set_fact:
+    online_backup: False
+    standard_backup: False
+    rhel_migration_backup: False
+
+- name: Check for online backup
+  set_fact:
+    online_backup: True
+  when: candlepin_dump.stat.exists and foreman_dump.stat.exists and mongo_dump.stat.exists
+
+- name: Check for standard backup
+  set_fact:
+    standard_backup: True
+  when: mongo_data.stat.exists and pgsql_data.stat.exists
+
+- name: Check for RHEL 6 to 7 migration backup
+  set_fact:
+    rhel_migration_backup: True
+  when: mongo_data.stat.exists and foreman_dump.stat.exists and candlepin_dump.stat.exists
+
+- name: Check RHEL 6 to 7 migration backup is present
+  fail:
+    msg: |
+      Backup is missing files. To use a RHEL 6 backup on a RHEL 7 system, you need to have
+      mongo_data.tar.gz, foreman.dump, and candlepin.dump files present.
+  when: rhel_migration and not rhel_migration_backup
+
+- name: Check full backup is present
+  fail:
+    msg: |
+      Backup is missing files. For an online backup, you need candlepin, foreman, and
+      mongo dump files. For an online backup, you need candlepin.dump, foreman.dump,
+      and mongo_dump folder. For a standard (offline) backup, you will need mongo_data.tar.gz
+      and pgsql_data.tar.gz files.
+  when: not online_backup and not standard_backup and not rhel_migration
+
+- name: Check only one backup is present
+  fail:
+    msg: |
+      It looks like there is both an online and standard backup present. You will have to
+      remove some files so there is only one backup present. For an online backup, you need
+      candlepin.dump, foreman.dump, and mongo_dump folder. For a standard (offline) backup,
+      you will need mongo_data.tar.gz and pgsql_data.tar.gz.
+  when: online_backup and standard_backup and not rhel_migration

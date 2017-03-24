@@ -1,5 +1,4 @@
 ---
-# include pre_install_check
 - include: pre_install_check.yml
   when: run_pre_install_check
 
@@ -18,6 +17,8 @@
   set_fact:
     satellite_version: 6.1
   when: satellite_answers.rc != 0
+
+- include: backup_check.yml
 
 # Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
@@ -130,14 +131,14 @@
   when: satellite_version == 6.1
 
 - include: reset_pulp_data.yml
-  when: not include_pulp_data
+  when: not pulp_data.stat.exists and not online_backup
 
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reindex --trace
-  when: run_katello_reindex or not include_pulp_data and satellite_version == 6.1
+  when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.1
 - name: Reset katello index - Note that this might take hours
   command: foreman-rake katello:reimport --trace
-  when: run_katello_reindex or not include_pulp_data and satellite_version == 6.2
+  when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
 
 - name: Run installer upgrade (for migration only)
   command: satellite-installer --upgrade
