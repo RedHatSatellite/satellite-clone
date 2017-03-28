@@ -18,7 +18,7 @@
 
 - name: Restore mongo data
   command: "tar --selinux --overwrite -xf {{ backup_dir }}/mongo_data.tar.gz -C /"
-  when: standard_backup
+  when: rhel_migration or standard_backup
 
 - name: Start mongod
   service: name=mongod state=started
