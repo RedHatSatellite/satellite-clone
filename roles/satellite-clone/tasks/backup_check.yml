@@ -91,8 +91,10 @@
 - name: Check only one backup is present
   fail:
     msg: |
-      It looks like there is both an online and standard backup present. You will have to
-      remove some files so there is only one backup present. For an online backup, you need
-      candlepin.dump, foreman.dump, and mongo_dump folder. For a standard (offline) backup,
-      you will need mongo_data.tar.gz and pgsql_data.tar.gz.
-  when: online_backup and standard_backup and not rhel_migration
+      It looks like there is more than one type of backup present. You will have to
+      remove some files so there is only one backup present. Here are the required backup files
+      for each scenario.
+      Standard backup scenario - config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
+      Online backup scenario - config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+      RHEL 6 to 7 migration scenario - config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+  when: (online_backup and standard_backup) or (online_backup and rhel_migration_backup) or (standard_backup and rhel_migration_backup)
