@@ -1,6 +1,0 @@
----
-# vars file for satellite-update
-
-# reboot option is disabled by default, pass '--extra-vars "reboot=yes"' to the
-# playbook command if you like to override this.
-reboot: no
