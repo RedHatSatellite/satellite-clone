@@ -3,7 +3,6 @@
 Satellite-clone contains simple Ansible playbooks that can be used to perform any of the following tasks:
 * Setup a Satellite 6.1 or 6.2 install with restored backup data.
 * Change the hostname on an existing Satellite install.
-* Perform a minor upgrade of an existing Satellite.
 
 ## Getting Started
 
@@ -35,6 +34,5 @@ Now you can proceed to any of the following tasks:
 
  * [Cloning a Satellite server](docs/satellite-clone.md)
  * [Changing the hostname of a Satellite server](docs/satellite-hostname.md)
- * [Update Satellite to a new minor version](docs/satellite-update.md)
 
 Please check our [FAQ section](docs/faqs.md) for frequently asked questions.
