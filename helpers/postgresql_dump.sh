@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to create backup files for rhel6 to 7 migration.
+# Script to create backup files for RHEL6 to 7 migration.
 #
 # Notes:
 # 1. This script runs katello-backup and also creates foreman.dump and candlepin.dump files from your Satellite6 server.
@@ -14,8 +14,6 @@ mkdir $backup_dir
 
 # Run katello-backup
 katello-backup $backup_dir
-echo "pgsql_data.tar.gz is not required for rhel6 to 7 migration..."
-rm -f $backup_dir/katello-backup*/pgsql_data.tar.gz
 
 # Create foreman and candlepin dumps
 katello-service stop
@@ -29,6 +27,8 @@ katello-service start
 
 set +x
 
-echo "Now copy the generated files to the destination host:"
-echo "config_files.tar.gz, mongo_data.tar.gz, pulp_data.tar, "\
+echo "Now, copy the generated files to the destination host:"
+echo "config_files.tar.gz, mongo_data.tar.gz, pulp_data.tar,"\
      "candlepin.dump, foreman.dump"
+echo "Note: Do not copy the generated pg_sql_data.tar.gz as this is not"\
+     "required for RHEL6 to 7 migration process."
