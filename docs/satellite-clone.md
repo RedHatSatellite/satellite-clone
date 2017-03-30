@@ -16,11 +16,7 @@
    Required backup files:
    - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
    - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
-   - RHEL 6 to 7 migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
-
-   Additional Notes:
-   - The playbook will work with or without the pulp_data.tar file from the backup.
-   - For cloning RHEL 6 backup data to a RHEL 7 machine: In addition to katello-backup created files, you also need foreman.dump and candlepin.dump.  You may utilize the included script [satellite-clone/helpers/postgresql_dump.sh](../helpers/postgresql_dump.sh) if needed.
+   - RHEL 6 to 7 migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar. (A helper script [satellite-clone/helpers/rhel_6_to_7_migration_backup.sh](../helpers/rhel_6_to_7_migration_backup.sh) is included for easily creating these files.)
 
 2. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh](../helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
 

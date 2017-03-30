@@ -27,8 +27,9 @@ katello-service start
 
 set +x
 
-echo "Now, copy the generated files to the destination host:"
+echo "Backup is created in $backup_dir folder. Now copy the generated"\
+     "files to the destination host:"
 echo "config_files.tar.gz, mongo_data.tar.gz, pulp_data.tar,"\
      "candlepin.dump, foreman.dump"
-echo "Note: Do not copy the generated pg_sql_data.tar.gz as this is not"\
+echo "Note: Do not copy the generated pgsql_data.tar.gz as this is not"\
      "required for RHEL6 to 7 migration process."
