@@ -147,6 +147,13 @@
   command: satellite-installer --upgrade
   when: rhel_migration
 
+- name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
+  script: disassociate_capsules.rb
+  register: disassociate_capsules
+
+- name: copy disassociate_capsules.rb output
+  local_action: copy content={{ disassociate_capsules.stdout }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
+
 - debug:
     msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
           ****NOTE**** Your Satellite's password is updated to changeme"
