@@ -18,20 +18,20 @@
    - Standard backup scenario: config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
    - Online backup or RHEL 6 to 7 migration scenario: config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
 
-2. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh](../helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
+2. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script (/usr/share/satellite-clone/helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
 
 #### Instructions ####
 
-1. Create file `satellite-clone-vars.yml` (by copying `satellite-clone-vars.sample.yml` found in the root of the project) and update the required variables.
+1. Edit satellite-clone-vars.yml and update with credentials
 
    ```console
-     # cp satellite-clone-vars.sample.yml satellite-clone-vars.yml
+     vi /etc/satellite-clone/satellite-clone-vars.yml
    ```
 2. Place the backup files in a folder on the blank machine. This folder path is specified in the `backup_dir` variable in `satellite-clone-vars.yml`.
 3. Update the folder path of the backup files using the `backup_dir` variable in `satellite-clone-vars.yml`.
 4. If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable `rhel_migration` to true in `satellite-clone-vars.yml`.
-5. Run the ansible playbook from the root directory of this project:
+5. Run satellite-clone
 
     ```console
-      # ansible-playbook satellite-clone-playbook.yml
+      satellite-clone
     ```
