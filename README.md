@@ -1,6 +1,7 @@
 # Satellite-clone
 
-Satellite-clone contains simple Ansible playbooks that can be used to setup a Satellite 6.1 or 6.2 install with restored backup data.
+Satellite-clone contains simple Ansible playbooks that can be used to perform any of the following tasks:
+* Setup a Satellite 6.1 or 6.2 install with restored backup data.
 
 ## Getting Started
 
@@ -14,15 +15,14 @@ Satellite-clone contains simple Ansible playbooks that can be used to setup a Sa
 
 #### Setup ####
 
-1. git clone this project.
-   ```console
-     # git clone https://github.com/RedHatSatellite/satellite-clone.git
-   ```
-
-2. Install `ansible` package on the server.  Ansible should be installed from epel.
+1. Install the EPEL package on the server.
    ```console
      # yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-     # yum install -y ansible
+   ```
+
+2. yum install satellite-clone
+   ```console
+    yum install -y satellite-clone
    ```
 
 Now you can proceed to performing the clone:
