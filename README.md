@@ -1,6 +1,7 @@
 # Satellite-clone
 
-Satellite-clone contains simple Ansible playbooks that can be used to setup a Satellite 6.1 or 6.2 install with restored backup data.
+Satellite-clone contains simple Ansible playbooks that can be used to perform any of the following tasks:
+* Setup a Satellite 6.1 or 6.2 install with restored backup data.
 
 ## Getting Started
 
@@ -14,12 +15,7 @@ Satellite-clone contains simple Ansible playbooks that can be used to setup a Sa
 
 #### Setup ####
 
-1. git clone this project.
-   ```console
-     # git clone https://github.com/RedHatSatellite/satellite-clone.git
-   ```
-
-2. Install `ansible` package on the server.  Ansible should be installed from extras channel.
+1. Install `ansible` package on the server.  Ansible should be installed from extras channel.
    ```console
      # subscription-manager repos --enable rhel-7-server-extras-rpms
      # yum install -y ansible
