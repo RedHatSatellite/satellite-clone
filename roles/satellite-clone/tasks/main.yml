@@ -77,10 +77,6 @@
 - name: create /etc/hosts
   template: src=hosts.j2 dest=/etc/hosts
 
-# Install vim for easy editing of config files later
-- name: Install vim
-  yum: name=vim state=latest
-
 # Install Satellite packages
 - name: Install Satellite 6.1 packages
   yum: name=katello state=latest
