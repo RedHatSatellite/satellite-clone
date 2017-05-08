@@ -19,7 +19,9 @@
    - Online backup scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
    - RHEL 6 to 7 migration scenario  : config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar. (A helper script [satellite-clone/helpers/rhel_6_to_7_migration_backup.sh](../helpers/rhel_6_to_7_migration_backup.sh) is included for easily creating these files.)
 
-2. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh](../helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
+2. You will need a Satellite 6 subscription for the cloned machine. There are [options](https://access.redhat.com/articles/513353) for obtaining subscriptions at a discounted rate for smaller environments. If you would like to handle the registration of the system manually, set `register_to_portal: false` in  `satellite-clone-vars.yml`
+
+3. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh](../helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
 
 #### Instructions ####
 
