@@ -116,6 +116,10 @@
 - name: Wait for foreman-tasks service to start
   pause: minutes=5
 
+- name: Run installer upgrade (satellite 6.2 only)
+  command: satellite-installer --upgrade
+  when: satellite_version == 6.2
+
 - name: Test Satellite
   command: hammer ping
 
@@ -138,10 +142,6 @@
 - name: Run katello reimport for satellite 6.2 - Note that this might take hours
   command: foreman-rake katello:reimport --trace
   when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
-
-- name: Run installer upgrade (for migration only)
-  command: satellite-installer --upgrade
-  when: rhel_migration
 
 - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
   script: disassociate_capsules.rb
