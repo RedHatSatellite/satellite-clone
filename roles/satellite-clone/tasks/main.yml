@@ -85,6 +85,39 @@
   yum: name=satellite state=latest
   when: satellite_version == 6.2
 
+# The postgres user is created after installing postgresql packages, so
+# we perform this owner/group change at this point rather than earlier
+- name: change owner of backup directory to postgres
+  file:
+    path: "{{ backup_dir }}"
+    owner: postgres
+    group: postgres
+    recurse: yes
+
+- name: test foreman.dump file is readable by postgres user
+  command: "test -r {{ backup_dir }}/foreman.dump"
+  become: yes
+  become_user: postgres
+  register: access_foreman_dump
+  ignore_errors: yes
+  when: foreman_dump
+
+- name: test candlepin.dump file is readable by postgres user
+  command: "test -r {{ backup_dir }}/candlepin.dump"
+  become: yes
+  become_user: postgres
+  register: access_candlepin_dump
+  ignore_errors: yes
+  when: candlepin_dump
+
+- name: fail if postgres user doesn't have access to files
+  fail:
+    msg: >
+      The postgres user does not have access to the files in {{ backup_dir }}.
+      Please move the backup directory to a different directory with the correct
+      permissions. Avoid using /root.
+  when: foreman_dump and candlepin_dump and (access_foreman_dump | failed or access_candlepin_dump | failed)
+
 # Workaround for Issue #72 -  satellite-clone playbook fails if /etc/katello-installer isn't present.
 - name: Create /etc/katello-installer folder
   file: path=/etc/katello-installer state=directory mode=0755
