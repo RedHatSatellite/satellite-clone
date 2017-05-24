@@ -10,7 +10,7 @@
   when: standard_backup
 
 - include: restore_psql_dump.yml
-  when: rhel_migration or online_backup
+  when: online_backup
 
 - name: Restore pulp data
   command: "tar --selinux --overwrite -xf {{ backup_dir }}/pulp_data.tar --exclude=var/lib/pulp/katello-export -C /"
@@ -18,7 +18,7 @@
 
 - name: Restore mongo data
   command: "tar --selinux --overwrite -xf {{ backup_dir }}/mongo_data.tar.gz -C /"
-  when: rhel_migration or standard_backup
+  when: standard_backup
 
 - name: Start mongod
   service: name=mongod state=started

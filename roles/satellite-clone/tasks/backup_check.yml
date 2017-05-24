@@ -55,7 +55,6 @@
   set_fact:
     online_backup: False
     standard_backup: False
-    rhel_migration_backup: False
 
 - name: Check for online backup
   set_fact:
@@ -67,17 +66,12 @@
     standard_backup: True
   when: mongo_data.stat.exists and pgsql_data.stat.exists
 
-- name: Check for RHEL 6 to 7 migration backup
-  set_fact:
-    rhel_migration_backup: True
-  when: mongo_data.stat.exists and foreman_dump.stat.exists and candlepin_dump.stat.exists
-
 - name: Check RHEL 6 to 7 migration backup is present
   fail:
     msg: |
       Backup is missing files. To use a RHEL 6 backup on a RHEL 7 system, you need to have
       mongo_data.tar.gz, foreman.dump, and candlepin.dump files present.
-  when: rhel_migration and not rhel_migration_backup
+  when: rhel_migration and not online_backup
 
 - name: Check full backup is present
   fail:
@@ -95,6 +89,5 @@
       remove some files so there is only one backup present. Here are the required backup files
       for each scenario.
       Standard backup scenario - config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-      Online backup scenario - config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
-      RHEL 6 to 7 migration scenario - config_files.tar.gz, mongo_data.tar.gz, foreman.dump, candlepin.dump, (optional) pulp_data.tar
-  when: (online_backup and standard_backup) or (online_backup and rhel_migration_backup) or (standard_backup and rhel_migration_backup)
+      Online backup or RHEL migration scenario - config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+  when: online_backup and standard_backup
