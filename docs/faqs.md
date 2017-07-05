@@ -19,13 +19,6 @@ We only support and test the 1st scenario (the "one machine" approach detailed i
 
 Capsules are not able to be cloned at this time (Feb 2017). This is a planned feature.
 
-## Hostname change questions ##
-*about satellite-hostname-playbook.yml*
-
-#### Will my Capsules and/or Satellite clients still work after changing the hostname? ####
-
-Unfortunately, they will not. You will have to re-register both capsules and clients, then re-install the capsules using newly generated certificates (`capsule-certs-generate`)
-
 ## General questions ##
 
 #### Will the output of ansible playbook runs stored locally? ####

@@ -1,7 +1,0 @@
----
-- hosts: satellite6
-  vars_files:
-  - satellite-hostname-vars.yml
-  remote_user: root
-  roles:
-  - satellite-hostname
