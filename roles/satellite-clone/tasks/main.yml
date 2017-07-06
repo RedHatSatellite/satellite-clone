@@ -100,7 +100,7 @@
   become_user: postgres
   register: access_foreman_dump
   ignore_errors: yes
-  when: foreman_dump
+  when: foreman_dump.stat.exists
 
 - name: test candlepin.dump file is readable by postgres user
   command: "test -r {{ backup_dir }}/candlepin.dump"
@@ -108,7 +108,7 @@
   become_user: postgres
   register: access_candlepin_dump
   ignore_errors: yes
-  when: candlepin_dump
+  when: candlepin_dump.stat.exists
 
 - name: fail if postgres user doesn't have access to files
   fail:
