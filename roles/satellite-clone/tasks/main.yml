@@ -33,7 +33,7 @@
 
 - name: Check that mandatory variables are updated
   fail: msg="Please update the variables in satellite-clone-vars.yml (after copying satellite-clone-vars.sample.yml)"
-  when: (activationkey == "changeme") or (org == "changeme")
+  when: ((activationkey == "changeme") or (org == "changeme")) && register_to_portal
 
 # Register/subscribe the VM
 - name: register host
