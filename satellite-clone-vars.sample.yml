@@ -59,3 +59,7 @@ org: changeme
 
 # Set this to true if you want to clone a rhel6 Satellite server to a rhel7 machine (defaults to false)
 #rhel_migration: false
+
+# Disable postgres triggers. Set this to true if you want to ignore postgresql constraints such as unique indexes
+# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command.
+#disable_postgres_triggers: false

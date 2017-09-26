@@ -8,7 +8,7 @@
   command: runuser - postgres -c "dropdb candlepin"
 
 - name: Restore postgresql foreman database
-  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/foreman.dump"
+  command: runuser - postgres -c "pg_restore {{ ' --disable-triggers' if disable_postgres_triggers }} -C -d postgres {{ backup_dir }}/foreman.dump"
 
 - name: Restore postgresql candlepin database
-  command: runuser - postgres -c "pg_restore -C -d postgres {{ backup_dir }}/candlepin.dump"
+  command: runuser - postgres -c "pg_restore {{ ' --disable-triggers' if disable_postgres_triggers }} -C -d postgres {{ backup_dir }}/candlepin.dump"
