@@ -142,49 +142,58 @@
   command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false --foreman-proxy-tftp false
   when: satellite_version == 6.2
 
-# restore backup data
-- include: restore.yml
+- block:
+  # restore backup data
+  - include: restore.yml
 
-- name: Restart katello-service
-  command: katello-service start
+  - name: Restart katello-service
+    command: katello-service start
 
-- name: Wait for foreman-tasks service to start
-  pause: minutes=5
+  - name: Wait for foreman-tasks service to start
+    pause: minutes=5
 
-- name: Run installer upgrade (satellite 6.2 only)
-  command: satellite-installer --upgrade
-  when: satellite_version == 6.2
+  - name: Run installer upgrade (satellite 6.2 only)
+    command: satellite-installer --upgrade
+    when: satellite_version == 6.2
 
-- name: Test Satellite
-  command: hammer ping
+  - name: Test Satellite
+    command: hammer ping
 
-- name: Reset admin password
-  command: foreman-rake permissions:reset password=changeme
+  - name: Reset admin password
+    command: foreman-rake permissions:reset password=changeme
 
-- name: update katello assets
-  file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
-  when: satellite_version == 6.1
-- name: update katello bastion assets
-  file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
-  when: satellite_version == 6.1
+  - name: update katello assets
+    file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
+    when: satellite_version == 6.1
+  - name: update katello bastion assets
+    file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
+    when: satellite_version == 6.1
 
-- include: reset_pulp_data.yml
-  when: not pulp_data.stat.exists and not online_backup
+  - include: reset_pulp_data.yml
+    when: not pulp_data.stat.exists and not online_backup
 
-- name: Run katello reindex for satellite 6.1 - Note that this might take hours
-  command: foreman-rake katello:reindex --trace
-  when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.1
-- name: Run katello reimport for satellite 6.2 - Note that this might take hours
-  command: foreman-rake katello:reimport --trace
-  when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
+  - name: Run katello reindex for satellite 6.1 - Note that this might take hours
+    command: foreman-rake katello:reindex --trace
+    when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.1
+  - name: Run katello reimport for satellite 6.2 - Note that this might take hours
+    command: foreman-rake katello:reimport --trace
+    when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
 
-- name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
-  script: disassociate_capsules.rb
-  register: disassociate_capsules
+  - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
+    script: disassociate_capsules.rb
+    register: disassociate_capsules
 
-- name: copy disassociate_capsules.rb output
-  local_action: copy content={{ disassociate_capsules.stdout }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
+  - name: copy disassociate_capsules.rb output
+    local_action: copy content={{ disassociate_capsules.stdout }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
 
-- debug:
-    msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
-          ****NOTE**** Your Satellite's password is updated to changeme"
+  - debug:
+      msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
+            ****NOTE**** Your Satellite's password is updated to changeme"
+  rescue:
+  # After the installer runs, if there is an error, we want to disassociate capsules from lifecycle environments.
+  # This is to prevent the clone trying to sync with existing original capsules. We do this with SQL in case
+  # hammer is not able to execute a command.
+  - name: Disassociate capsules from lifecycle environments to avoid communication with production capsules
+    command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from features_smart_proxies where feature_id = (select id from features where features.name = 'Pulp Node'));"
+    become_user: postgres
+    become: true
