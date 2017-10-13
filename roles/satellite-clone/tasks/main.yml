@@ -2,6 +2,9 @@
 - include: pre_install_check.yml
   when: run_pre_install_check
 
+- fail:
+    msg: "failing on purpose"
+
 - name: check satellite version from the config files
   command: tar zxf {{ backup_dir }}/config_files.tar.gz  etc/foreman-installer/scenarios.d/satellite-answers.yaml --to-stdout
   register: satellite_answers
