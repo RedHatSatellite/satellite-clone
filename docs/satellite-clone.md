@@ -3,13 +3,14 @@
 #### Important Notes ####
 
   - The playbook will update the cloned Satellite hostname to match the hostname of the original Satellite from which the backup is generated.
-  - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings after the playbook run.
+  - DHCP, DNS, TFTP, and remote execution will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings after the playbook run.
   - The playbook will reset the admin password to "changeme".
   - The playbook run may may take a while to complete.
   - You can clone RHEL 6 backup data to a RHEL 7 machine.  In this case, you must update the variable `rhel_migration` to true as explained later in this document. Please note that this scenario is supported only for *Satellite 6.2*.
   - If you are using NFS for storage and your pulp backup tar file is large (>150 gb), you might see memory errors while untaring pulp data.  In this case you can optionally choose to skip pulp restore (by setting `include_pulp_data` to `false` in `satellite-clone-vars.yml`).
   - After running the playbook, existing manifests may have to be refreshed.
   - Capsules will be unassociated with Lifecycle environments to avoid any interference with existing infrastructure. Instructions to reverse these changes can be found in `logs/reassociate_capsules.txt` under Satellite Clone's root directory
+  - It is recommended to clone to an environment that is isolated from your original Satellite's network. We take steps to disable communication from the cloned Satellite to existing capsules and hosts, but the only way to ensure this is in an isolated environment.
 
 #### Prerequisites ####
 
