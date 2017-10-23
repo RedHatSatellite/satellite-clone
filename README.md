@@ -19,9 +19,9 @@ Satellite-clone contains simple Ansible playbooks that can be used to setup a Sa
      # git clone https://github.com/RedHatSatellite/satellite-clone.git
    ```
 
-2. Install `ansible` package on the server.  Ansible should be installed from epel.
+2. Install `ansible` package on the server.  Ansible should be installed from extras channel.
    ```console
-     # yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+     # subscription-manager repos --enable rhel-7-server-extras-rpms
      # yum install -y ansible
    ```
 
