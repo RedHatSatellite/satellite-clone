@@ -14,7 +14,7 @@
 
 - name: Restore pulp data
   command: "tar --selinux --overwrite -xf {{ backup_dir }}/pulp_data.tar --exclude=var/lib/pulp/katello-export -C /"
-  when: pulp_data.stat.exists
+  when: clone_pulp_data_exists
 
 - name: Restore mongo data
   command: "tar --selinux --overwrite -xf {{ backup_dir }}/mongo_data.tar.gz -C /"
