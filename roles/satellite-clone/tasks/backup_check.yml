@@ -76,8 +76,7 @@
 - name: Check full backup is present
   fail:
     msg: |
-      Backup is missing files. For an online backup, you need candlepin, foreman, and
-      mongo dump files. For an online backup, you need candlepin.dump, foreman.dump,
+      Backup is missing files. For an online backup, you need candlepin.dump, foreman.dump,
       and mongo_dump folder. For a standard (offline) backup, you will need mongo_data.tar.gz
       and pgsql_data.tar.gz files.
   when: not online_backup and not standard_backup and not rhel_migration
