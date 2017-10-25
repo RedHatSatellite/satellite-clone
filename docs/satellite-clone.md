@@ -23,13 +23,13 @@
      2. Extract the contents so it resembles the following:
 
      ```console
-	#[root@backup]# tar xvf katello-backup-2017-10-20.tar.gz
-        #[root@backup]# ll
-	#total 30485040
-	#-rw-r--r--. 1 postgres postgres 15608760320 Oct 23 13:29 katello-backup-2017-10-20.tar.gz
-	#-rwxr-xr-x. 1 postgres postgres 10709285627 Oct 20 08:57 config_files.tar.gz
-	#-rwxr-xr-x. 1 postgres postgres  3679307712 Oct 20 09:08 mongo_data.tar.gz
-	#-rwxr-xr-x. 1 postgres postgres  1219320429 Oct 20 09:06 pgsql_data.tar.gz
+       [root@backup]# tar xvf katello-backup-2017-10-20.tar.gz
+       [root@backup]# ll
+       total 30485040
+       -rw-r--r--. 1 postgres postgres 15608760320 Oct 23 13:29 katello-backup-2017-10-20.tar.gz
+       -rwxr-xr-x. 1 postgres postgres 10709285627 Oct 20 08:57 config_files.tar.gz
+       -rwxr-xr-x. 1 postgres postgres  3679307712 Oct 20 09:08 mongo_data.tar.gz
+       -rwxr-xr-x. 1 postgres postgres  1219320429 Oct 20 09:06 pgsql_data.tar.gz
      ```
 
 2. Make sure that the blank machine has adequate space and also make sure that the root partition has all the storage space. You may utilize the included script [satellite-clone/helpers/reallocate.sh](../helpers/reallocate.sh) if needed. The ansible playbook run will fail if the free space in root partition is less than the value specified in `required_root_free_space` variable in `satellite-clone-vars.yml`
