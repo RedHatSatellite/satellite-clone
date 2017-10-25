@@ -21,6 +21,7 @@
    - Example for standard backup:
      1. Copy the katello-backup.tar.gz to the new blank vanilla machine under your preferred directory, default is /backup 
      2. Extract the contents so it resembles the following:
+
      ```console
 	[root@backup]# tar xvf katello-backup-2017-10-20.tar.gz
         [root@backup]# ll
