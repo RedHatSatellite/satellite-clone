@@ -134,6 +134,10 @@
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz --exclude=etc/httpd/conf.d/passenger.conf -C /
   when: rhel_migration
 
+- name: Restore selinux context on the filesystem
+  command: restorecon -R /
+  when: restorecon
+
 # Run Satellite installer
 - name: run Satellite 6.1 installer
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
