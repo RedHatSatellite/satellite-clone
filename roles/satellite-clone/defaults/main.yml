@@ -10,3 +10,4 @@ run_pre_install_check: True
 register_to_portal: True
 rhel_migration: False
 disable_postgres_triggers: False
+restorecon: False

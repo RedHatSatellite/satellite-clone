@@ -61,5 +61,9 @@ org: changeme
 #rhel_migration: false
 
 # Disable postgres triggers. Set this to true if you want to ignore postgresql constraints such as unique indexes
-# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command.
+# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command. (defaults to false)
 #disable_postgres_triggers: false
+#
+# Run restorecon step. This will add a step to restore selinux contexts across the fileystem. The backup is restored
+# with selinux context, but if selinux issues are still present, this option is useful. (defaults to false)
+#restorecon: false
