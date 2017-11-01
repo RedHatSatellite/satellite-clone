@@ -153,8 +153,10 @@
   - name: Restart katello-service
     command: katello-service start
 
+    # We don't use pause module here because it displays a prompt
+    # to use ctrl+c which would break out of a production script.
   - name: Wait for foreman-tasks service to start
-    pause: minutes=5
+    command: sleep 300
 
   - name: Run installer upgrade (satellite 6.2 only)
     command: satellite-installer --upgrade
