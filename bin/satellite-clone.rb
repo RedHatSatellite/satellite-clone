@@ -45,6 +45,10 @@ unless File.exist?(DEFAULT_PRODUCTION_INSTALL_PATH)
   exit(false)
 end
 
+# Set ansible config location as env variable otherwise it may not be noticed
+# by ansible
+ENV["ANSIBLE_CONFIG"] = "#{DEFAULT_PRODUCTION_INSTALL_PATH}/ansible.production.cfg"
+
 unless IO.readlines("#{DEFAULT_PRODUCTION_INSTALL_PATH}/ansible.cfg")[-1].include?("deprecation_warning")
   open("#{DEFAULT_PRODUCTION_INSTALL_PATH}/ansible.cfg", 'a') do |f|
     f.puts "deprecation_warnings=False"
@@ -57,10 +61,10 @@ STDOUT.puts "\n"
 exit(false) unless response
 
 inventory_path = "#{DEFAULT_PRODUCTION_INSTALL_PATH}/inventory"
-`cd #{DEFAULT_PRODUCTION_INSTALL_PATH}`
-
-STDOUT.puts "Running #{DEFAULT_PLAYBOOK_FILE}"
-pipe = IO.popen("ansible-playbook -i #{inventory_path} #{@ansible_args.join(" ")} #{DEFAULT_PLAYBOOK_FILE}")
-while (line = pipe.gets)
-  print line
+DIR.chdir("#{DEFAULT_PRODUCTION_INSTALL_PATH}") do
+  STDOUT.puts "Running #{DEFAULT_PLAYBOOK_FILE}"
+  pipe = IO.popen("ansible-playbook -i #{inventory_path} #{@ansible_args.join(" ")} #{DEFAULT_PLAYBOOK_FILE}")
+  while (line = pipe.gets)
+    print line
+  end
 end
