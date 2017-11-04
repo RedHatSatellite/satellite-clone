@@ -8,28 +8,38 @@
   ignore_errors: true
   no_log: true
 
+- name: setting fact - satellite_answers
+  set_fact:
+    clone_satellite_answers: "{{ (satellite_answers.rc | int) == 0 }}"
+    cacheable: true
+
 - name: set satellite_version to 6.2 if satellite_answers.yaml exists
   set_fact:
     satellite_version: 6.2
-  when: satellite_answers.rc == 0
+    cacheable: true
+  when: clone_satellite_answers
 
 - name: set satellite_version to 6.1 if satellite_answers.yaml does not exist
   set_fact:
     satellite_version: 6.1
-  when: satellite_answers.rc != 0
+    cacheable: true
+  when: not clone_satellite_answers
 
 - include: backup_check.yml
 
 # Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
   shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'
-  register: backup_hostname_result
-- name: Check that the hostname is not none
-  fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ backup_hostname_result.stdout }}) doesn't look right"
-  when: backup_hostname_result.stderr
-- name: set hostname
+  register: backup_hostname
+
+- name: setting fact - hostname
   set_fact:
-    hostname: "{{ backup_hostname_result.stdout }}"
+    hostname: "{{ backup_hostname.stdout }}"
+    cacheable: true
+
+- name: Check that the hostname is not none
+  fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
+  when: backup_hostname.stderr
 
 - name: Check that mandatory variables are updated
   fail: msg="Please update the variables in satellite-clone-vars.yml (after copying satellite-clone-vars.sample.yml)"
@@ -104,6 +114,11 @@
   ignore_errors: yes
   when: foreman_dump.stat.exists
 
+- name: setting fact - access_foreman_dump
+  set_fact:
+    clone_access_foreman_dump: "{{ access_foreman_dump | failed }}"
+    cacheable: true
+
 - name: test candlepin.dump file is readable by postgres user
   command: "test -r {{ backup_dir }}/candlepin.dump"
   become: yes
@@ -112,13 +127,18 @@
   ignore_errors: yes
   when: candlepin_dump.stat.exists
 
+- name: setting fact - access_candlepin_dump
+  set_fact:
+    clone_access_candlepin_dump: "{{ access_candlepin_dump | failed }}"
+    cacheable: true
+
 - name: fail if postgres user doesn't have access to files
   fail:
     msg: >
       The postgres user does not have access to the files in {{ backup_dir }}.
       Please move the backup directory to a different directory with the correct
       permissions. Avoid using /root.
-  when: foreman_dump and candlepin_dump and (access_foreman_dump | failed or access_candlepin_dump | failed)
+  when: foreman_dump and candlepin_dump and (clone_access_foreman_dump or clone_access_candlepin_dump)
 
 # Workaround for Issue #72 -  satellite-clone playbook fails if /etc/katello-installer isn't present.
 - name: Create /etc/katello-installer folder
@@ -170,21 +190,26 @@
     when: satellite_version == 6.1
 
   - include: reset_pulp_data.yml
-    when: not pulp_data.stat.exists and not online_backup
+    when: not clone_pulp_data_exists and not online_backup
 
   - name: Run katello reindex for satellite 6.1 - Note that this might take hours
     command: foreman-rake katello:reindex --trace
-    when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.1
+    when: run_katello_reindex or not clone_pulp_data_exists and satellite_version == 6.1
   - name: Run katello reimport for satellite 6.2 - Note that this might take hours
     command: foreman-rake katello:reimport --trace
-    when: run_katello_reindex or not pulp_data.stat.exists and satellite_version == 6.2
+    when: run_katello_reindex or not clone_pulp_data_exists and satellite_version == 6.2
 
   - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
     script: disassociate_capsules.rb
     register: disassociate_capsules
 
+  - name: set fact - disassociate_capsules
+    set_fact:
+      clone_disassociate_capsules: "{{ disassociate_capsules.stdout }}"
+      cacheable: true
+
   - name: copy disassociate_capsules.rb output
-    local_action: copy content={{ disassociate_capsules.stdout }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
+    local_action: copy content={{ clone_disassociate_capsules }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
 
   - debug:
       msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
