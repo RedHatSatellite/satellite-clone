@@ -11,3 +11,6 @@
 - name: reset pulp data in 6.1
   command: echo "Katello::Erratum.all.destroy_all" | foreman-rake console
   when: satellite_version == 6.1
+
+- name: migrate pulp db
+  command: sudo -u apache pulp-manage-db
