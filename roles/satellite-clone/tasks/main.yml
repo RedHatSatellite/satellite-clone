@@ -158,6 +158,10 @@
   - name: Wait for foreman-tasks service to start
     command: sleep 300
 
+  - name: Cleanup paused tasks
+    command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true 
+    when: satellite_version == 6.2
+
   - name: Run installer upgrade (satellite 6.2 only)
     command: satellite-installer --upgrade
     when: satellite_version == 6.2
@@ -203,3 +207,6 @@
     command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from features_smart_proxies where feature_id = (select id from features where features.name = 'Pulp Node'));"
     become_user: postgres
     become: true
+
+  - fail:
+      msg: "Something went wrong! Please check the output above for more information."
