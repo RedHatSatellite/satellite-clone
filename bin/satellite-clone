@@ -2,8 +2,8 @@
 
 import argparse
 import os
-import subprocess
 import sys
+from ansible.cli.playbook import PlaybookCLI
 
 
 def yes_or_no(question):
@@ -25,7 +25,12 @@ def main():
     parser.add_argument("--start-at-task",
                         action="store",
                         dest="start_at_task",
-                        help="Start at a specific task",)
+                        help="Start at a specific task")
+    parser.add_argument("--step",
+                        action="store_true",
+                        dest="step",
+                        default=False,
+                        help="interactive: confirm each task before running")
     args = parser.parse_args()
 
     PRODUCTION_INSTALL_PATH = "/usr/share/satellite-clone"
@@ -40,6 +45,8 @@ def main():
     if args.start_at_task:
         ansible_args.append("--start-at-task")
         ansible_args.append(args.start_at_task)
+    if args.step:
+        ansible_args.append("--step")
 
     if not os.path.isdir(PRODUCTION_INSTALL_PATH):
         sys.stdout.write("It looks like satellite-clone has"
@@ -51,24 +58,16 @@ def main():
                                                 'ansible.production.cfg')
 
     inventory_path = os.path.join(PRODUCTION_INSTALL_PATH, 'inventory')
+    inventory_path = os.path.join(PRODUCTION_INSTALL_PATH, 'inventory')
     ansible_playbook = (["ansible-playbook", "-i", inventory_path] +
-                        + ansible_args
-                        + [DEFAULT_PLAYBOOK_FILE])
+                        ansible_args +
+                        [DEFAULT_PLAYBOOK_FILE])
 
     sys.stdout.write(" ".join(ansible_playbook))
-    run_playbook = subprocess.Popen(ansible_playbook,
-                                    stdout=subprocess.PIPE,
-                                    bufsize=1,
-                                    cwd=PRODUCTION_INSTALL_PATH)
 
-    # provide real-time output
-    while True:
-        line = run_playbook.stdout.readline()
-        sys.stdout.write(line)
-        if not line:
-            break
-    run_playbook.stdout.close()
-    run_playbook.wait()
+    cli = PlaybookCLI(ansible_playbook)
+    cli.parse()
+    cli.run()
 
 
 if __name__ == '__main__':
