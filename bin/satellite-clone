@@ -3,7 +3,6 @@
 import argparse
 import os
 import sys
-from ansible.cli.playbook import PlaybookCLI
 
 
 def yes_or_no(question):
@@ -57,7 +56,10 @@ def main():
     os.environ["ANSIBLE_CONFIG"] = os.path.join(PRODUCTION_INSTALL_PATH,
                                                 'ansible.production.cfg')
 
-    inventory_path = os.path.join(PRODUCTION_INSTALL_PATH, 'inventory')
+    # We need to import here because the ANSIBLE_CONFIG environment variable is
+    # checked at import time (instead of when calling PlaybookCLI)
+    from ansible.cli.playbook import PlaybookCLI
+
     inventory_path = os.path.join(PRODUCTION_INSTALL_PATH, 'inventory')
     ansible_playbook = (["ansible-playbook", "-i", inventory_path] +
                         ansible_args +
