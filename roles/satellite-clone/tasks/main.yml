@@ -178,6 +178,17 @@
   - name: Wait for foreman-tasks service to start
     command: sleep 300
 
+  - name: Get candlepin credentials
+    command: sed -n -e 's/^.*myDS.password=//p' /etc/candlepin/candlepin.conf
+    register: candlepin_password
+
+  - set_fact:
+      clone_candlepin_password: "{{ candlepin_password.stdout }}"
+      cacheable: true
+
+  - name: Migrate candlepin db
+    command: "/usr/share/candlepin/cpdb --update -p {{ clone_candlepin_password }}"
+
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true 
     when: satellite_version == 6.2
