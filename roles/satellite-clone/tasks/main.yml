@@ -176,7 +176,10 @@
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
   - name: Wait for foreman-tasks service to start
-    command: sleep 300
+    command: sleep 900
+  
+  - name: Check hammer ping
+    command: hammer ping
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true 
