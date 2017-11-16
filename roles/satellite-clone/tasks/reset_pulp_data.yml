@@ -2,7 +2,7 @@
   command: mongo pulp_database --eval "db.units_distribution.drop();db.units_docker_blob.drop();db.units_docker_image.drop();db.units_docker_manifest.drop();db.units_docker_tag.drop();db.units_drpm.drop();db.units_erratum.drop();db.units_iso.drop();db.units_package_category.drop();db.units_package_environment.drop();db.units_package_group.drop();db.units_puppet_module.drop();db.units_rpm.drop();db.units_srpm.drop();db.units_yum_repo_metadata_file.drop();db.repo_content_units.drop();"
 
 - name: reset pulp repo importers
-  command: 'echo "db.repo_importers.update({}, {\$set: {\"scratchpad.repomd_revision\": null}}, {multi: true});" | mongo pulp_database'
+  command: 'mongo pulp_database --eval "db.repo_importers.update({\"scratchpad.repomd_revision\": {$exists: true}}, {$set: {\"scratchpad.repomd_revision\": null}}, {multi: true});"'
 
 - name: reset pulp data in 6.2
   command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::PuppetModule.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all" | foreman-rake console
