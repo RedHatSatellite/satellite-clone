@@ -30,6 +30,11 @@ def main():
                         dest="step",
                         default=False,
                         help="interactive: confirm each task before running")
+    parser.add_argument("--list-tasks",
+                        action="store_true",
+                        dest="list_tasks",
+                        default=False,
+                        help="list tasks that will be run in the playbook")
     args = parser.parse_args()
 
     PRODUCTION_INSTALL_PATH = "/usr/share/satellite-clone"
@@ -42,8 +47,7 @@ def main():
               .format(PRODUCTION_INSTALL_PATH))
         exit(1)
 
-    yes_or_no("This will initiate satellite-clone. Do you want to proceed?")
-
+    confirm = False
     ansible_args = []
     if args.verbose:
         ansible_args.append("-vvv")
@@ -52,6 +56,14 @@ def main():
         ansible_args.append(args.start_at_task)
     if args.step:
         ansible_args.append("--step")
+    if args.list_tasks:
+        ansible_args = []
+        ansible_args.append("--list-tasks")
+        confirm = True
+
+    if not confirm:
+        yes_or_no("This will initiate satellite-clone. "
+                  "Do you want to proceed?")
 
     os.environ["ANSIBLE_CONFIG"] = os.path.join(PRODUCTION_INSTALL_PATH,
                                                 'ansible.production.cfg')
