@@ -4,7 +4,7 @@
 
   - The playbook will update the cloned Satellite hostname to match the hostname of the original Satellite from which the backup is generated.
   - On the clone, refreshing the manifest will invalidate the original Satellite's manifest.
-  - DHCP, DNS, and TFTP will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings after the playbook run.
+  - DHCP, DNS, TFTP, and IPA authentication will be disabled during the install to avoid configuration errors. If you want to use provisioning on the cloned Satellite, you will have to manually re-enable these settings after the playbook run.
   - If you are using Remote Execution, you will have to re-copy the ssh keys to your clients. The keys are regenerate during the install portion of the clone process.
   - The playbook will reset the admin password to "changeme".
   - The playbook run may may take a while to complete.
