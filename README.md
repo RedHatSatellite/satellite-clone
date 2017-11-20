@@ -2,6 +2,36 @@
 
 Easily setup a Satellite 6.1 or 6.2 server with restored backup data.
 
+## 1.2 release notes
+
+#### Notable commits:
+
+09387bf5bb39dc179c854364f984c41192d307c7 Disable REX on install Fixes #234
+Remote execution is disabled on install
+
+fccf47f1928cb01f5e859fca1d62144c94214160 Add option to restorecon the filesystem
+This is useful when fixing permission errors resulting from a bad backup Fixes #220
+
+00155a5fbd2b0b07d2b5224edbbf58e1aea64b5c Fixes pulp duplicate key error Fixes #255
+When cloning w/o pulp_data.tar, the database has to be migrated to recreate indexes and prevent errors like duplicate key errors.
+
+73108b928a965f31889b61d617b96baa4213ecf0 Cleanup paused tasks
+
+ee82d710cf2a241e372ef030e4604f1df3f0fc2e Change disable postgres triggers to true Fixes #257
+This setting is now true by default
+
+3cee9fd06f147115ddd865b2ecfe73b6ecd06f7f Updates production cli
+adds caching of facts which allows you do do `--start-at-task` and `--step` modes
+
+4c6670eeeac7eb326094f417c84ed8f2612bd438 Migrate cp database after install Fixes #261 - The candlepin database can be restored from an earlier sat version, so we can migrate it before running the upgrade to avoid issues.
+
+aa059b62b0551784de614e6e1489fc82d1d2b5d6 Add man page Fixes #244
+can now run `man satellite-clone` to view man pages
+
+f47c96deeb8916e923d2824c22a4a917743faead Add --list-tasks Fixes #265
+this is helpful when using `--start-at-task`
+
+
 ## Getting Started
 Throughout this documentation, ensure that you understand the following terminology:
 - Source server: Existing Satellite server.
