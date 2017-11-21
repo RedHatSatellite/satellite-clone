@@ -163,7 +163,7 @@
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
   when: satellite_version == 6.1
 - name: run Satellite 6.2 installer
-  command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false --foreman-proxy-tftp false --no-enable-foreman-plugin-remote-execution --no-enable-foreman-proxy-plugin-remote-execution-ssh
+  command: satellite-installer --scenario satellite --foreman-proxy-dns false --foreman-proxy-dhcp false --foreman-proxy-tftp false
   when: satellite_version == 6.2
 
 - block:
