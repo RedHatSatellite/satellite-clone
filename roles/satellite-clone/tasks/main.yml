@@ -47,7 +47,7 @@
 
 # Register/subscribe the VM
 - name: register host
-  command: subscription-manager register --force --activationkey={{ activationkey }} --org {{ org }}
+  command: "subscription-manager register --force --activationkey='{{ activationkey }}' --org '{{ org }}'"
   when: register_to_portal
 - name: disable all repos
   command: subscription-manager repos --disable "*"
@@ -190,7 +190,7 @@
     command: "/usr/share/candlepin/cpdb --update -p {{ clone_candlepin_password }}"
 
   - name: Cleanup paused tasks
-    command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true 
+    command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
     when: satellite_version == 6.2
 
   - name: Run installer upgrade (satellite 6.2 only)
