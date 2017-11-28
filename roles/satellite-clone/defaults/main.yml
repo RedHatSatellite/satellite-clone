@@ -11,3 +11,4 @@ register_to_portal: True
 rhel_migration: False
 disable_postgres_triggers: True
 restorecon: False
+skip_satellite_rpm_check: False

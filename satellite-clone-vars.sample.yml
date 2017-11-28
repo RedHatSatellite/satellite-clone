@@ -67,3 +67,6 @@ org: changeme
 # Run restorecon step. This will add a step to restore selinux contexts across the fileystem. The backup is restored
 # with selinux context, but if selinux issues are still present, this option is useful. (defaults to false)
 #restorecon: false
+#
+# Skip checking that satellite isn't already installed. (defaults to false)
+#skip_satellite_rpm_check: false
