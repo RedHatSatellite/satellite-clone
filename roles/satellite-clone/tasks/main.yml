@@ -86,8 +86,10 @@
 - name: check /etc/hostname
   lineinfile: dest=/etc/hostname line={{ hostname }}
   when: ansible_distribution_major_version == "7"
+
 - name: create /etc/hosts
   template: src=hosts.j2 dest=/etc/hosts
+  when: overwrite_etc_hosts
 
 # Install Satellite packages
 - name: Install Satellite 6.1 packages
