@@ -52,6 +52,10 @@ Options
 
 :  List tasks that will run in the satellite-clone playbook
 
+--flush-cache
+
+:  Clear the fact cache
+
 FILES
 =====
 

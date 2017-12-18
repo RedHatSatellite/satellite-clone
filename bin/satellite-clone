@@ -35,6 +35,12 @@ def main():
                         dest="list_tasks",
                         default=False,
                         help="list tasks that will be run in the playbook")
+    parser.add_argument("--flush-cache",
+                        action="store_true",
+                        dest="flush_cache",
+                        default=False,
+                        help="clear the fact cache")
+
     args = parser.parse_args()
 
     PRODUCTION_INSTALL_PATH = "/usr/share/satellite-clone"
@@ -60,6 +66,8 @@ def main():
         ansible_args = []
         ansible_args.append("--list-tasks")
         confirm = True
+    if args.flush_cache:
+        ansible_args.append("--flush-cache")
 
     if not confirm:
         yes_or_no("This will initiate satellite-clone. "
