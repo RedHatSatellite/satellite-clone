@@ -46,7 +46,11 @@ Options
 
 --step
 
-: interactive, confirm each task before running
+:  Interactive, confirm each task before running
+
+--list-tasks
+
+:  List tasks that will run in the satellite-clone playbook
 
 FILES
 =====
