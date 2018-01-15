@@ -1,22 +1,4 @@
 ---
-############## required variables ####################
-# Registration info - Credentials to register your Satellite to Red Hat portal
-# - You will need an activation key with a Satellite subscription.
-# - For security reasons only Activationkey / Org combination is supported for now.
-# - If you don't know how to create Activation keys in https://access.redhat.com, refer
-#   to the knowledge base article https://access.redhat.com/articles/1378093.  In this
-#   document, there are separate sections for `Creating an Activation Key` and `Finding
-#   your Organization ID`.
-# - If you want to register your Destination node to the portal by yourself, you can
-#   do that and skip the registration part in the playbook run by setting `register_to_portal`
-#   to false in this config.
-# - `org` field below is the unique Red Hat ID for your organization in portal. It may
-#   look like `1111111`.
-activationkey: changeme
-org: changeme
-
-
-
 ############## optional variables ####################
 #
 # The backup folder on your Destination node.
@@ -51,11 +33,25 @@ org: changeme
 # uncomment the following line to override this option (defaults to true)
 #run_pre_install_check: true
 
-# If register_to_portal is set to false:
+# Use register_to_portal to automatically register to Red Hat Portal. By default,
 #   - the host will not be registered to RH portal.
-#   - it is the responsibility of the user to make the required repos available.  Otherwise, the script will stop with an error.
-# uncomment the following line to override this option (defaults to true)
-#register_to_portal: true
+#   - it is the responsibility of the user to make the required repos available.
+# uncomment the following line to override this option (defaults to false). If you override this option, you must update
+# `activationkey` and `org` variables in the next section.
+#register_to_portal: false
+
+# Red Hat Portal Registration info - Credentials to register your Satellite to Red Hat portal
+# - Use this section if and only if `register_to_portal` is `true`.
+# - You will need an activation key with a Satellite subscription.
+# - For security reasons only Activationkey / Org combination is supported for now.
+# - If you don't know how to create Activation keys in https://access.redhat.com, refer
+#   to the knowledge base article https://access.redhat.com/articles/1378093.  In this
+#   document, there are separate sections for `Creating an Activation Key` and `Finding
+#   your Organization ID`.
+# - `org` field below is the unique Red Hat ID for your organization in portal. It may
+#   look like `1111111`.
+#activationkey: changeme
+#org: changeme
 
 # Set this to true if you want to clone a rhel6 Satellite server to a rhel7 machine (defaults to false)
 #rhel_migration: false

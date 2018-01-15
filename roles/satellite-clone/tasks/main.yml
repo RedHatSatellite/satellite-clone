@@ -41,11 +41,11 @@
   fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
   when: backup_hostname.stderr
 
-- name: Check that mandatory variables are updated
+- name: Check that the registration variables (activationkey, org) are updated
   fail: msg="Please update the variables in /etc/satellite-clone/satellite-clone-vars.yml"
   when: ((activationkey == "changeme") or (org == "changeme")) and register_to_portal
 
-# Register/subscribe the VM
+# Register/subscribe the VM to Red Hat Portal
 - name: register host
   command: "subscription-manager register --force --activationkey='{{ activationkey }}' --org '{{ org }}'"
   when: register_to_portal
