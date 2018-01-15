@@ -3,7 +3,6 @@
 activationkey: changeme
 org: changeme
 backup_dir: /backup
-required_root_free_space: 75
 disable_firewall: False
 run_katello_reindex: False
 run_pre_install_check: True

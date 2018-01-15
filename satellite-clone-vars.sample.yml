@@ -32,11 +32,6 @@ org: changeme
 #backup_dir: /backup
 
 # Misc info
-# This defines the minimum free GBs that should be present in your root partition. Update this in accordance with the data present in your Satellite.
-#
-# uncomment the following line to override this option (defaults to 75)
-#required_root_free_space: 75
-
 # Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes.
 # uncomment the following line to override this option (defaults to false)
 #disable_firewall: false
