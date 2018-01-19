@@ -160,6 +160,10 @@
   command: restorecon -R /
   when: restorecon
 
+- name: purposefully fail
+  fail:
+    msg: "debugging"
+
 # Run Satellite installer
 - name: run Satellite 6.1 installer
   command: katello-installer --capsule-dns false --capsule-dhcp false --capsule-tftp false
