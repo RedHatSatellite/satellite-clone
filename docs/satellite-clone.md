@@ -29,10 +29,11 @@
    ```console
      # cp satellite-clone-vars.sample.yml satellite-clone-vars.yml
    ```
-2. Place the backup files in a folder on the blank machine. This folder path is specified in the `backup_dir` variable in `satellite-clone-vars.yml`.
-3. Update the folder path of the backup files using the `backup_dir` variable in `satellite-clone-vars.yml`.
-4. If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable `rhel_migration` to true in `satellite-clone-vars.yml`.
-5. Run the ansible playbook from the root directory of this project:
+2. Place the backup files in `/backup` folder on the blank machine. If using a different folder, update `backup_dir` variable in `satellite-clone-vars.yml`.
+3. If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable `rhel_migration` to true in `satellite-clone-vars.yml`.
+4. You are required to register and subscribe the blank machine to Red Hat portal to get content for the Satellite installation.  Alternatively, to let the clone tool register to Red Hat portal, you can override `register_to_portal` to `true` and update `activationkey`, `org` variables in `satellite-clone-vars.yml`.
+5. It is assumed that you have access to the required repositories for Satellite installation. If using custom repositories for Satellite installation, override `enable_repos` to `false` in `satellite-clone-vars.yml`.
+6. Run the ansible playbook from the root directory of this project:
 
     ```console
       # ansible-playbook satellite-clone-playbook.yml

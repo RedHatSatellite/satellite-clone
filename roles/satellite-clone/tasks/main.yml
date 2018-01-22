@@ -45,16 +45,50 @@
   fail: msg="Please update the variables in /etc/satellite-clone/satellite-clone-vars.yml"
   when: ((activationkey == "changeme") or (org == "changeme")) and register_to_portal
 
-# Register/subscribe the VM to Red Hat Portal
-- name: register host
+- name: Register/Subscribe the system to Red Hat Portal
   command: "subscription-manager register --force --activationkey='{{ activationkey }}' --org '{{ org }}'"
   when: register_to_portal
-- name: disable all repos
+
+- name: Disable all repos
   command: subscription-manager repos --disable "*"
-  when: register_to_portal
-- name: Enable required repos
+  ignore_errors: True
+  register: disable_repos_result
+  when: enable_repos
+
+- name: set fact - disable_repos_result
+  set_fact:
+    disable_repos_result_fail: "{{ (disable_repos_result.rc | int) != 0 }}"
+    caceable: True
+  when: enable_repos
+
+- name: Check that the repos are disabled without errors
+  fail:
+    msg: "Disabling repos failed. Make sure that your system is registered to Red Hat and has the appropriate Satellite
+         subscriptions attached.  Alternatively, you can skip this task by specifying `enable_repos` to `False` if
+         you would like to enable the required repositories manually."
+  when: enable_repos and disable_repos_result_fail
+
+- name: Enable required repos for Satellite installation
   command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms
-  when: register_to_portal
+  ignore_errors: True
+  register: enable_repos_result
+  when: enable_repos
+
+- name: set fact - enable_repos_result
+  set_fact:
+    enable_repos_result_fail: "{{ (enable_repos_result.rc | int) != 0}}"
+    caceable: True
+  when: enable_repos
+
+- name: Check that the repos are enabled without errors
+  fail:
+    msg: "Enabling required repos failed.  Make sure that your system has access to the following repos:
+         rhel-{{ ansible_distribution_major_version }}-server-rpms,
+         rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms,
+         rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms.
+         Alternatively, you can skip this task by specifying `enable_repos` to `False` and provide alternate
+         means (e.g., custom repositories) to get the required rpms."
+  when: enable_repos and enable_repos_result_fail
 
 # Remove EPEL as it causes problems for the Satellite installer
 - name: Remove epel

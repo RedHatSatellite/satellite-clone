@@ -1,12 +1,13 @@
 ---
 # more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
-activationkey: changeme
-org: changeme
 backup_dir: /backup
 disable_firewall: False
 run_katello_reindex: False
 run_pre_install_check: True
 register_to_portal: False
+activationkey: changeme
+org: changeme
+enable_repos: True
 rhel_migration: False
 disable_postgres_triggers: True
 restorecon: False
