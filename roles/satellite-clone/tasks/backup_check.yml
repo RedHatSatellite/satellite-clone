@@ -107,8 +107,8 @@
 - name: Check RHEL 6 to 7 migration backup is present
   fail:
     msg: |
-      Backup is missing files. To use a RHEL 6 backup on a RHEL 7 system, you need to have
-      mongo_data.tar.gz, foreman.dump, and candlepin.dump files present.
+      Backup is missing files. To use a RHEL 6 backup on a RHEL 7 system, you need
+      a mongo_dump folder, a foreman.dump file, and a candlepin.dump file present.
   when: rhel_migration and not online_backup
 
 - name: Check full backup is present
