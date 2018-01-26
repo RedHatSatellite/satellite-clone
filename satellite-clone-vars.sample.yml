@@ -1,40 +1,40 @@
 ---
+# Throughout this documentation, ensure that you understand the following terminology:
+# - Source server: Existing Satellite server.
+# - Target server: new server, to which Satellite server is being cloned to.
+# Note:
+# 1. All the options mentioned in this file affects only the target server.
+# 2. To change any variable, just uncomment the corresponding line and provide a new value.
+
 ############## optional variables ####################
-#
-# The backup folder on your Destination node.
-# NOTE: Place the backup files only on the Destination node and not on the Ansible Control node.
-#
-#   Required backup files:
+
+# The backup folder on your target server (defaults to /backup).
+# Required backup files:
 #   - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
 #   - Online backup or RHEL migration scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump
-#
-#    If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
-#
-# uncomment the following line to override this option (defaults to /backup)
+# Note:
+# 1. Place the backup files only on the target server and not on the source server.
+# 2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
 #backup_dir: /backup
 
-# Misc info
-# Disable firewall - This setting can optionally be used to disable firewall to setup Satellite for testing purposes.
-# uncomment the following line to override this option (defaults to false)
+# Disable firewall to setup Satellite for testing purposes. (defaults to false)
 #disable_firewall: false
 
-# Run katello-reindex - This setting can optionally be used to run katello reindex after the Satellite install.
+# Run katello reindex after the Satellite install. (defaults to false)
 # Note: If you are planning to clone your Satellite 6.1 and immediately upgrade to 6.2, you may choose to skip this step.
-# A reindex will run automatically if you set include_pulp_data to false
-# uncomment the following line to override this option (defaults to false)
 #run_katello_reindex: false
 
-# Run pre_install_check
-# uncomment the following line to override this option (defaults to true)
+# Run several pre-install checks (defaults to true)
 #run_pre_install_check: true
 
-# Use register_to_portal to automatically register to Red Hat Portal. By default, the system will not
-# be registered to Red Hat portal.
-# uncomment the following line to override this option (defaults to false). If you override this option, you must update
-# `activationkey` and `org` variables in the next section.
+# Automatically register the target server to Red Hat Portal. (defaults to false)
+# By default,
+#   - The target server will not be registered to the Red Hat portal.
+#   - It is the responsibility of the user to make the required repositories available.
+# If you override this option, you must update `activationkey` and `org` variables in the next section.
 #register_to_portal: false
 
-# Red Hat Portal Registration info - Credentials to register your Satellite to Red Hat portal
+# Credentials to register the target server to Red Hat portal.
 # - Use this section if and only if `register_to_portal` is `true`.
 # - You will need an activation key with a Satellite subscription.
 # - For security reasons only Activationkey / Org combination is supported for now.
@@ -53,21 +53,21 @@
 # sure that the required rpms are available for Satellite installation.
 #enable_repos: true
 
-# Set this to true if you want to clone a rhel6 Satellite server to a rhel7 machine (defaults to false)
+# Set this to true (defaults to false) if you are cloning a rhel6 source server to a rhel7 target server.
 #rhel_migration: false
 
-# Disable postgres triggers. This is set to true to ignore postgresql constraints such as unique indexes
-# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command. (defaults to true)
+# Disable postgres triggers (defaults to true). This is set to true to ignore postgresql constraints such as unique indexes
+# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command.
 #disable_postgres_triggers: true
-#
-# Run restorecon step. This will add a step to restore selinux contexts across the fileystem. The backup is restored
-# with selinux context, but if selinux issues are still present, this option is useful. (defaults to false)
+
+# Run restorecon step (defaults to false) to add a step to restore selinux contexts across the fileystem. The backup is restored
+# with selinux context, but if selinux issues are still present, this option is useful.
 #restorecon: false
-#
-# Skip checking that satellite isn't already installed. (defaults to false)
+
+# Disable checking that satellite is already installed. (defaults to false)
 #skip_satellite_rpm_check: false
-#
-# Overwrite /etc/hosts file. The playbook will overwrite /etc/hosts file with the hostname from the backup files provided. If you
+
+# Overwrite /etc/hosts file (defaults to true). The playbook will overwrite /etc/hosts file with the hostname from the backup files provided. If you
 # have a custom /etc/hosts file and do not want it overwritten, you can disable this step and setup the file yourself. If you
-# do disable this option, make sure the original Satellite's hostname can resolve to 127.0.0.1 (defaults to true)
+# do disable this option, make sure the source server's (original Satellite's) hostname can resolve to 127.0.0.1.
 #overwrite_etc_hosts: true

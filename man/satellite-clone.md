@@ -3,7 +3,7 @@
 NAME
 ====
 
-**satellite-clone** — Setup a Satellite 6.1 or 6.2 install with restored backup data.
+**satellite-clone** — Setup a Satellite 6.1 or 6.2 server with restored backup data.
 
 SYNOPSIS
 ========
@@ -13,25 +13,33 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Restores a working Satellite 6 instance from a backup.
+Easily setup a Satellite 6.1 or 6.2 server with restored backup data.
 Currently satellite 6.1 and 6.2 backups are supported.
+
+Throughout this documentation, the following terminology is used:
+
+ - Source server: Existing Satellite server.
+ - Target server: new server, to which Satellite server is being cloned.
 
 You will need:
 --------------
 
-  - A blank, clean install, RHEL 7 machine,
-  - A Satellite backup (katello-backup in 6.1 and 6.2), see the required files below
-    - Standard backup scenario: config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-    - Online backup or RHEL 6 to 7 migration scenario: config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+  - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
+  - A backup from a 6.1 or 6.2 Satellite server (source server) created with katello-backup. This backup can be with or without pulp-data, and can be from a RHEL 6 or 7 machine.
+  - You will need a Satellite 6 subscription for the cloned machine. There are options for obtaining subscriptions at a discounted rate for smaller environments.
 
 To perform the clone:
 ---------------------
 
-  - Place the backup files in a folder on the blank machine. This folder path is specified in the "backup_dir" variable in /etc/satellite-clone/satellite-clone-vars.yml and can be changed.
-  - If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable "rhel_migration" (Satellite 6.2 only) to true in satellite-clone-vars.yml.
-  - In the same file either add an activation key from the Red Hat portal OR setup the proper Satellite subscriptions yourself and change "register_to_portal" to false in satellite-clone-vars.yml
-  - Run satellite-clone
+Satellite-clone configuration file is in /etc/satellite-clone/satellite-clone-vars.yml.
 
+On the target server:
+
+ - Place the backup files in "/backup" folder. If using a different folder, update "backup_dir" variable in satellite-clone-vars.yml.
+ - If you are cloning RHEL 6 backup data to a RHEL 7 machine, update the variable "rhel_migration" to "true" in satellite-clone-vars.yml.
+ - You are required to register and subscribe the target server to Red Hat portal to get content for the Satellite installation.  Alternatively, to let the clone tool register to Red Hat portal, you can override "register_to_portal" to "true" and update "activationkey", "org" variables in satellite-clone-vars.yml.
+ - It is assumed that the target server has access to the required repositories for Satellite installation. If using custom repositories for Satellite installation, override "enable_repos" to "false" in satellite-clone-vars.yml.
+ - Run "satellite-clone". This may take a while to complete.
 
 Options
 -------
