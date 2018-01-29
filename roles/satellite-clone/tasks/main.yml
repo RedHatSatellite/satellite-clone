@@ -56,10 +56,6 @@
   command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms
   when: register_to_portal
 
-# Install libselinux package
-- name: Ensure libselinux-python package is present (required by ansible)
-  yum: name=libselinux-python state=latest
-
 # Remove EPEL as it causes problems for the Satellite installer
 - name: Remove epel
   yum_repository:
