@@ -2,7 +2,49 @@
 
 Easily setup a Satellite 6.1 or 6.2 server with restored backup data.
 
-## 1.2 release notes
+## 1.2.1 release notes
+
+#### Notable commits
+
+b23b9c60d66c038192e2ccce33c03fc7fba7c717 Documentation updates
+
+f764102877b40dad3f22e5b9149db6efff87f25e Use cached variables for candlepin and foreman dump check Fixes #314
+
+4c06e7b5a997f10be147ede58af677ff4e9da7f0 Add flexibility to enable required repos.
+Subscriptions must be attached manually by default. If you would like to specify an activation key, you must update the config file. Repos are enabled automatically.
+
+77a1f62e59e6271ff363ccb44a1de88b83403427 Removal of libselinux package check
+
+85c47ae8fb550fd8b58cc2a46761a16b1315e731 Disabled Ansible retry option.
+
+3ca6b61f282f4afee375c343137fc17003d6c59b Update error msg for online backup (#307)
+
+79a3fbf5d4ce9b2a757cfa5460004b92e1bf144b Don't create retry files in production (#308)
+
+e47c20e2acdd196fa8ed88c63467d7a73e9a647c Exit properly on error in production script (#303)
+
+4d6e6de7578009a2e6fe87dffd7dc771234aec09 Remove space calculation check
+This was causing issues for users and we removed in favor of documentation.
+
+52c91ffbc36c19620916045b11cde60ec050bfa8 Made portal registration disabled by default.
+By default, the server will not be registered to Red Hat Portal - It is the responsibility of the user to provide right repos for satellite installation.
+
+75715b4c0195de71f439e5007b2c90bc944023a3 Remove jmx.conf
+
+ee74df471e5b4f0f5598a589b275d711dcd7bbc7 added --flush-cache
+
+e395b95c6f536bfa688a4b5f399a779dc0f288f1 Add option to not overwrite /etc/hosts
+
+3373ff4426b7d233434488c3b335ba84884573c9 Actually drop mongo database
+
+8735944c5dd38a96e96d697d3f273c0c0b94fe4c Ensure satellite isn't already installed
+Prevent satellite-clone from running on a system where satellite is installed. The check is skippable.
+
+be5225d61f1b8f82133745d1203061517435d936 Allow multi-word activation key names
+
+5d94c6ee25eccff05c8f894217aed6245e186d34 disable IPA authentication
+
+## 1.2.0 release notes
 
 #### Notable commits:
 
