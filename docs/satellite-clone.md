@@ -3,12 +3,10 @@
 #### Important Notes ####
 Before cloning:
   - It is recommended that the target server is network isolated. We take steps to disable communication from the target server to existing capsules and hosts, but the only way to ensure this is in an isolated environment.
-  - If your storage is slow (like NFS) and your pulp backup tar file is large (>100 gb), you might see memory errors while untaring pulp data during the playbook run. In this case don't include pulp_data.tar during the cloning process and instead copy over `/var/lib/pulp` from the source server to the target server after the cloning process. For example, from the source server:
-
-     ```console
-        # rsync -az /var/lib/pulp target_server:/var/lib/pulp
-    ```
-    Note that rsync command may take a while to complete to copy large data.
+  - You can choose to perform a clone without a pulp_data.tar file. After the clone run *without pulp content*, you have two options:
+    - To recover pulp content after the cloning process, follow these [steps](#cloning-without-pulp_contenttar-and-recover-pulp-content-after-cloning).
+    - If you are cloning just for testing purposes, you can get away with not using pulp data at all. The target server should still be functional other than the pulp content.
+  - If your storage is slow (like NFS) and your pulp backup tar file is large (>100 gb), you might see memory errors while untaring pulp data during the playbook run. In this case, don't include pulp_data.tar during the cloning process.
 
 During cloning:
   - The playbook will update the target server's hostname to match the hostname of the source server.
@@ -27,6 +25,21 @@ RHEL6 to RHEL7 migration:
     - Upgrade RHEL6 Satellite 6.1 to RHEL6 Satellite 6.2.latest using the normal upgrade process.
     - Use this clone tool (also shipped with Satellite 6.2) to migrate from RHEL6 Satellite 6.2.latest to RHEL 7 Satellite 6.2.latest.
     - Upgrade RHEL7 Satellite 6.2.latest to RHEL7 Satellite 6.3.latest using the foreman-maintain (also shipped with Satellite 6.3) tool.
+
+#### Cloning without pulp_content.tar and recover pulp content after cloning ####
+Note: This step is not required if you used pulp_data.tar during cloning process.
+- Use clone tool to clone/migrate from source server to the target server.
+- Stop katello-service on the target server: `katello-service stop`
+- Copy `/var/lib/pulp` from source server to the target server.
+  On the source server:
+
+  ```console
+    # rsync -aPz /var/lib/pulp/ target_server:/var/lib/pulp/
+  ```
+  Note:
+  1. This command may take a while to complete in case of large data.
+  2. If you find issues in Satellite content syncing post rsync command, verify the contents of `/var/lib/pulp` on the target server.
+- Start katello-service on the target server: `katello-service start`
 
 #### Prerequisites ####
 
