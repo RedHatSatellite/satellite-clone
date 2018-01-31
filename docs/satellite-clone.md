@@ -41,6 +41,17 @@ Note: This step is not required if you used pulp_data.tar during cloning process
   2. If you find issues in Satellite content syncing post rsync command, verify the contents of `/var/lib/pulp` on the target server.
 - Start katello-service on the target server: `katello-service start`
 
+Typical Production workflow:
+
+This workflow will help transition your environment from a current working Satellite to a new cloned Satellite.
+  - Backup the source server.
+  - Clone/Migrate the source server (RHEL6 Satellite 6.2.latest) server to the target server (RHEL7 Satellite 6.2.latest).
+  - Shut down the source server.
+  - Update network configuration on the target server, (e.g., DNS) to match the target server’s IP address with its new host name.
+  - Restart goferd in Content hosts and capsules to refresh the connection.
+  - Test the new target server.
+  - Decommission the source server.
+
 #### Prerequisites ####
 
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
