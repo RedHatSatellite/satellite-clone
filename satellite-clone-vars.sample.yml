@@ -65,7 +65,9 @@
 #restorecon: false
 
 # Disable checking that satellite is already installed. (defaults to false)
-#skip_satellite_rpm_check: false
+# Once the playbook confirms that there is no satellite installation, the subsequent runs will not run this task.
+# To force run this task for a specific run, use `--flush-cache` option
+#disable_satellite_rpm_check: false
 
 # Overwrite /etc/hosts file (defaults to true). The playbook will overwrite /etc/hosts file with the hostname from the backup files provided. If you
 # have a custom /etc/hosts file and do not want it overwritten, you can disable this step and setup the file yourself. If you
