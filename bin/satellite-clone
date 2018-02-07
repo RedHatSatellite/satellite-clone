@@ -90,7 +90,6 @@ def main():
 
     cli = PlaybookCLI(ansible_playbook)
     cli.parse()
-    cli.run()
     exit_code = cli.run()
     sys.exit(exit_code)
 
