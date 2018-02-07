@@ -8,7 +8,8 @@ NAME
 SYNOPSIS
 ========
 
-| **satellite-clone** \[**-h**|**--help**] \[**-v**|**--verbose**] \[**--start-at-task TASK**] \[**--step**]
+| **satellite-clone** \[**-h**|**--help**] \[**--start-at-task TASK**] \[**--step**] \[**--list-tasks**] \[**--flush-cache**]
+
 
 DESCRIPTION
 ===========
@@ -43,10 +44,6 @@ On the target server:
 
 Options
 -------
-
--v, --verbose
-
-:  Verbose output
 
 --start-at-task TASK
 
