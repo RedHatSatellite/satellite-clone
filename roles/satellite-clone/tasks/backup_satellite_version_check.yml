@@ -1,0 +1,37 @@
+- name: check for satellite answers file
+  command: tar zxf {{ backup_dir }}/config_files.tar.gz  etc/foreman-installer/scenarios.d/satellite-answers.yaml --to-stdout
+  register: satellite_answers
+  ignore_errors: true
+  no_log: true
+
+- name: setting fact - satellite_answers
+  set_fact:
+    clone_satellite_answers: "{{ (satellite_answers.rc | int) == 0 }}"
+    cacheable: true
+
+- name: Temporarily set satellite_version to 6.2 if satellite_answers.yaml exists
+  set_fact:
+    satellite_version: "6.2"
+    cacheable: true
+  when: clone_satellite_answers
+
+- name: set satellite_version to 6.1 if satellite_answers.yaml does not exist
+  set_fact:
+    satellite_version: "6.1"
+    cacheable: true
+  when: not clone_satellite_answers
+
+- name: Check for satellite version in metadata file
+  check_metadata_for_satellite_version:
+    metadata_path: "{{ backup_dir }}/metadata.yml"
+  register: metadata_satellite_version
+  when: clone_metadata_exists
+
+- name: setting fact - satellite_version
+  set_fact:
+    satellite_version: "{{ metadata_satellite_version.satellite_version }}"
+    cacheable: true
+  when:
+    - clone_metadata_exists
+    - metadata_satellite_version is defined
+    - metadata_satellite_version | success

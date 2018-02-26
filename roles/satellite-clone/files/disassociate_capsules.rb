@@ -2,7 +2,7 @@
 username = "admin"
 password = "changeme"
 external_capsules = []
-external_capsule_ids = `hammer -u #{username} -p #{password} --csv capsule list --search 'feature = \"Pulp Node\"' | tail -n+2 | awk -F, {'print $1'}`
+external_capsule_ids = `hammer -u #{username} -p #{password} --csv capsule list --search 'feature = \"Pulp Node\"' | grep -v "Warning:" | tail -n+2 | awk -F, {'print $1'}`
 if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
