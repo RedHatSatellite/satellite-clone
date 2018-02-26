@@ -6,10 +6,10 @@
   service: name=postgresql state=stopped
 
 - name: Restore postgresql data
-  command: tar --selinux --overwrite -xf {{ backup_dir }}/pgsql_data.tar.gz -C /
+  command: "tar --selinux --overwrite -xf {{ backup_dir }}/pgsql_data.tar.gz -C /"
   when: standard_backup
 
-- include: restore_psql_dump.yml
+- include_tasks: restore_psql_dump.yml
   when: online_backup
 
 - name: Restore pulp data
@@ -23,7 +23,7 @@
 - name: Start mongod
   service: name=mongod state=started
 
-- include: restore_mongo_dump.yml
+- include_tasks: restore_mongo_dump.yml
   when: online_backup
 
 - name: migrate pulp db

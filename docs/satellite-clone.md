@@ -68,6 +68,7 @@ This workflow will help transition your environment from a current working Satel
    Required backup files:
    - Standard backup scenario: config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
    - Online backup or RHEL 6 to 7 migration scenario: config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+   - For Satellite 6.3+ backups, you will need the metadata.yml file from the backup as well as the other required files.
 
 2. The target server must have capacity to store the backup files, which the source server transfers to the target server, and the backup files when they are restored.
 

@@ -82,6 +82,18 @@
     clone_mongo_dump_exists: "{{ mongo_dump.stat.exists }}"
     cacheable: True
 
+- name: Check for metadata.yml file
+  stat:
+    path: "{{ backup_dir }}/metadata.yml"
+    get_checksum: False
+    get_md5: False
+  register: metadata
+
+- name: set fact - metadata
+  set_fact:
+    clone_metadata_exists: "{{ metadata.stat.exists }}"
+    cacheable: True
+
 - name: Fail if the config tar file is not present or not accessible
   fail: msg="{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
   when: not clone_config_data_exists

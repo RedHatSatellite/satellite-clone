@@ -1,6 +1,6 @@
 # Satellite-clone
 
-Easily setup a Satellite 6.1 or 6.2 server with restored backup data.
+Easily setup a Satellite 6.1, 6.2, or 6.3 server with restored backup data.
 
 ## Getting Started
 Throughout this documentation, ensure that you understand the following terminology:
@@ -9,7 +9,7 @@ Throughout this documentation, ensure that you understand the following terminol
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
-  - A backup from a 6.1 or 6.2 Satellite server (source server) created with `katello-backup`. This backup can be with or without pulp-data, and can be from a RHEL 6 or 7 machine.
+  - A backup from a 6.1, 6.2, or 6.3 Satellite server (source server) created with `katello-backup`. This backup can be with or without pulp-data, and can be from a RHEL 6 or 7 machine.
   - You will need a Satellite 6 subscription for the cloned machine. There are [options](https://access.redhat.com/articles/513353) for obtaining subscriptions at a discounted rate for smaller environments.
 
 #### Setup ####

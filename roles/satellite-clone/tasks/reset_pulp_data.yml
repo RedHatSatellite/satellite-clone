@@ -4,13 +4,19 @@
 - name: reset pulp repo importers
   command: 'mongo pulp_database --eval "db.repo_importers.update({\"scratchpad.repomd_revision\": {$exists: true}}, {$set: {\"scratchpad.repomd_revision\": null}}, {multi: true});"'
 
-- name: reset pulp data in 6.2
+- name: reset pulp data in 6.2+
   command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::PuppetModule.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all" | foreman-rake console
-  when: satellite_version == 6.2
+  when: satellite_version in ["6.2", "6.3"]
 
 - name: reset pulp data in 6.1
   command: echo "Katello::Erratum.all.destroy_all" | foreman-rake console
-  when: satellite_version == 6.1
+  when: satellite_version == "6.1"
 
-- name: migrate pulp db
+- name: stop pulp services
+  command: katello-service stop --only httpd,pulp_workers,pulp_celerybeat,pulp_resource_manager,pulp_streamer
+
+- name: migrate pulp db (reset pulp data)
   command: sudo -u apache pulp-manage-db
+
+- name: start pulp services
+  command: katello-service start --only httpd,pulp_workers,pulp_celerybeat,pulp_resource_manager,pulp_streamer
