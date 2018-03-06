@@ -14,7 +14,7 @@
 ### Before Cloning ###
   - It is recommended that the target server is network isolated. We take steps to disable communication from the target server to existing capsules and hosts, but the only way to ensure this is in an isolated environment.
   - You can choose to perform a clone without a pulp_data.tar file. After the clone run *without pulp content*, you have two options:
-    - To recover pulp content after the cloning process, follow these [steps](#cloning-without-pulp_contenttar-and-recover-pulp-content-after-cloning).
+    - To recover pulp content after the cloning process, follow these [steps](#cloning-without-pulp-data).
     - If you are cloning just for testing purposes, you can get away with not using pulp data at all. The target server should still be functional other than the pulp content.
   - If your storage is slow (like NFS) and your pulp backup tar file is large (>100 gb), you might see memory errors while untaring pulp data during the playbook run. In this case, don't include pulp_data.tar during the cloning process.
 
