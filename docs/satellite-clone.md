@@ -1,32 +1,42 @@
-## Cloning a Satellite server
+# Cloning a Satellite server #
 
-#### Important Notes ####
-Before cloning:
+* [Important Notes](#important-notes)
+  - [Before Cloning](#before-cloning)
+  - [During Cloning](#during-cloning)
+  - [After Cloning](#after-cloning)
+  - [RHEL6 to RHEL7 Migration](#rhel6-to-rhel7-migration)
+  - [Cloning Without Pulp Data](#cloning-without-pulp-data)
+  - [Typical Production Workflow](#typical-production-workflow)
+* [Prerequisites](#prerequisites)
+* [Instructions](#instructions)
+
+## Important Notes ##
+### Before Cloning ###
   - It is recommended that the target server is network isolated. We take steps to disable communication from the target server to existing capsules and hosts, but the only way to ensure this is in an isolated environment.
   - You can choose to perform a clone without a pulp_data.tar file. After the clone run *without pulp content*, you have two options:
     - To recover pulp content after the cloning process, follow these [steps](#cloning-without-pulp_contenttar-and-recover-pulp-content-after-cloning).
     - If you are cloning just for testing purposes, you can get away with not using pulp data at all. The target server should still be functional other than the pulp content.
   - If your storage is slow (like NFS) and your pulp backup tar file is large (>100 gb), you might see memory errors while untaring pulp data during the playbook run. In this case, don't include pulp_data.tar during the cloning process.
 
-During cloning:
+### During Cloning ###
   - The playbook will update the target server's hostname to match the hostname of the source server.
   - The target server will have the same Y version of the source server. For example, if your source server is Satellite version 6.2, your target server will have version 6.2 as well.
   - The playbook will reset the admin password of the target server to "changeme".
 
-After cloning:
+### After Cloning ###
   - On the target server, refreshing the manifest will invalidate the source server's manifest.
   - DHCP, DNS, TFTP, and IPA authentication will be disabled during the install to avoid configuration errors. If you want to use provisioning on the target server, you will have to manually re-enable these settings after the playbook run.
   - If you are using Remote Execution, you will have to re-copy the ssh keys to your clients. The keys are regenerate during the install portion of the clone process.
   - On the target server, the capsules will be unassociated with Lifecycle environments to avoid any interference with existing infrastructure. Instructions to reverse these changes can be found in `logs/reassociate_capsules.txt` under Satellite Clone's root directory
 
-RHEL6 to RHEL7 migration:
+### RHEL6 to RHEL7 Migration ###
   - You can clone RHEL 6 backup data to a RHEL 7 machine.  In this case, you must update the variable `rhel_migration` to `true` as explained later in this document.
   - The migration scenario is supported only for *Satellite 6.2*. If you have a RHEL6 Satellite 6.1 server and want to migrate to RHEL7, then perform the following steps:
     - Upgrade RHEL6 Satellite 6.1 to RHEL6 Satellite 6.2.latest using the normal upgrade process.
     - Use this clone tool (also shipped with Satellite 6.2) to migrate from RHEL6 Satellite 6.2.latest to RHEL 7 Satellite 6.2.latest.
     - Upgrade RHEL7 Satellite 6.2.latest to RHEL7 Satellite 6.3.latest using the foreman-maintain (also shipped with Satellite 6.3) tool.
 
-#### Cloning without pulp_content.tar and recover pulp content after cloning ####
+### Cloning Without Pulp Data ###
 Note: This step is not required if you used pulp_data.tar during cloning process.
 - Use clone tool to clone/migrate from source server to the target server.
 - Stop katello-service on the target server: `katello-service stop`
@@ -41,7 +51,7 @@ Note: This step is not required if you used pulp_data.tar during cloning process
   2. If you find issues in Satellite content syncing post rsync command, verify the contents of `/var/lib/pulp` on the target server.
 - Start katello-service on the target server: `katello-service start`
 
-Typical Production workflow:
+### Typical Production Workflow ###
 
 This workflow will help transition your environment from a current working Satellite to a new cloned Satellite.
   - Backup the source server.
@@ -52,7 +62,7 @@ This workflow will help transition your environment from a current working Satel
   - Test the new target server.
   - Decommission the source server.
 
-#### Prerequisites ####
+## Prerequisites ##
 
 1. You will need files from a katello-backup (`katello-backup` on the `Satellite server`).
    Required backup files:
@@ -61,7 +71,7 @@ This workflow will help transition your environment from a current working Satel
 
 2. The target server must have capacity to store the backup files, which the source server transfers to the target server, and the backup files when they are restored.
 
-#### Instructions ####
+## Instructions ##
 
 On the target server:
 
