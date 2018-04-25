@@ -1,0 +1,5 @@
+---
+satellite_package: katello
+satellite_installer_cmd: katello-installer
+capsule_puppet_module: capsule
+verify_rake_task: reindex
