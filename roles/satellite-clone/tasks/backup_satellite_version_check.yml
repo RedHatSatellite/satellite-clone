@@ -22,16 +22,17 @@
   when: not clone_satellite_answers
 
 - name: Check for satellite version in metadata file
-  check_metadata_for_satellite_version:
+  parse_backup_metadata:
     metadata_path: "{{ backup_dir }}/metadata.yml"
-  register: metadata_satellite_version
+  register: backup_metadata
   when: clone_metadata_exists
 
 - name: setting fact - satellite_version
   set_fact:
-    satellite_version: "{{ metadata_satellite_version.satellite_version }}"
+    satellite_version: "{{ backup_metadata.satellite_version }}"
+    puppet_version: "{{ backup_metadata.puppet_version }}"
     cacheable: true
   when:
     - clone_metadata_exists
-    - metadata_satellite_version is defined
-    - metadata_satellite_version | success
+    - backup_metadata is defined
+    - backup_metadata | success

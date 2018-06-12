@@ -56,6 +56,12 @@
   register: enable_repos_result
   when: enable_repos
 
+- name: "Enable puppet repos"
+  command: subscription-manager repos --enable rhel-7-server-satellite-{{ satellite_version }}-puppet{{ puppet_version }}-rpms
+  when:
+    - enable_repos
+    - puppet_version | int >= 4
+
 - name: set fact - enable_repos_result
   set_fact:
     enable_repos_result_fail: "{{ (enable_repos_result.rc | int) != 0}}"
@@ -157,10 +163,19 @@
   file: path=/etc/katello-installer state=directory mode=0755
   when: satellite_version in ["6.2", "6.3"]
 
-# Restore Config
+# If there is no puppet user, the extracted config files will not have the correct puppet
+# user/group permissions with puppet 4. Installing puppetserver before extracting config_files
+# fixes this issue.
+- name: Install puppetserver to create puppet user
+  yum:
+    name: puppetserver
+    state: latest
+  when: puppet_version | int >= 4
+
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C /
   when: not rhel_migration
+
 - name: untar config files (for migration only)
   # rhel7's /etc/httpd/conf.d/passenger.conf is not backward compatible with rhel6
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz --exclude=etc/httpd/conf.d/passenger.conf -C /
@@ -222,7 +237,7 @@
     when: satellite_version in ["6.2", "6.3"]
 
   - name: Run installer upgrade (satellite 6.2+ only)
-    command: satellite-installer --upgrade
+    command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
     when: satellite_version in ["6.2", "6.3"]
