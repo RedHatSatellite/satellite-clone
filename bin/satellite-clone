@@ -36,6 +36,12 @@ def main():
                         dest="flush_cache",
                         default=False,
                         help="clear the fact cache and run playbook")
+    parser.add_argument("-y",
+                        "--assume-yes",
+                        action="store_true",
+                        dest="assume_yes",
+                        default=False,
+                        help="Assume yes for each question")
 
     args = parser.parse_args()
 
@@ -62,6 +68,8 @@ def main():
         confirm = True
     if args.flush_cache:
         ansible_args.append("--flush-cache")
+    if args.assume_yes:
+        confirm = True
 
     if not confirm:
         yes_or_no("This will initiate satellite-clone. "
