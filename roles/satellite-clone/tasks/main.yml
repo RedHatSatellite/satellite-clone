@@ -192,6 +192,12 @@
     path: /var/lib/candlepin/cpdb_done
     state: absent
 
+# jmx.conf can cause issues when re-running the installer later in the playbook
+- name: Remove jmx.conf file
+  file:
+    state: absent
+    path: /etc/tomcat/conf.d/jmx.conf
+
 - name: Run Satellite installer
   environment:
     HOSTNAME: "{{ hostname }}"
@@ -214,12 +220,6 @@
     # to use ctrl+c which would break out of a production script.
   - name: Wait for foreman-tasks service to start
     command: sleep 300
-
-  # jmx.conf can cause issues when re-running the installer later in the playbook
-  - name: Remove jmx.conf file
-    file:
-      state: absent
-      path: /etc/tomcat/conf.d/jmx.conf
 
   - name: Get candlepin credentials
     command: sed -n -e 's/^.*myDS.password=//p' /etc/candlepin/candlepin.conf
