@@ -2,6 +2,15 @@
 
 Easily setup a Satellite 6.1, 6.2, or 6.3 server with restored backup data.
 
+## 1.2.5 release notes
+
+Fixes capsule disassociating script failing on lifecycle envs with spaces
+in name.
+
+## 1.2.2 - 1.2.4 release notes
+
+Mostly bug fixes, satellite 6.3 support was added, including with puppet 4
+
 ## 1.2.1 release notes
 
 #### Notable commits
