@@ -17,8 +17,8 @@ else
   reverse_commands = []
   external_capsules.each do |capsule|
     capsule[:lifecycle_environments].each do |env|
-      `hammer -u #{username} -p #{password} --csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment #{env} --organization "#{capsule[:organization]}"`
-      reverse_command = "hammer -u #{username} -p #{password} --csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment #{env} --organization \"#{capsule[:organization]}\""
+      `hammer -u #{username} -p #{password} --csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment "#{env}" --organization "#{capsule[:organization]}"`
+      reverse_command = "hammer -u #{username} -p #{password} --csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment \"#{env}\" --organization \"#{capsule[:organization]}\""
       reverse_commands << reverse_command
     end
   end
