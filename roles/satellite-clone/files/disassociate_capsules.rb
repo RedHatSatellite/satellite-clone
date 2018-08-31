@@ -1,15 +1,28 @@
 #!/usr/bin/ruby
-username = "admin"
-password = "changeme"
+
+require 'shellwords'
+
+@username = "admin"
+@password = "changeme"
+
+def prepare_hammer_cmd(command)
+  "hammer -u #{@username.shellescape} -p #{@password.shellescape} #{command}"
+end
+
+def run_hammer_cmd(command)
+  command = prepare_hammer_cmd(command)
+  `#{command}`
+end
+
 external_capsules = []
-external_capsule_ids = `hammer -u #{username} -p #{password} --csv capsule list --search 'feature = \"Pulp Node\"' | grep -v "Warning:" | tail -n+2 | awk -F, {'print $1'}`
+external_capsule_ids = run_hammer_cmd("--csv capsule list --search 'feature = \"Pulp Node\"' | grep -v \"Warning:\" | tail -n+2 | awk -F, {'print $1'}")
 if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
   external_capsule_ids.split("\n").each do |id|
-    lifecycle_environment = `hammer -u #{username} -p #{password} --csv capsule content lifecycle-environments --id #{id} | tail -n+2 | awk -F, {'print $2'}`.split("\n")
-    name = `hammer -u #{username} -p #{password} --csv capsule info --id #{id} | tail -n+2 | awk -F, {'print $2'}`.chomp
-    organization = `hammer -u #{username} -p #{password} --csv capsule info --id #{id}| tail -n+2 | awk -F, '{print $(NF-2)}'`.chomp
+    lifecycle_environment = run_hammer_cmd("--csv capsule content lifecycle-environments --id #{id} | tail -n+2 | awk -F, {'print $2'}").split("\n")
+    name = run_hammer_cmd("--csv capsule info --id #{id} | tail -n+2 | awk -F, {'print $2'}").chomp
+    organization = run_hammer_cmd("--csv capsule info --id #{id}| tail -n+2 | awk -F, '{print $(NF-2)}'").chomp
     external_capsules << {:id => id, :name => name, :lifecycle_environments => lifecycle_environment, :organization => organization}
   end
 
@@ -17,8 +30,8 @@ else
   reverse_commands = []
   external_capsules.each do |capsule|
     capsule[:lifecycle_environments].each do |env|
-      `hammer -u #{username} -p #{password} --csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment "#{env}" --organization "#{capsule[:organization]}"`
-      reverse_command = "hammer -u #{username} -p #{password} --csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment \"#{env}\" --organization \"#{capsule[:organization]}\""
+      run_hammer_cmd("--csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment #{env.shellescape} --organization #{capsule[:organization].shellescape}")
+      reverse_command = prepare_hammer_cmd("--csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment #{env.shellescape} --organization #{capsule[:organization].shellescape}")
       reverse_commands << reverse_command
     end
   end
