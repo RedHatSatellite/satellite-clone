@@ -51,7 +51,7 @@
   when: enable_repos and disable_repos_result_fail
 
 - name: Enable required repos for Satellite installation
-  command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms
+  command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms --enable rhel-7-server-satellite-maintenance-6-rpms
   ignore_errors: True
   register: enable_repos_result
   when: enable_repos
@@ -60,7 +60,7 @@
   command: subscription-manager repos --enable rhel-7-server-satellite-{{ satellite_version }}-puppet{{ puppet_version }}-rpms
   when:
     - enable_repos
-    - puppet_version | int >= 4
+    - puppet_version|int == 4
 
 - name: set fact - enable_repos_result
   set_fact:
@@ -113,6 +113,12 @@
 - name: Install Satellite packages
   yum:
     name: "{{ satellite_package }}"
+    state: latest
+
+# due to support for remote databases in 6.4 the postgres user (and server) may be missing
+- name: Install postgresql-server
+  yum:
+    name: "postgresql-server"
     state: latest
 
 # The postgres user is created after installing postgresql packages, so
@@ -170,7 +176,7 @@
   yum:
     name: puppetserver
     state: latest
-  when: puppet_version | int >= 4
+  when: puppet_version|int == 4
 
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C /
@@ -234,13 +240,13 @@
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
-    when: satellite_version in ["6.2", "6.3"]
+    when: satellite_version in ["6.2", "6.3", "6.4"]
 
   - name: Run installer upgrade (satellite 6.2+ only)
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
-    when: satellite_version in ["6.2", "6.3"]
+    when: satellite_version in ["6.2", "6.3", "6.4"]
 
   - name: Test Satellite
     command: hammer ping
