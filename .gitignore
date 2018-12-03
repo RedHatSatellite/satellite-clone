@@ -6,9 +6,10 @@
 *.swo
 
 #Log files
-logs/playbook.log
-logs/satellite-hostname.log
+logs/
 
 #Varies per deployment
 satellite-clone-vars.yml
 satellite-hostname-vars.yml
+
+cache/

@@ -18,7 +18,7 @@ from ansible.module_utils.basic import *
 #          - Full path (including file name) to metadata.yml
 #        required: true
 
-SUPPORTED_VERSIONS = ["6.2", "6.3"]
+SUPPORTED_VERSIONS = ["6.2", "6.3", "6.4"]
 
 def find_rpm(rpms, pattern):
     matches = [r for r in rpms if pattern.match(r)]
