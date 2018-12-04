@@ -1,6 +1,6 @@
 # Satellite-clone
 
-Easily set up a Red Hat Satellite server with restored backup data.
+VERY Easily set up a Red Hat Satellite server with restored backup data.
 
 ## Getting Started
 Throughout this documentation, ensure that you understand the following terminology:
