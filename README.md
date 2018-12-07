@@ -2,6 +2,10 @@
 
 Easily set up a Red Hat Satellite server with restored backup data.
 
+## 1.3.0 release notes
+
+- Added Satellite 6.4 support
+
 ## Getting Started
 Throughout this documentation, ensure that you understand the following terminology:
 - Source server: Existing Satellite server.
