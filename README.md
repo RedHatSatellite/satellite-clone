@@ -2,6 +2,10 @@
 
 Easily set up a Red Hat Satellite server with restored backup data.
 
+## 1.3.1 release notes
+
+- Reset puppet cert location on install
+
 ## 1.3.0 release notes
 
 - Added Satellite 6.4 support
