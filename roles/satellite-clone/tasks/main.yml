@@ -242,6 +242,26 @@
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
     when: satellite_version in ["6.2", "6.3", "6.4", "6.5"]
 
+  - name: Check if foreman-maintain-hammer.yml exists
+    stat:
+      path: /etc/foreman-maintain/foreman-maintain-hammer.yml
+    register: foreman_maintain_hammer
+
+  - name: Backup existing foreman-maintain-hammer credentials
+    command: mv /etc/foreman-maintain/foreman-maintain-hammer.yml /etc/foreman-maintain/foreman-maintain-hammer.yml.satclone.backup
+    when: foreman_maintain_hammer.stat.exists
+
+  - name: Reset admin password
+    command: foreman-rake permissions:reset password=changeme
+
+  - name: Setup hammer for foreman-maintain (satellite 6.4+ only)
+    lineinfile:
+      path: /etc/foreman-maintain/foreman-maintain-hammer.yml
+      state: present
+      create: yes
+      line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
+    when: satellite_version in ["6.4", "6.5"]
+
   - name: Run installer upgrade (satellite 6.2+ only)
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
@@ -250,9 +270,6 @@
 
   - name: Test Satellite
     command: hammer ping
-
-  - name: Reset admin password
-    command: foreman-rake permissions:reset password=changeme
 
   - name: update katello assets
     file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
