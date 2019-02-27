@@ -240,13 +240,13 @@
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
-    when: satellite_version in ["6.2", "6.3", "6.4"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5"]
 
   - name: Run installer upgrade (satellite 6.2+ only)
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
-    when: satellite_version in ["6.2", "6.3", "6.4"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5"]
 
   - name: Test Satellite
     command: hammer ping
