@@ -6,9 +6,15 @@ import os
 import sys
 
 
+def get_input(question):
+    try:
+        return raw_input(question)
+    except NameError:
+        return input(question)
+
 def yes_or_no(question):
     while "the answer is invalid":
-        reply = str(raw_input(question + ' (y/n): ')).lower().strip()
+        reply = str(get_input(question + ' (y/n): ')).lower().strip()
         if reply[0] == 'y':
             return True
         if reply[0] == 'n':
