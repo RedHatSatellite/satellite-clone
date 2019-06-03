@@ -10,7 +10,10 @@ Throughout this documentation, ensure that you understand the following terminol
 #### Supported Satellite Versions ####
 - 6.2
 - 6.3
-- 6.4 (remote database cloning not currently supported)
+- 6.4 
+- 6.5
+
+Note: cloning with a remote database is not currently supported
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
