@@ -179,7 +179,7 @@
   when: puppet_version|int == 4
 
 - name: untar config files (for cloning only)
-  command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C /
+  command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public/assets
   when: not rhel_migration
 
 - name: untar config files (for migration only)
