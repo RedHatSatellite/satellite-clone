@@ -20,18 +20,17 @@ if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
   external_capsule_ids.split("\n").each do |id|
-    lifecycle_environment = run_hammer_cmd("--csv capsule content lifecycle-environments --id #{id} | tail -n+2 | awk -F, {'print $2'}").split("\n")
+    lifecycle_environment = run_hammer_cmd("--csv capsule content lifecycle-environments --id #{id} | tail -n+2 | awk -F, {'print $1'}").split("\n")
     name = run_hammer_cmd("--csv capsule info --id #{id} | tail -n+2 | awk -F, {'print $2'}").chomp
-    organization = run_hammer_cmd("--csv capsule info --id #{id}| tail -n+2 | awk -F, '{print $(NF-2)}'").chomp
-    external_capsules << {:id => id, :name => name, :lifecycle_environments => lifecycle_environment, :organization => organization}
+    external_capsules << {:id => id, :name => name, :lifecycle_environments => lifecycle_environment}
   end
 
 
   reverse_commands = []
   external_capsules.each do |capsule|
     capsule[:lifecycle_environments].each do |env|
-      run_hammer_cmd("--csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment #{env.shellescape} --organization #{capsule[:organization].shellescape}")
-      reverse_command = prepare_hammer_cmd("--csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment #{env.shellescape} --organization #{capsule[:organization].shellescape}")
+      run_hammer_cmd("--csv capsule content remove-lifecycle-environment --id #{capsule[:id]} --environment-id #{env}")
+      reverse_command = prepare_hammer_cmd("--csv capsule content add-lifecycle-environment --id #{capsule[:id]} --environment-id #{env}")
       reverse_commands << reverse_command
     end
   end
