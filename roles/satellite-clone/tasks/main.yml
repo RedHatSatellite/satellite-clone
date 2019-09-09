@@ -187,6 +187,12 @@
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz --exclude=etc/httpd/conf.d/passenger.conf -C /
   when: rhel_migration
 
+# postgres is not happy when initializing if the data folder isn't empty
+- name: remove postgresql.conf
+  file:
+    path: /var/lib/pgsql/data/postgresql.conf
+    state: absent
+
 - name: Restore selinux context on the filesystem
   command: restorecon -R /
   when: restorecon
@@ -218,6 +224,11 @@
 - block:
   # restore backup data
   - include_tasks: restore.yml
+    when: satellite_version in ["6.2", "6.3", "6.4"]
+
+  - name: restore using foreman-maintain
+    command: foreman-maintain restore --assumeyes {{ backup_dir }}
+    when: satellite_version in ["6.5"]
 
   - name: Restart katello-service
     command: katello-service start
@@ -254,7 +265,7 @@
   - name: Reset admin password
     command: foreman-rake permissions:reset password=changeme
 
-  - name: Setup hammer for foreman-maintain (satellite 6.4+ only)
+  - name: Setup hammer for foreman-maintain
     lineinfile:
       path: /etc/foreman-maintain/foreman-maintain-hammer.yml
       state: present
@@ -262,7 +273,7 @@
       line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
     when: satellite_version in ["6.4", "6.5"]
 
-  - name: Run installer upgrade (satellite 6.2+ only)
+  - name: Run installer upgrade to match latest z-version
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
