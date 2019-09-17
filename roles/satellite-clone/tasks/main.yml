@@ -179,7 +179,7 @@
   when: puppet_version|int == 4
 
 - name: untar config files (for cloning only)
-  command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public/assets
+  command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
   when: not rhel_migration
 
 - name: untar config files (for migration only)
@@ -228,7 +228,7 @@
 
   - name: restore using foreman-maintain
     command: foreman-maintain restore --assumeyes {{ backup_dir }}
-    when: satellite_version in ["6.5"]
+    when: satellite_version in ["6.5", "6.6"]
 
   - name: Restart katello-service
     command: katello-service start
@@ -251,7 +251,7 @@
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6"]
 
   - name: Check if foreman-maintain-hammer.yml exists
     stat:
@@ -271,13 +271,13 @@
       state: present
       create: yes
       line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
-    when: satellite_version in ["6.4", "6.5"]
+    when: satellite_version in ["6.4", "6.5", "6.6"]
 
   - name: Run installer upgrade to match latest z-version
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6"]
 
   - name: Test Satellite
     command: hammer ping
