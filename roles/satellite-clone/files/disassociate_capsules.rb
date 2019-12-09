@@ -14,14 +14,19 @@ def run_hammer_cmd(command)
   `#{command}`
 end
 
+def get_info_from_hammer(command, column=1)
+  bash_parse = " | grep -v \"Warning:\" | tail -n+2 | awk -F, {'print $#{column}'}"
+  run_hammer_cmd(command + bash_parse)
+end
+
 external_capsules = []
-external_capsule_ids = run_hammer_cmd("--csv capsule list --search 'feature = \"Pulp Node\"' | grep -v \"Warning:\" | tail -n+2 | awk -F, {'print $1'}")
+external_capsule_ids = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'")
 if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
   external_capsule_ids.split("\n").each do |id|
-    lifecycle_environment = run_hammer_cmd("--csv capsule content lifecycle-environments --id #{id} | tail -n+2 | awk -F, {'print $1'}").split("\n")
-    name = run_hammer_cmd("--csv capsule info --id #{id} | tail -n+2 | awk -F, {'print $2'}").chomp
+    lifecycle_environment = get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
+    name = get_info_from_hammer("--csv capsule info --id #{id}", 2).chomp
     external_capsules << {:id => id, :name => name, :lifecycle_environments => lifecycle_environment}
   end
 

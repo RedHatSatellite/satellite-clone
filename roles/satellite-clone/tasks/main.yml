@@ -210,6 +210,13 @@
     state: absent
     path: /etc/tomcat/conf.d/jmx.conf
 
+# This no longer is supported in 6.6, but was still found enabled in some backups
+- name: Remove hammer csv module
+  file:
+    state: absent
+    path: /etc/hammer/cli.modules.d/csv.yml
+  when: satellite_version in ["6.6"]
+
 - name: Run Satellite installer
   environment:
     HOSTNAME: "{{ hostname }}"
