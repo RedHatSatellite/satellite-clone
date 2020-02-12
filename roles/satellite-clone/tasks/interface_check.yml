@@ -1,0 +1,44 @@
+---
+- name: Check if DNS is enabled
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ["foreman_proxy", "dns"]
+  register: dns_enabled
+
+- name: Check if DHCP is enabled
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ["foreman_proxy", "dhcp"]
+  register: dhcp_enabled
+
+- name: Grab DNS interface from Satellite answer file
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ["foreman_proxy", "dns_interface"]
+  register: dns_interface
+  when: dns_enabled.value
+
+- name: Grab DHCP interface from Satellite answer file
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ["foreman_proxy", "dhcp_interface"]
+  register: dhcp_interface
+  when: dhcp_enabled.value
+
+- name: Grab network interfaces from system
+  debug:
+    msg: "{{ ansible_interfaces | reject('match', 'lo') | list }}"
+  register: network_interfaces
+
+- name: Fail if interfaces on machine do not match answer file interfaces
+  fail:
+    msg: "The network interface {{ dns_interface.value }} setup for DNS and {{ dhcp_interface.value }} setup for DHCP do not match the network interfaces on the current machine"
+  when:
+    - dns_enabled.value
+    - dhcp_enabled.value
+    - dns_interface.value not in network_interfaces.msg
+    - dhcp_interface.value not in network_interfaces.msg

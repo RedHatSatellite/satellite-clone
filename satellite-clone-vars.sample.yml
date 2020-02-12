@@ -71,3 +71,6 @@
 # have a custom /etc/hosts file and do not want it overwritten, you can disable this step and setup the file yourself. If you
 # do disable this option, make sure the source server's (original Satellite's) hostname can resolve to 127.0.0.1.
 #overwrite_etc_hosts: true
+
+# Disable checking interfaces setup for DHCP and DNS match the interfaces on the target server. (defaults to true)
+#check_networking_interfaces: true

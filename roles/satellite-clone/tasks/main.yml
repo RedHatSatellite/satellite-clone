@@ -2,6 +2,9 @@
 - include_tasks: pre_install_check.yml
   when: run_pre_install_check
 
+- include_tasks: interface_check.yml
+  when: run_pre_install_check and check_networking_interfaces
+
 - include_tasks: backup_check.yml
 
 - include_tasks: backup_satellite_version_check.yml
