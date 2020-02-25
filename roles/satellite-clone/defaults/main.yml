@@ -1,6 +1,8 @@
 ---
 # more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
 backup_dir: /backup
+satellite_answers_path: "etc/foreman-installer/scenarios.d/satellite-answers.yaml"
+config_files_path: "{{ backup_dir }}/config_files.tar.gz"
 disable_firewall: False
 run_katello_reindex: False
 run_pre_install_check: True

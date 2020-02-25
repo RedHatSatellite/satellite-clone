@@ -9,19 +9,21 @@
 - name: Set Satellite version dependent variables
   include_vars: "satellite_{{ satellite_version }}.yml"
 
-# Identify hostname from backup config file
 - name: Identify the hostname from the backup config tar file
-  shell: tar zxf {{ backup_dir }}/config_files.tar.gz etc/foreman-proxy/settings.yml --to-stdout | grep foreman_url |sed 's#.*/##'
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "etc/foreman-proxy/settings.yml"
+    keys: [":foreman_url"]
   register: backup_hostname
 
-- name: setting fact - hostname
+- name: Set backup_hostname variable
   set_fact:
-    hostname: "{{ backup_hostname.stdout }}"
+    hostname: "{{ backup_hostname.value | urlsplit('hostname') }}"
     cacheable: true
 
 - name: Check that the hostname is not none
   fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
-  when: backup_hostname.stderr
+  when: backup_hostname|length == 0
 
 - name: Check that the registration variables (activationkey, org) are updated
   fail: msg="Please update the variables in /etc/satellite-clone/satellite-clone-vars.yml"
