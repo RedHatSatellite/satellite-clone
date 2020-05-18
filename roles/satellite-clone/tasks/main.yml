@@ -309,7 +309,7 @@
     when: run_katello_reindex or not clone_pulp_data_exists 
 
   - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
-    script: disassociate_capsules.rb
+    script: disassociate_capsules.rb {{ satellite_version }}
     register: disassociate_capsules
 
   - name: set fact - disassociate_capsules
