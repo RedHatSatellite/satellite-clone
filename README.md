@@ -13,6 +13,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.4 
 - 6.5
 - 6.6
+- 6.7
 
 Note: cloning with a remote database is not currently supported
 
