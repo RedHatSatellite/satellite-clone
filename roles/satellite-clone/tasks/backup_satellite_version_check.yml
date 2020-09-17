@@ -35,4 +35,4 @@
   when:
     - clone_metadata_exists
     - backup_metadata is defined
-    - backup_metadata | success
+    - backup_metadata is success
