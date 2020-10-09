@@ -91,3 +91,24 @@ On the target server:
       # ansible-playbook satellite-clone-playbook.yml
     ```
   The playbook run may may take a while to complete.
+
+## Cloning a Satellite With Remote Databases
+
+Note: the backup used for this procedures must have the correct options to manage remote databases in `/etc/foreman-installer/scenarios.d/satellite-answers.yaml`. Please check that the answers file has the correct database management values filled configuration backups.
+
+1. Set up the remote databases according to Satellite documentation in the same way that they were set up on your original Satellite.
+2. Set up a base RHEL7 server that will become the cloned satellite, make sure the target clone server has access to the remote databases.
+3. The remote databases for the clone will also need to be reached on the same hostname as ones used for the original Satellite. You can use `/etc/hosts` on the target server to associate the original remote database hostnames with the new clone database IP addresses.
+4. Install satellite-clone on target server according to [instructions](#instructions), but don't run the playbook yet.
+5. In `satellite-clone-vars.yml` find and uncomment the line: `installer_additional_options: ""`
+6. Add your remote database options to the `installer_additional_options` value, plus any other options you would like to have for the clone. These should be the same as your original Satellite's setup as they same configuration files will be restored.
+  - `--scenario` is hardcoded, so don’t include that flag in the option.
+  - Make sure all the installer options to not manage the database for services with remote databases are included. i.e. `--foreman-db-manage false --katello-pulp-manage-db false --katello-candlepin-manage-db false`, some of these are missing in the Satellite remote database documentation as of this writing.
+  - For example: 
+  ```
+    installer_additional_options: "--foreman-db-host postgres.example.com --foreman-db-password Foreman_Password --foreman-db-database foreman --katello-candlepin-db-host postgres.example.com --katello-candlepin-db-name candlepin --katello-candlepin-db-password Candlepin_Password --katello-candlepin-manage-db false --katello-pulp-db-username pulp --katello-pulp-db-password pulp_password --katello-pulp-db-seeds mongo.example.com:27017 --katello-pulp-db-name pulp_database --foreman-db-manage false --katello-pulp-manage-db false"`
+  ```
+7. Change “overwrite_etc_hosts: false” to true in the `satellite-clone-vars.yml` config file.
+8. You will need to make sure the backup hostname can resolve to 127.0.0.1 on the target server. You can update /etc/hosts with this hostname before cloning.
+9. Proceed to run the clone playbook as specified in the [instructions](#instructions).
+

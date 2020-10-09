@@ -19,6 +19,20 @@
     keys: [":foreman_url"]
   register: backup_hostname
 
+- name: Get candlepin password
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ['katello', 'candlepin_db_password']
+  register: candlepin_db_password
+
+- name: Get candlepin db host
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "{{ satellite_answers_path }}"
+    keys: ['katello', 'candlepin_db_host']
+  register: candlepin_db_host
+
 - name: Set backup_hostname variable
   set_fact:
     hostname: "{{ backup_hostname.value | urlsplit('hostname') }}"
@@ -232,6 +246,7 @@
     --{{ capsule_puppet_module }}-dhcp false
     --{{ capsule_puppet_module }}-tftp false
     {{ satellite_installer_options | default("") }}
+    {{ (installer_additional_options is defined) | ternary(installer_additional_options, (satellite_installer_options | default(""))) }}
 
 - block:
   # restore backup data
@@ -250,16 +265,8 @@
   - name: Wait for foreman-tasks service to start
     command: sleep 300
 
-  - name: Get candlepin credentials
-    command: sed -n -e 's/^.*myDS.password=//p' /etc/candlepin/candlepin.conf
-    register: candlepin_password
-
-  - set_fact:
-      clone_candlepin_password: "{{ candlepin_password.stdout }}"
-      cacheable: true
-
   - name: Migrate candlepin db
-    command: "/usr/share/candlepin/cpdb --update -p {{ clone_candlepin_password }}"
+    command: "/usr/share/candlepin/cpdb --update --dbhost={{ candlepin_db_host.value }} --password={{ candlepin_db_password.value }}"
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
