@@ -246,7 +246,7 @@
     --{{ capsule_puppet_module }}-dhcp false
     --{{ capsule_puppet_module }}-tftp false
     {{ satellite_installer_options | default("") }}
-    {{ (installer_additional_options is defined) | ternary(installer_additional_options, (satellite_installer_options | default(""))) }}
+    {{ (installer_additional_options is defined) | ternary(installer_additional_options, "") }}
 
 - block:
   # restore backup data
