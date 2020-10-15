@@ -74,6 +74,3 @@
 
 # Disable checking interfaces setup for DHCP and DNS match the interfaces on the target server. (defaults to true)
 #check_networking_interfaces: true
-#
-# Pass additional options to the Satellite installer for the initial install
-#installer_additional_options: ""
