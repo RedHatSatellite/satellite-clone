@@ -15,8 +15,6 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.6
 - 6.7
 
-Note: cloning with a remote database is not currently supported
-
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
   - A backup from a Satellite server (source server) created with `foreman-maintain` or `katello-backup`. This backup can be with or without pulp data, and can be from a RHEL 6 or 7 machine.

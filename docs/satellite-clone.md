@@ -91,3 +91,26 @@ On the target server:
       # ansible-playbook satellite-clone-playbook.yml
     ```
   The playbook run may may take a while to complete.
+
+## Cloning a Satellite With Remote Databases
+
+Cloning a Satellite with external databases can be done using `installer_additional_options` in satellite-clone's configuration file. This procedure is experimental, proceed at your own risk. Be sure to take security precautions to ensure the production Satellite server and it's databases will not be affected. It is always recommended to set up the cloned Satellite on an network isolated from your production Satellite.
+
+1. The backup used for this procedure must have the correct options to manage remote databases in `/etc/foreman-installer/scenarios.d/satellite-answers.yaml`. Please check that the answer's file configuration matches your setup.
+  - You can check with `tar -xOf config_files.tar.gz etc/foreman-installer/scenarios.d/satellite-answers.yaml | grep -E '(manage.db|db.manage)'`:
+  ```
+    db_manage: false # Foreman's db is external
+    db_manage_rake: true
+    candlepin_manage_db: false # Candlepin's db is external
+    pulp_manage_db: false # Pulp's db is external
+  ```
+  - Some of these options are currently (at the time of this writing) [missing from the initial setup documentation](https://bugzilla.redhat.com/show_bug.cgi?id=1887846), so they can be set incorrectly even in functional setups. This can interfere with the cloning process.
+  - If these values do not match your setup, they can be corrected on the original Satellite and a new backup created.
+2. Set up a base RHEL7 server that will become the cloned Satellite.
+3. Set up remote databases according to [Satellite documentation](https://access.redhat.com/documentation/en-us/red_hat_satellite/) in the same way that they were set up on your original Satellite. Do not run any installer steps on the target RHEL7 server that will become the clone.
+4. The remote databases for the clone will also need to be reached on the same hostname as ones used for the original Satellite. You can use `/etc/hosts` on the target server to associate the original remote database hostnames with the new clone database IP addresses. Make sure they are reachable from the target server.
+5. Install satellite-clone on target server according to [instructions](#instructions), but don't run the playbook yet.
+6. Change “overwrite_etc_hosts: true” to false in the `satellite-clone-vars.yml` config file.
+7. You will need to make sure the backup hostname can resolve to 127.0.0.1 on the target server. You can update /etc/hosts with this hostname before cloning.
+8. Proceed to run the clone playbook as specified in the [instructions](#instructions).
+
