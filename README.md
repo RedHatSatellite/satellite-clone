@@ -14,6 +14,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.5
 - 6.6
 - 6.7
+- 6.8
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
