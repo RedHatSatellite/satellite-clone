@@ -139,6 +139,15 @@
   yum:
     name: "postgresql-server"
     state: latest
+  when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+
+# due to change in postgresql version in 6.8 adding package rh-postgresql12
+- name: Install postgresql-server
+  yum:
+    name: "rh-postgresql12-postgresql-server"
+    state: latest
+  when: satellite_version in ["6.8"]
+
 
 # The postgres user is created after installing postgresql packages, so
 # we perform this owner/group change at this point rather than earlier
@@ -211,6 +220,14 @@
   file:
     path: /var/lib/pgsql/data/postgresql.conf
     state: absent
+  when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+
+# postgres is not happy when initializing if the data folder isn't empty
+- name: remove postgresql.conf
+  file:
+    path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
+    state: absent
+  when: satellite_version in ["6.8"]
 
 - name: Restore selinux context on the filesystem
   command: restorecon -R /
@@ -268,7 +285,7 @@
       state: started
 
   - name: Restart katello-service
-    command: katello-service start
+    command: " '{{ satellite_service }}' start"
 
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
@@ -280,7 +297,7 @@
 
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Check if foreman-maintain-hammer.yml exists
     stat:
@@ -300,13 +317,13 @@
       state: present
       create: yes
       line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
-    when: satellite_version in ["6.4", "6.5", "6.6", "6.7"]
+    when: satellite_version in ["6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Run installer upgrade to match latest z-version
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Test Satellite
     command: hammer ping
@@ -348,7 +365,7 @@
   # This is to prevent the clone trying to sync with existing original capsules. We do this with SQL in case
   # hammer is not able to execute a command.
   - name: Disassociate capsules from lifecycle environments to avoid communication with production capsules
-    command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from features_smart_proxies where feature_id = (select id from features where features.name = 'Pulp Node'));"
+    command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from {{ sp_features_table_name }} where feature_id = (select id from features where features.name = 'Pulp Node'));"
     become_user: postgres
     become: true
 
