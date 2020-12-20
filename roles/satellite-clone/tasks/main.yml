@@ -24,6 +24,7 @@
     tarball: "{{ config_files_path }}"
     target_file: "{{ satellite_answers_path }}"
     keys: ['katello', 'candlepin_db_password']
+    allow_null: true
   register: candlepin_db_password
 
 - name: Get candlepin db host
@@ -285,7 +286,7 @@
       state: started
 
   - name: Restart katello-service
-    command: " '{{ satellite_service }}' start"
+    command: "{{ satellite_service }} start"
 
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
