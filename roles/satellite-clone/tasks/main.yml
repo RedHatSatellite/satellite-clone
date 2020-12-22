@@ -24,6 +24,7 @@
     tarball: "{{ config_files_path }}"
     target_file: "{{ satellite_answers_path }}"
     keys: ['katello', 'candlepin_db_password']
+    allow_null: true
   register: candlepin_db_password
 
 - name: Get candlepin db host
