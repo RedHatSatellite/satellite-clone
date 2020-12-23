@@ -4,3 +4,4 @@ satellite_installer_cmd: katello-installer
 capsule_puppet_module: capsule
 verify_rake_task: reindex
 sp_features_table_name: features_smart_proxies
+satellite_service: katello-service

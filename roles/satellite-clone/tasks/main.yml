@@ -286,7 +286,7 @@
       state: started
 
   - name: Restart katello-service
-    command: " '{{ satellite_service }}' start"
+    command: "{{ satellite_service }} start"
 
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
