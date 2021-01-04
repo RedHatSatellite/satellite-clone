@@ -23,10 +23,6 @@ def yes_or_no(question):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--start-at-task",
-                        action="store",
-                        dest="start_at_task",
-                        help="Start at a specific task")
     parser.add_argument("--step",
                         action="store_true",
                         dest="step",
@@ -63,9 +59,6 @@ def main():
 
     confirm = False
     ansible_args = []
-    if args.start_at_task:
-        ansible_args.append("--start-at-task")
-        ansible_args.append(args.start_at_task)
     if args.step:
         ansible_args.append("--step")
     if args.list_tasks:

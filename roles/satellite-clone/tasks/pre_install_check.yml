@@ -1,9 +1,4 @@
 ---
-- name: Fail if the destination host is not rhel7 (for migration only)
-  fail:
-    msg: "For a RHEL migration, the destination host must be RHEL 7. The supplied host as the major version {{ ansible_distribution_major_version }}"
-  when: rhel_migration and ansible_distribution_major_version != "7"
-
 - name: Check if satellite is already installed
   command: rpm -q satellite
   register: satellite_rpm
@@ -23,4 +18,3 @@
 - name: set fact - satellite_installed
   set_fact:
     clone_satellite_installed_check: True
-    cacheable: True
