@@ -6,3 +6,5 @@ capsule_puppet_module: foreman-proxy
 satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath --disable-system-checks"
 satellite_upgrade_options: "--disable-system-checks"
 verify_rake_task: reimport
+sp_features_table_name: features_smart_proxies
+satellite_service: katello-service
