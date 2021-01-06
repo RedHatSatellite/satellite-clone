@@ -9,9 +9,6 @@
 ############## optional variables ####################
 
 # The backup folder on your target server (defaults to /backup).
-# Required backup files:
-#   - Standard backup scenario : config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-#   - Online backup or RHEL migration scenario   : config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump
 # Note:
 # 1. Place the backup files only on the target server and not on the source server.
 # 2. If the folder mentioned by `backup_dir` does not exist or not accessible, the script will stop with an error.
@@ -21,7 +18,7 @@
 #disable_firewall: false
 
 # Run katello reindex after the Satellite install. (defaults to false)
-# Note: If you are planning to clone your Satellite 6.1 and immediately upgrade to 6.2, you may choose to skip this step.
+# Note: If you are planning to clone your Satellite and immediately upgrade, you may choose to skip this step.
 #run_katello_reindex: false
 
 # Run several pre-install checks (defaults to true)
@@ -52,9 +49,6 @@
 # uncomment the following line to override this option (defaults to true). If you override this option, you must make
 # sure that the required rpms are available for Satellite installation.
 #enable_repos: true
-
-# Set this to true (defaults to false) if you are cloning a rhel6 source server to a rhel7 target server.
-#rhel_migration: false
 
 # Disable postgres triggers (defaults to true). This is set to true to ignore postgresql constraints such as unique indexes
 # when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command.

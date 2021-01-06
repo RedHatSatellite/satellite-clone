@@ -10,7 +10,6 @@ register_to_portal: False
 activationkey: changeme
 org: changeme
 enable_repos: True
-rhel_migration: False
 disable_postgres_triggers: True
 restorecon: False
 skip_satellite_rpm_check: False
@@ -18,4 +17,3 @@ overwrite_etc_hosts: True
 puppet_version: 3
 check_networking_interfaces: True
 sp_features_table_name: smart_proxy_features
-satellite_service: satellite-maintain service

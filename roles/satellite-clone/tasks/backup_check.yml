@@ -8,7 +8,6 @@
 - name: set fact - config_data
   set_fact:
     clone_config_data_exists: "{{ config_data.stat.exists }}"
-    cacheable: True
 
 - name: Check for pgsql tar file
   stat:
@@ -20,7 +19,6 @@
 - name: set fact - pgsql_data
   set_fact:
     clone_pgsql_data_exists: "{{ pgsql_data.stat.exists }}"
-    cacheable: True
 
 - name: Check for pulp data file
   stat:
@@ -32,7 +30,6 @@
 - name: set fact - pulp_data
   set_fact:
     clone_pulp_data_exists: "{{ pulp_data.stat.exists }}"
-    cacheable: True
 
 - name: Check for foreman dump file
   stat:
@@ -44,7 +41,6 @@
 - name: set fact - foreman_dump
   set_fact:
     clone_foreman_dump_exists: "{{ foreman_dump.stat.exists }}"
-    cacheable: True
 
 - name: Check for candlepin dump file
   stat:
@@ -56,7 +52,6 @@
 - name: set fact - candlepin_dump
   set_fact:
     clone_candlepin_dump_exists: "{{ candlepin_dump.stat.exists }}"
-    cacheable: True
 
 - name: Check for mongo backup file
   stat:
@@ -68,7 +63,6 @@
 - name: set fact - mongo_data
   set_fact:
     clone_mongo_data_exists: "{{ mongo_data.stat.exists }}"
-    cacheable: True
 
 - name: Check for mongo dump folder
   stat:
@@ -80,7 +74,6 @@
 - name: set fact - mongo_dump
   set_fact:
     clone_mongo_dump_exists: "{{ mongo_dump.stat.exists }}"
-    cacheable: True
 
 - name: Check for metadata.yml file
   stat:
@@ -92,7 +85,6 @@
 - name: set fact - metadata
   set_fact:
     clone_metadata_exists: "{{ metadata.stat.exists }}"
-    cacheable: True
 
 - name: Fail if the config tar file is not present or not accessible
   fail: msg="{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
@@ -102,26 +94,16 @@
   set_fact:
     online_backup: False
     standard_backup: False
-    cacheable: True
 
 - name: Check for online backup
   set_fact:
     online_backup: True
-    cacheable: True
   when: clone_candlepin_dump_exists and clone_foreman_dump_exists and clone_mongo_dump_exists
 
 - name: Check for standard backup
   set_fact:
     standard_backup: True
-    cacheable: True
   when: clone_mongo_data_exists and clone_pgsql_data_exists
-
-- name: Check RHEL 6 to 7 migration backup is present
-  fail:
-    msg: |
-      Backup is missing files. To use a RHEL 6 backup on a RHEL 7 system, you need
-      a mongo_dump folder, a foreman.dump file, and a candlepin.dump file present.
-  when: rhel_migration and not online_backup
 
 - name: Check full backup is present
   fail:
@@ -129,7 +111,7 @@
       Backup is missing files. For an online backup, you need candlepin.dump, foreman.dump,
       and mongo_dump folder. For a standard (offline) backup, you will need mongo_data.tar.gz
       and pgsql_data.tar.gz files.
-  when: not online_backup and not standard_backup and not rhel_migration
+  when: not online_backup and not standard_backup
 
 - name: Check only one backup is present
   fail:
@@ -137,6 +119,6 @@
       It looks like there is more than one type of backup present. You will have to
       remove some files so there is only one backup present. Here are the required backup files
       for each scenario.
-      Standard backup scenario - config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-      Online backup or RHEL migration scenario - config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+      Standard backup - metadata.yml, config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
+      Online backup - metadata.yml, config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
   when: online_backup and standard_backup

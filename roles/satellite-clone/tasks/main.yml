@@ -19,25 +19,9 @@
     keys: [":foreman_url"]
   register: backup_hostname
 
-- name: Get candlepin password
-  get_value_from_yaml_in_tarball:
-    tarball: "{{ config_files_path }}"
-    target_file: "{{ satellite_answers_path }}"
-    keys: ['katello', 'candlepin_db_password']
-    allow_null: true
-  register: candlepin_db_password
-
-- name: Get candlepin db host
-  get_value_from_yaml_in_tarball:
-    tarball: "{{ config_files_path }}"
-    target_file: "{{ satellite_answers_path }}"
-    keys: ['katello', 'candlepin_db_host']
-  register: candlepin_db_host
-
 - name: Set backup_hostname variable
   set_fact:
     hostname: "{{ backup_hostname.value | urlsplit('hostname') }}"
-    cacheable: true
 
 - name: Check that the hostname is not none
   fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
@@ -135,12 +119,12 @@
     name: "{{ satellite_package }}"
     state: latest
 
-# due to support for remote databases in 6.4 the postgres user (and server) may be missing
+# due to support for remote databases in 6.4+ the postgres user (and server) may be missing
 - name: Install postgresql-server
   yum:
     name: "postgresql-server"
     state: latest
-  when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+  when: satellite_version in ["6.5", "6.6", "6.7"]
 
 # due to change in postgresql version in 6.8 adding package rh-postgresql12
 - name: Install postgresql-server
@@ -170,7 +154,6 @@
 - name: setting fact - access_foreman_dump
   set_fact:
     clone_no_foreman_dump_access: "{{ access_foreman_dump is failed }}"
-    cacheable: true
 
 - name: test candlepin.dump file is readable by postgres user
   command: "test -r {{ backup_dir }}/candlepin.dump"
@@ -183,7 +166,6 @@
 - name: setting fact - access_candlepin_dump
   set_fact:
     clone_no_candlepin_dump_access: "{{ access_candlepin_dump is failed }}"
-    cacheable: true
 
 - name: fail if postgres user doesn't have access to files
   fail:
@@ -192,11 +174,6 @@
       Please move the backup directory to a different directory with the correct
       permissions. Avoid using /root.
   when: clone_foreman_dump_exists and clone_candlepin_dump_exists and (clone_no_foreman_dump_access or clone_no_candlepin_dump_access)
-
-# Workaround for Issue #72 -  satellite-clone playbook fails if /etc/katello-installer isn't present.
-- name: Create /etc/katello-installer folder
-  file: path=/etc/katello-installer state=directory mode=0755
-  when: satellite_version in ["6.2", "6.3"]
 
 # If there is no puppet user, the extracted config files will not have the correct puppet
 # user/group permissions with puppet 4. Installing puppetserver before extracting config_files
@@ -209,19 +186,13 @@
 
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
-  when: not rhel_migration
-
-- name: untar config files (for migration only)
-  # rhel7's /etc/httpd/conf.d/passenger.conf is not backward compatible with rhel6
-  command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz --exclude=etc/httpd/conf.d/passenger.conf -C /
-  when: rhel_migration
 
 # postgres is not happy when initializing if the data folder isn't empty
 - name: remove postgresql.conf
   file:
     path: /var/lib/pgsql/data/postgresql.conf
     state: absent
-  when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+  when: satellite_version in ["6.5", "6.6", "6.7"]
 
 # postgres is not happy when initializing if the data folder isn't empty
 - name: remove postgresql.conf
@@ -266,10 +237,6 @@
     {{ satellite_installer_options | default("") }}
 
 - block:
-  # restore backup data
-  - include_tasks: restore.yml
-    when: satellite_version in ["6.2", "6.3", "6.4"]
-
   # Cron services can interfere with restoring the backup
   - name: stop crond
     systemd:
@@ -278,27 +245,22 @@
 
   - name: restore using foreman-maintain
     command: foreman-maintain restore --assumeyes {{ backup_dir }}
-    when: satellite_version in ["6.5", "6.6", "6.7"]
 
   - name: start crond
     systemd:
       name: crond
       state: started
 
-  - name: Restart katello-service
-    command: "{{ satellite_service }} start"
+  - name: Restart services
+    command: foreman-maintain service start
 
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
   - name: Wait for foreman-tasks service to start
     command: sleep 300
 
-  - name: Migrate candlepin db
-    command: "/usr/share/candlepin/cpdb --update --dbhost={{ candlepin_db_host.value }} --password={{ candlepin_db_password.value }}"
-
   - name: Cleanup paused tasks
     command: foreman-rake foreman_tasks:cleanup TASK_SEARCH='label ~ *' STATES='paused'  VERBOSE=true AFTER='0h'  VERBOSE=true
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Check if foreman-maintain-hammer.yml exists
     stat:
@@ -318,23 +280,14 @@
       state: present
       create: yes
       line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
-    when: satellite_version in ["6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Run installer upgrade to match latest z-version
     command: 'satellite-installer --upgrade {{ satellite_upgrade_options | default("") }}'
     environment:
       HOSTNAME: "{{ hostname }}"
-    when: satellite_version in ["6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8"]
 
   - name: Test Satellite
     command: hammer ping
-
-  - name: update katello assets
-    file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/katello dest=/usr/share/foreman/public/assets/katello
-    when: satellite_version == "6.1"
-  - name: update katello bastion assets
-    file: src=/opt/rh/ruby193/root/usr/share/gems/gems/katello-2.2.0.93/public/assets/bastion_katello dest=/usr/share/foreman/public/assets/bastion_katello
-    when: satellite_version == "6.1"
 
   - include_tasks: reset_pulp_data.yml
     when: not clone_pulp_data_exists and not online_backup
@@ -353,7 +306,6 @@
   - name: set fact - disassociate_capsules
     set_fact:
       clone_disassociate_capsules: "{{ disassociate_capsules.stdout }}"
-      cacheable: true
 
   - name: copy disassociate_capsules.rb output
     local_action: copy content={{ clone_disassociate_capsules }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt

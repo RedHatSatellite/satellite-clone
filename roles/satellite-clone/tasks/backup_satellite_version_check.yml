@@ -7,19 +7,6 @@
 - name: setting fact - satellite_answers
   set_fact:
     clone_satellite_answers: "{{ (satellite_answers.rc | int) == 0 }}"
-    cacheable: true
-
-- name: Temporarily set satellite_version to 6.2 if satellite_answers.yaml exists
-  set_fact:
-    satellite_version: "6.2"
-    cacheable: true
-  when: clone_satellite_answers
-
-- name: set satellite_version to 6.1 if satellite_answers.yaml does not exist
-  set_fact:
-    satellite_version: "6.1"
-    cacheable: true
-  when: not clone_satellite_answers
 
 - name: Check for satellite version in metadata file
   parse_backup_metadata:
@@ -31,7 +18,6 @@
   set_fact:
     satellite_version: "{{ backup_metadata.satellite_version }}"
     puppet_version: "{{ backup_metadata.puppet_version }}"
-    cacheable: true
   when:
     - clone_metadata_exists
     - backup_metadata is defined
