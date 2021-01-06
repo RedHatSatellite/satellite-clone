@@ -41,7 +41,7 @@ Note: This step is not required if you used pulp_data.tar during cloning process
   Note:
   1. This command may take a while to complete in case of large data.
   2. If you find issues in Satellite content syncing post rsync command, verify the contents of `/var/lib/pulp` on the target server.
-- Start services on the target server: `foreman-maintain service start`
+- Start services on the target server: `satellite-maintain service start`
 
 ### Typical Production Workflow ###
 
@@ -56,7 +56,7 @@ This workflow will help transition your environment from a current working Satel
 
 ## Prerequisites ##
 
-1. You will need files from a Satellite backup (`foreman-maintain backup`).
+1. You will need files from a Satellite backup (`satellite-maintain backup`).
    Required backup files:
    - Standard backup scenario: metadata.yml, config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
    - Online backup: metadata.yml, config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
@@ -73,9 +73,9 @@ On the target server:
      # cp satellite-clone-vars.sample.yml satellite-clone-vars.yml
    ```
 2. Place the backup files in `/backup` folder. If using a different folder, update `backup_dir` variable in `satellite-clone-vars.yml`.
-4. You are required to register and subscribe the blank machine to Red Hat Subscription Management to get content for the Satellite installation.  Alternatively, to let the clone tool register with Red Hat, you can override `register_to_portal` to `true` and update `activationkey`, `org` variables in `satellite-clone-vars.yml`.
-5. It is assumed that you have access to the required repositories for Satellite installation. If using custom repositories for Satellite installation, override `enable_repos` to `false` in `satellite-clone-vars.yml`.
-6. Run the ansible playbook from the root directory of this project:
+3. You are required to register and subscribe the blank machine to Red Hat Subscription Management to get content for the Satellite installation.  Alternatively, to let the clone tool register with Red Hat, you can override `register_to_portal` to `true` and update `activationkey`, `org` variables in `satellite-clone-vars.yml`.
+4. It is assumed that you have access to the required repositories for Satellite installation. If using custom repositories for Satellite installation, override `enable_repos` to `false` in `satellite-clone-vars.yml`.
+5. Run the ansible playbook from the root directory of this project:
 
     ```console
       # ansible-playbook satellite-clone-playbook.yml

@@ -15,7 +15,7 @@ Throughout this documentation, ensure that you understand the following terminol
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
-  - A backup from a Satellite server (source server) created with `foreman-maintain`. This backup can be with or without pulp data, and can be from a RHEL 6 or 7 machine.
+  - A backup from a Satellite server (source server) created with `satellite-maintain`. This backup can be with or without pulp data, and can be from a RHEL 6 or 7 machine.
   - You will need a Satellite 6 subscription for the cloned machine. With the new Satellite Infrastructure [subscription model](https://access.redhat.com/solutions/3382781) you should have multiple Satellite subscriptions available.
 
 #### Setup ####
