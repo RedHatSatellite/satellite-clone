@@ -184,6 +184,13 @@
     state: latest
   when: puppet_version|int == 4
 
+  # Because of https://projects.theforeman.org/issues/30506
+- name: Install Satellite SELinux packages for 6.8 and above
+  yum:
+    name: "{{ selinux_packages | join(',') }}"
+    state: present
+  when: selinux_packages | length > 0
+
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
 
