@@ -194,20 +194,6 @@
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
 
-# postgres is not happy when initializing if the data folder isn't empty
-- name: remove postgresql.conf
-  file:
-    path: /var/lib/pgsql/data/postgresql.conf
-    state: absent
-  when: satellite_version in ["6.5", "6.6", "6.7"]
-
-# postgres is not happy when initializing if the data folder isn't empty
-- name: remove postgresql.conf
-  file:
-    path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
-    state: absent
-  when: satellite_version in ["6.8"]
-
 - name: Restore selinux context on the filesystem
   command: restorecon -R /
   when: restorecon
