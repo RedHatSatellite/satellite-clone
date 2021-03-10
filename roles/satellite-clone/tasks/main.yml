@@ -119,20 +119,11 @@
     name: "{{ satellite_package }}"
     state: latest
 
-# due to support for remote databases in 6.4+ the postgres user (and server) may be missing
-- name: Install postgresql-server
+- name: Install packages necessary to check DB status
   yum:
-    name: "postgresql-server"
-    state: latest
-  when: satellite_version in ["6.5", "6.6", "6.7"]
-
-# due to change in postgresql version in 6.8 adding package rh-postgresql12
-- name: Install postgresql-server
-  yum:
-    name: "rh-postgresql12-postgresql-server"
-    state: latest
-  when: satellite_version in ["6.8"]
-
+    name: "{{ db_packages | join(',') }}"
+    state: present
+  when: db_packages | length > 0
 
 # The postgres user is created after installing postgresql packages, so
 # we perform this owner/group change at this point rather than earlier

@@ -10,3 +10,7 @@ selinux_packages:
   - crane-selinux
   - foreman-selinux
   - katello-selinux
+db_packages:
+  - rh-mongodb34-syspaths
+  - rh-postgresql12-syspaths
+  - rh-postgresql12-postgresql-evr
