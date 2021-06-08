@@ -60,12 +60,6 @@
   register: enable_repos_result
   when: enable_repos
 
-- name: "Enable puppet repos"
-  command: subscription-manager repos --enable rhel-7-server-satellite-{{ satellite_version }}-puppet{{ puppet_version }}-rpms
-  when:
-    - enable_repos
-    - puppet_version|int == 4
-
 - name: set fact - enable_repos_result
   set_fact:
     enable_repos_result_fail: "{{ (enable_repos_result.rc | int) != 0}}"
@@ -165,15 +159,6 @@
       Please move the backup directory to a different directory with the correct
       permissions. Avoid using /root.
   when: clone_foreman_dump_exists and clone_candlepin_dump_exists and (clone_no_foreman_dump_access or clone_no_candlepin_dump_access)
-
-# If there is no puppet user, the extracted config files will not have the correct puppet
-# user/group permissions with puppet 4. Installing puppetserver before extracting config_files
-# fixes this issue.
-- name: Install puppetserver to create puppet user
-  yum:
-    name: puppetserver
-    state: latest
-  when: puppet_version|int == 4
 
   # Because of https://projects.theforeman.org/issues/30506
 - name: Install Satellite SELinux packages for 6.8 and above

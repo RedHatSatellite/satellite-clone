@@ -17,7 +17,6 @@
 - name: setting fact - satellite_version
   set_fact:
     satellite_version: "{{ backup_metadata.satellite_version }}"
-    puppet_version: "{{ backup_metadata.puppet_version }}"
   when:
     - clone_metadata_exists
     - backup_metadata is defined
