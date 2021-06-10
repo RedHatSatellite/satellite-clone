@@ -12,6 +12,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.6
 - 6.7
 - 6.8
+- 6.9
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
@@ -22,18 +23,30 @@ Throughout this documentation, ensure that you understand the following terminol
 
 On the target server:
 
-1. git clone this project.
+1. Clone this repository with git:
    ```console
-     # git clone https://github.com/RedHatSatellite/satellite-clone.git
+   # yum install git
+   # git clone https://github.com/RedHatSatellite/satellite-clone.git
+   ```
+2. Enable the Ansible repository corresponding to your Satellite version
+   |Satellite Version|Ansible Repository            |
+   |-----------------|------------------------------|
+   |6.9              |rhel-7-server-ansible-2.9-rpms|
+   |6.8              |rhel-7-server-ansible-2.9-rpms|
+   |6.7              |rhel-7-server-ansible-2.8-rpms|
+   |6.6              |rhel-7-server-ansible-2.8-rpms|
+   |6.5              |rhel-7-server-ansible-2.6-rpms|
+
+   ```console
+   # subscription-manager repos --enable REPO_NAME
    ```
 
-2. Install `ansible` package.  Ansible should be installed from extras channel.
+3. Install the `ansible` package:
    ```console
-     # subscription-manager repos --enable rhel-7-server-extras-rpms
-     # yum install -y ansible
+   # yum install ansible
    ```
 
-Now you can proceed to performing the [cloning process](docs/satellite-clone.md). Please check our [FAQ section](docs/faqs.md) for frequently asked questions.
+Proceed to performing the [cloning process](docs/satellite-clone.md). Please check our [FAQ section](docs/faqs.md) for frequently asked questions.
 
 ## Development ##
 
