@@ -38,15 +38,6 @@ def get_rpm_version(rpms, pattern, hyphen_split=1, version_split=2):
         return False
 
 
-def get_puppet_version(puppet_agent_version, puppet_rpm_version):
-    error_msg = "Puppet version not found"
-    # Only puppet 4+ has puppet-agent rpm
-    if puppet_agent_version:
-        return puppet_agent_version
-    else:
-        raise error_msg
-
-
 def parse_backup_metadata(params):
     with open(params["metadata_path"]) as data_file:
         data = yaml.load(data_file)
@@ -54,9 +45,6 @@ def parse_backup_metadata(params):
     rpm_key = ":rpms" if ":rpms" in data else "rpms"
     rpms = data[rpm_key]
     satellite_version = get_rpm_version(rpms, "^satellite-[\d+].*")
-    puppet_agent_version = get_rpm_version(rpms, "^puppet-agent-[\d+].*", 2, 1)
-    puppet_rpm_version = get_rpm_version(rpms, "^puppet-[\d+].*", 1, 1)
-    puppet_version = get_puppet_version(puppet_agent_version, puppet_rpm_version)
 
     if not satellite_version or satellite_version not in SUPPORTED_VERSIONS:
         msg = "Satellite version is not supported or found. " \
@@ -65,7 +53,6 @@ def parse_backup_metadata(params):
 
     msg = "{0} backup found".format(satellite_version)
     result = dict(satellite_version=satellite_version,
-                  puppet_version=puppet_version,
                   msg=msg,
                   changed=False)
     return True, result
