@@ -3,6 +3,10 @@ satellite_package: satellite
 satellite_installer_cmd: satellite-installer
 satellite_scenario: satellite
 capsule_puppet_module: foreman-proxy
+
+# See the following issues for installer options
+# https://github.com/RedHatSatellite/satellite-clone/issues/268
+# https://github.com/RedHatSatellite/satellite-clone/issues/349
 satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath --disable-system-checks"
 satellite_upgrade_options: "--disable-system-checks"
 verify_rake_task: reimport
@@ -10,6 +14,7 @@ selinux_packages:
   - crane-selinux
   - foreman-selinux
   - katello-selinux
+  - pulpcore-selinux
 db_packages:
   - rh-mongodb34-syspaths
   - rh-postgresql12-syspaths
