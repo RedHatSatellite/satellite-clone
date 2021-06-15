@@ -217,9 +217,9 @@
   command: >
     {{ satellite_installer_cmd }}
     {{ (satellite_scenario is defined) | ternary("--scenario", "") }} {{ satellite_scenario }}
-    --{{ capsule_puppet_module }}-dns false
-    --{{ capsule_puppet_module }}-dhcp false
-    --{{ capsule_puppet_module }}-tftp false
+    --foreman-proxy-dns false
+    --foreman-proxy-dhcp false
+    --foreman-proxy-tftp false
     {{ satellite_installer_options | default("") }}
 
 - block:
