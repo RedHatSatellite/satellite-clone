@@ -2,7 +2,6 @@
 satellite_package: satellite
 satellite_installer_cmd: satellite-installer
 satellite_scenario: satellite
-capsule_puppet_module: foreman-proxy
 
 # See the following issues for installer options
 # https://github.com/RedHatSatellite/satellite-clone/issues/268
