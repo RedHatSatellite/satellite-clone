@@ -220,6 +220,7 @@
     --{{ capsule_puppet_module }}-dns false
     --{{ capsule_puppet_module }}-dhcp false
     --{{ capsule_puppet_module }}-tftp false
+    --{{ capsule_puppet_module }}-realm false
     {{ satellite_installer_options | default("") }}
 
 - block:

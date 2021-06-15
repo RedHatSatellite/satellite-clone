@@ -25,7 +25,7 @@
 
 ### After Cloning ###
   - On the target server, refreshing the manifest will invalidate the source server's manifest.
-  - DHCP, DNS, TFTP, and IPA authentication will be disabled during the install to avoid configuration errors. If you want to use provisioning on the target server, you will have to manually re-enable these settings after the playbook run.
+  - DHCP, DNS, TFTP, Realm, and IPA authentication will be disabled during the install to avoid configuration errors. If you want to use provisioning on the target server, you will have to manually re-enable these settings after the playbook run.
   - If you are using Remote Execution, you will have to re-copy the ssh keys to your clients. The keys are regenerate during the install portion of the clone process.
   - On the target server, the capsules will be unassociated with Lifecycle environments to avoid any interference with existing infrastructure. Instructions to reverse these changes can be found in `logs/reassociate_capsules.txt` under Satellite Clone's root directory
 
