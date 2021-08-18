@@ -8,7 +8,6 @@ Throughout this documentation, ensure that you understand the following terminol
 - Target server: new server, to which Satellite server is being cloned.
 
 #### Supported Satellite Versions ####
-- 6.5
 - 6.6
 - 6.7
 - 6.8
@@ -35,7 +34,6 @@ On the target server:
    |6.8              |rhel-7-server-ansible-2.9-rpms|
    |6.7              |rhel-7-server-ansible-2.8-rpms|
    |6.6              |rhel-7-server-ansible-2.8-rpms|
-   |6.5              |rhel-7-server-ansible-2.6-rpms|
 
    ```console
    # subscription-manager repos --enable REPO_NAME
