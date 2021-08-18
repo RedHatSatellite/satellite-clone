@@ -20,8 +20,8 @@ def get_info_from_hammer(command, column=1)
   run_hammer_cmd(command + bash_parse)
 end
 
-def capsule_lce_args(action, capsule_id, env, lifecycle)
-  "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --#{lifecycle ? "lifecycle-" : ""}environment-id #{env}"
+def capsule_lce_args(action, capsule_id, env)
+  "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --lifecycle-environment-id #{env}"
 end
 
 external_capsules = []
@@ -36,18 +36,11 @@ else
   end
 
   reverse_commands = []
-  satellite_version = ARGV[0].to_f
   external_capsules.each do |capsule|
     capsule[:lifecycle_environments].each do |env|
-      if Gem::Version.new(satellite_version) > Gem::Version.new(6.5)
-        run_hammer_cmd(capsule_lce_args("remove", capsule[:id], env, true))
-        reverse_command = prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env, true))
-        reverse_commands << reverse_command
-      else
-        run_hammer_cmd(capsule_lce_args("remove", capsule[:id], env, false))
-        reverse_command = prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env, false))
-        reverse_commands << reverse_command
-      end
+      run_hammer_cmd(capsule_lce_args("remove", capsule[:id], env))
+      reverse_command = prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
+      reverse_commands << reverse_command
     end
   end
 

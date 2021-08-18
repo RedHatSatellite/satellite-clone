@@ -169,7 +169,7 @@
   file:
     path: /var/lib/pgsql/data/postgresql.conf
     state: absent
-  when: satellite_version in ["6.5", "6.6", "6.7"]
+  when: satellite_version in ["6.6", "6.7"]
 
 # postgres is not happy when initializing if the data folder isn't empty
 - name: remove postgresql.conf
@@ -280,7 +280,7 @@
     when: run_katello_reindex or not clone_pulp_data_exists 
 
   - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
-    script: disassociate_capsules.rb {{ satellite_version }}
+    script: disassociate_capsules.rb
     register: disassociate_capsules
 
   - name: set fact - disassociate_capsules
