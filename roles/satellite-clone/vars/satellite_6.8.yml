@@ -1,7 +1,6 @@
 ---
 satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath --disable-system-checks"
 satellite_upgrade_options: "--disable-system-checks"
-verify_rake_task: reimport
 selinux_packages:
   - crane-selinux
   - foreman-selinux

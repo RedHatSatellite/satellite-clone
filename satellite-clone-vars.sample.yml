@@ -17,9 +17,9 @@
 # Disable firewall to setup Satellite for testing purposes. (defaults to false)
 #disable_firewall: false
 
-# Run katello reindex after the Satellite install. (defaults to false)
+# Run `foreman-rake katello:reimport` after the Satellite install. (defaults to false)
 # Note: If you are planning to clone your Satellite and immediately upgrade, you may choose to skip this step.
-#run_katello_reindex: false
+#run_katello_reimport: false
 
 # Run several pre-install checks (defaults to true)
 #run_pre_install_check: true
