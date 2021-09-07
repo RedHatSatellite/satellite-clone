@@ -275,10 +275,6 @@
   - name: Wait 60 seconds for services to be fully up
     wait_for: timeout=60
 
-  - name: "Run katello {{ verify_rake_task }} for Satellite - Note that this might take hours"
-    command: "foreman-rake katello:{{ verify_rake_task }} --trace"
-    when: run_katello_reindex or not clone_pulp_data_exists 
-
   - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
     script: disassociate_capsules.rb {{ satellite_version }}
     register: disassociate_capsules
@@ -304,3 +300,7 @@
 
   - fail:
       msg: "Something went wrong! Please check the output above for more information."
+
+- name: "Run katello {{ verify_rake_task }} for Satellite - Note that this might take hours"
+  command: "foreman-rake katello:{{ verify_rake_task }} --trace"
+  when: run_katello_reindex or not clone_pulp_data_exists
