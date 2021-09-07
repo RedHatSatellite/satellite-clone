@@ -39,8 +39,7 @@ else
   external_capsules.each do |capsule|
     capsule[:lifecycle_environments].each do |env|
       run_hammer_cmd(capsule_lce_args("remove", capsule[:id], env))
-      reverse_command = prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
-      reverse_commands << reverse_command
+      reverse_commands << prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
     end
   end
 
