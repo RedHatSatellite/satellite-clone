@@ -6,7 +6,7 @@ satellite_package: satellite
 satellite_scenario: satellite
 config_files_path: "{{ backup_dir }}/config_files.tar.gz"
 disable_firewall: False
-run_katello_reindex: False
+run_katello_reimport: False
 run_pre_install_check: True
 register_to_portal: False
 activationkey: changeme
