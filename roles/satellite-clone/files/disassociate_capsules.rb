@@ -30,9 +30,10 @@ if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
   external_capsule_ids.split("\n").each do |id|
-    lifecycle_environment = get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
-    name = get_info_from_hammer("--csv capsule info --id #{id}", 2).chomp
-    external_capsules << {:id => id, :name => name, :lifecycle_environments => lifecycle_environment}
+    external_capsules << {
+      id: id,
+      lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
+    }
   end
 
   reverse_commands = []
