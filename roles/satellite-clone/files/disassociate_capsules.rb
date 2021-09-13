@@ -24,30 +24,21 @@ def capsule_lce_args(action, capsule_id, env)
   "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --lifecycle-environment-id #{env}"
 end
 
-external_capsules = []
 external_capsule_ids = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'")
-if external_capsule_ids.empty?
-  STDOUT.puts "There are no external capsules to disassociate."
-else
-  external_capsule_ids.split("\n").each do |id|
-    external_capsules << {
-      id: id,
-      lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
-    }
-  end
+STDOUT.puts "There are no external capsules to disassociate." if external_capsule_ids.empty?
 
-  reverse_commands = []
-  external_capsules.each do |capsule|
-    capsule[:lifecycle_environments].each do |env|
-      run_hammer_cmd(capsule_lce_args("remove", capsule[:id], env))
-      reverse_commands << prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
-    end
-  end
-
-  STDOUT.puts "All Capsules are unassociated with any lifecycle environments. This is to avoid any syncing errors with your original Satellite " \
-              "and any interference with existing infrastructure. To reverse these changes, run the following commands," \
-              " making sure to replace the credentials with your own."
-  reverse_commands.each do |reverse|
-    STDOUT.puts reverse
-  end
+external_capsules = external_capsule_ids.split("\n").map do |id|
+  { id: id, lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n") }
 end
+
+reverse_commands = external_capsules.map do |capsule|
+  capsule[:lifecycle_environments].map do |env|
+    run_hammer_cmd(capsule_lcs_args("remove", capsule[:id], env))
+    prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
+  end
+end.flatten
+
+STDOUT.puts "All Capsules are unassociated with any lifecycle environments. This is to avoid any syncing errors with your original Satellite " \
+            "and any interference with existing infrastructure. To reverse these changes, run the following commands," \
+            " making sure to replace the credentials with your own." unless reverse_commands.empty?
+reverse_commands.each { |command| STDOUT.puts command }
