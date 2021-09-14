@@ -1,5 +1,5 @@
 - name: check for satellite answers file
-  command: tar zxf {{ backup_dir }}/config_files.tar.gz  etc/foreman-installer/scenarios.d/satellite-answers.yaml --to-stdout
+  command: tar zxf {{ backup_dir }}/config_files.tar.gz {{ satellite_answers_path }} --to-stdout
   register: satellite_answers
   ignore_errors: true
   no_log: true
