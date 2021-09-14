@@ -21,7 +21,8 @@ from ansible.module_utils.basic import *
 SUPPORTED_VERSIONS = ["6.6", "6.7", "6.8", "6.9", "6.10"]
 
 def find_rpm(rpms, pattern):
-    matches = [r for r in rpms if pattern.match(r)]
+    rpm_pattern = re.compile(pattern)
+    matches = [r for r in rpms if rpm_pattern.match(r)]
     if len(matches) > 0:
         return matches[0]
     else:
@@ -29,8 +30,7 @@ def find_rpm(rpms, pattern):
 
 
 def get_rpm_version(rpms, pattern, hyphen_split=1, version_split=2):
-    rpm_pattern = re.compile(pattern)
-    rpm = find_rpm(rpms, rpm_pattern)
+    rpm = find_rpm(rpms, pattern)
     if rpm:
         rpm_version = rpm.split("-")[hyphen_split]
         return '.'.join(rpm_version.split('.')[0:version_split])
@@ -45,6 +45,8 @@ def parse_backup_metadata(params):
     rpm_key = ":rpms" if ":rpms" in data else "rpms"
     rpms = data[rpm_key]
     satellite_version = get_rpm_version(rpms, "^satellite-[\d+].*")
+    puppetserver_present = bool(find_rpm(rpms, "^puppetserver-[\d+].*"))
+    qpidd_present = bool(find_rpm(rpms, "^qpid-cpp-server-[\d+].*"))
 
     if not satellite_version or satellite_version not in SUPPORTED_VERSIONS:
         msg = "Satellite version is not supported or found. " \
@@ -53,6 +55,8 @@ def parse_backup_metadata(params):
 
     msg = "{0} backup found".format(satellite_version)
     result = dict(satellite_version=satellite_version,
+                  puppetserver_present=puppetserver_present,
+                  qpidd_present=qpidd_present,
                   msg=msg,
                   changed=False)
     return True, result

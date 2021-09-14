@@ -113,6 +113,18 @@
     state: present
   when: db_packages | length > 0
 
+- name: Install Puppet server
+  package:
+    name: puppetserver
+    state: present
+  when: puppetserver_present
+
+- name: Install qpidd
+  package:
+    name: qpid-cpp-server
+    state: present
+  when: qpidd_present
+
 # The postgres user is created after installing postgresql packages, so
 # we perform this owner/group change at this point rather than earlier
 - name: change owner of backup directory to postgres
