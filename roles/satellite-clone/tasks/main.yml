@@ -84,6 +84,7 @@
   yum_repository:
     name: epel
     state: absent
+  when: enable_repos
 
 - name: Clean yum info
   command: yum clean all
