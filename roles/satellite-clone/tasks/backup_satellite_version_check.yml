@@ -1,3 +1,14 @@
+- name: Check for metadata.yml file
+  stat:
+    path: "{{ backup_dir }}/metadata.yml"
+    get_checksum: False
+    get_md5: False
+  register: metadata
+
+- name: set fact - metadata
+  set_fact:
+    clone_metadata_exists: "{{ metadata.stat.exists }}"
+
 - name: Check for satellite version in metadata file
   parse_backup_metadata:
     metadata_path: "{{ backup_dir }}/metadata.yml"

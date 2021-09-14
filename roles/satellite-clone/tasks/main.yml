@@ -5,9 +5,9 @@
 - include_tasks: interface_check.yml
   when: run_pre_install_check and check_networking_interfaces
 
-- include_tasks: backup_check.yml
-
 - include_tasks: backup_satellite_version_check.yml
+
+- include_tasks: backup_check.yml
 
 - name: Set Satellite version dependent variables
   include_vars: "satellite_{{ satellite_version }}.yml"
@@ -176,7 +176,7 @@
   file:
     path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
     state: absent
-  when: satellite_version in ["6.8", "6.9"]
+  when: satellite_version in ["6.8", "6.9", "6.10"]
 
 - name: Restore selinux context on the filesystem
   command: restorecon -R /
@@ -270,7 +270,10 @@
     command: hammer ping
 
   - include_tasks: reset_pulp_data.yml
-    when: not clone_pulp_data_exists and not online_backup
+    when:
+      - not clone_pulp_data_exists
+      - not online_backup
+      - satellite_version in ["6.6", "6.7", "6.8", "6.9"]
 
   - name: Wait 60 seconds for services to be fully up
     wait_for: timeout=60
