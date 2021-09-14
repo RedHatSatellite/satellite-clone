@@ -48,6 +48,9 @@ def parse_backup_metadata(params):
     puppetserver_present = bool(find_rpm(rpms, "^puppetserver-[\d+].*"))
     qpidd_present = bool(find_rpm(rpms, "^qpid-cpp-server-[\d+].*"))
 
+    if not satellite_version:
+        satellite_version = os.getenv('SATELLITE_CLONE_FORCE_VERSION')
+
     if not satellite_version or satellite_version not in SUPPORTED_VERSIONS:
         msg = "Satellite version is not supported or found. " \
               "Only Satellite {0} is supported.".format(", ".join(SUPPORTED_VERSIONS))
