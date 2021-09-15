@@ -17,18 +17,15 @@ end
 
 def get_info_from_hammer(command, column=1)
   bash_parse = " | grep -v \"Warning:\" | tail -n+2 | awk -F, {'print $#{column}'}"
-  run_hammer_cmd(command + bash_parse)
+  run_hammer_cmd(command + bash_parse).split("\n")
 end
 
 def capsule_lce_args(action, capsule_id, env)
   "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --lifecycle-environment-id #{env}"
 end
 
-external_capsule_lifecycle_environments = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'").split("\n").map do |id|
-  {
-    capsule_id: id,
-    lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
-  }
+external_capsule_lifecycle_environments = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'").map do |id|
+  { capsule_id: id, lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}") }
 end
 
 reverse_commands = external_capsule_lifecycle_environments.map do |association|
