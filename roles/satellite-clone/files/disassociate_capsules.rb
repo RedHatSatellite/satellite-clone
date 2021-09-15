@@ -38,7 +38,9 @@ reverse_commands = external_capsules.map do |capsule|
   end
 end.flatten
 
-STDOUT.puts "All Capsules are unassociated with any lifecycle environments. This is to avoid any syncing errors with your original Satellite " \
-            "and any interference with existing infrastructure. To reverse these changes, run the following commands," \
-            " making sure to replace the credentials with your own." unless reverse_commands.empty?
-reverse_commands.each { |command| STDOUT.puts command }
+unless reverse_commands.empty?
+  STDOUT.puts "All Capsules are unassociated with any lifecycle environments. This is to avoid any syncing errors with your original Satellite " \
+              "and any interference with existing infrastructure. To reverse these changes, run the following commands," \
+              " making sure to replace the credentials with your own."
+  reverse_commands.each { |command| STDOUT.puts command }
+end
