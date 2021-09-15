@@ -24,8 +24,10 @@ def capsule_lce_args(action, capsule_id, env)
   "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --lifecycle-environment-id #{env}"
 end
 
+# the correct way is to look at hosts with the Pulpcore feature and the mirror:true setting
+# but this is currently not exposed in API/Hammer
 external_capsules = []
-external_capsule_ids = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'")
+external_capsule_ids = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\" or (feature = Pulpcore and feature = Container_Gateway)'")
 if external_capsule_ids.empty?
   STDOUT.puts "There are no external capsules to disassociate."
 else
