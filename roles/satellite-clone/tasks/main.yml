@@ -297,7 +297,7 @@
   # This is to prevent the clone trying to sync with existing original capsules. We do this with SQL in case
   # hammer is not able to execute a command.
   - name: Disassociate capsules from lifecycle environments to avoid communication with production capsules
-    command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from smart_proxy_features where feature_id = (select id from features where features.name = 'Pulp Node'));"
+    command: psql foreman -c "delete from katello_capsule_lifecycle_environments where capsule_id in (select smart_proxy_id from smart_proxy_features where feature_id IN (select id from features where features.name = 'Pulp Node' or features.name = 'Container_Gateway'));"
     become_user: postgres
     become: true
 
