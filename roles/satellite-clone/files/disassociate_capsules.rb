@@ -24,15 +24,17 @@ def capsule_lce_args(action, capsule_id, env)
   "--csv capsule content #{action}-lifecycle-environment --id #{capsule_id} --lifecycle-environment-id #{env}"
 end
 
-external_capsule_ids = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'")
-external_capsules = external_capsule_ids.split("\n").map do |id|
-  { id: id, lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n") }
+external_capsule_lifecycle_environments = get_info_from_hammer("--csv capsule list --search 'feature = \"Pulp Node\"'").split("\n").map do |id|
+  {
+    capsule_id: id,
+    lifecycle_environments: get_info_from_hammer("--csv capsule content lifecycle-environments --id #{id}").split("\n")
+  }
 end
 
-reverse_commands = external_capsules.map do |capsule|
-  capsule[:lifecycle_environments].map do |env|
-    run_hammer_cmd(capsule_lcs_args("remove", capsule[:id], env))
-    prepare_hammer_cmd(capsule_lce_args("add", capsule[:id], env))
+reverse_commands = external_capsule_lifecycle_environments.map do |association|
+  association[:lifecycle_environments].map do |env|
+    run_hammer_cmd(capsule_lcs_args("remove", association[:capsule_id], env))
+    prepare_hammer_cmd(capsule_lce_args("add", association[:capsule_id], env))
   end
 end.flatten
 
