@@ -12,8 +12,7 @@ def prepare_hammer_cmd(command)
 end
 
 def run_hammer_cmd(command)
-  command = prepare_hammer_cmd(command)
-  `#{command}`
+  `#{prepare_hammer_cmd(command)}`
 end
 
 def get_ids_from_hammer(command, search = nil)
