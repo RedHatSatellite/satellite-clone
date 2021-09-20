@@ -1,13 +1,3 @@
-- name: check for satellite answers file
-  command: tar zxf {{ backup_dir }}/config_files.tar.gz {{ satellite_answers_path }} --to-stdout
-  register: satellite_answers
-  ignore_errors: true
-  no_log: true
-
-- name: setting fact - satellite_answers
-  set_fact:
-    clone_satellite_answers: "{{ (satellite_answers.rc | int) == 0 }}"
-
 - name: Check for satellite version in metadata file
   parse_backup_metadata:
     metadata_path: "{{ backup_dir }}/metadata.yml"
