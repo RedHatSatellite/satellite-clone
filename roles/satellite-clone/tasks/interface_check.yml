@@ -1,4 +1,15 @@
 ---
+- name: get answers file path from yaml
+  get_value_from_yaml_in_tarball:
+    tarball: "{{ config_files_path }}"
+    target_file: "etc/foreman-installer/scenarios.d/{{ satellite_scenario }}.yaml"
+    keys: [":answer_file"]
+  register: answer_file
+
+- name: set answers file path
+  set_fact:
+    satellite_answers_path: "{{ answer_file.value | relpath('/') }}"
+
 - name: Check if DNS is enabled
   get_value_from_yaml_in_tarball:
     tarball: "{{ config_files_path }}"
