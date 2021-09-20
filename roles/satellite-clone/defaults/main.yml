@@ -1,6 +1,7 @@
 ---
 # more info about these variables can be found in satellite-clone-vars.sample.yml in the root directory of this project
 backup_dir: /backup
+satellite_installer_cmd: satellite-installer
 satellite_package: satellite
 satellite_scenario: satellite
 config_files_path: "{{ backup_dir }}/config_files.tar.gz"
