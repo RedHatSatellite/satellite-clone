@@ -12,7 +12,6 @@ register_to_portal: False
 activationkey: changeme
 org: changeme
 enable_repos: True
-disable_postgres_triggers: True
 restorecon: False
 skip_satellite_rpm_check: False
 overwrite_etc_hosts: True
