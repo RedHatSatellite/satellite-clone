@@ -50,10 +50,6 @@
 # sure that the required rpms are available for Satellite installation.
 #enable_repos: true
 
-# Disable postgres triggers (defaults to true). This is set to true to ignore postgresql constraints such as unique indexes
-# when restoring the database. This is helpful if the playbook is blocked by errors on the pg_restore command.
-#disable_postgres_triggers: true
-
 # Run restorecon step (defaults to false) to add a step to restore selinux contexts across the fileystem. The backup is restored
 # with selinux context, but if selinux issues are still present, this option is useful.
 #restorecon: false
