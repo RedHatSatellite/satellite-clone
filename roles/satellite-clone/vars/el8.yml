@@ -1,1 +1,2 @@
 postgresql_package_name: postgresql-server
+postgresql_conf_path: /var/pgsql/data/postgresql.conf
