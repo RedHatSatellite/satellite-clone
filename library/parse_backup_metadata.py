@@ -23,7 +23,7 @@ SUPPORTED_VERSIONS = ["6.6", "6.7", "6.8", "6.9", "6.10"]
 def find_rpm(rpms, pattern):
     rpm_pattern = re.compile(pattern)
     matches = [r for r in rpms if rpm_pattern.match(r)]
-    if len(matches) > 0:
+    if matches:
         return matches[0]
     else:
         return False
