@@ -90,19 +90,28 @@
   command: yum clean all
 
 # turn off firewall
-- name: turn off firewalld - rhel7
-  service: name=firewalld enabled=no state=stopped
-  when: ansible_distribution_major_version == "7" and disable_firewall
+- name: turn off firewalld
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
+  when: disable_firewall
 
 # Update hostname
 - name: set host_name
-  hostname: name={{ hostname }}
+  hostname:
+    name: "{{ hostname }}"
+
 - name: check /etc/hostname
-  lineinfile: dest=/etc/hostname line={{ hostname }}
+  lineinfile:
+    dest: /etc/hostname
+    line: "{{ hostname }}"
   when: ansible_distribution_major_version == "7"
 
 - name: create /etc/hosts
-  template: src=hosts.j2 dest=/etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
   when: overwrite_etc_hosts
 
 # Install Satellite packages
