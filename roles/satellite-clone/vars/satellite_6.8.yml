@@ -8,6 +8,5 @@ selinux_packages:
   - katello-selinux
 db_packages:
   - rh-mongodb34-syspaths
-  - rh-postgresql12-syspaths
-  - rh-postgresql12-postgresql-evr
+  - "{{ postgresql_package_name }}"
 satellite_ansible_version: '2.9'

@@ -9,6 +9,9 @@
 
 - include_tasks: backup_check.yml
 
+- name: Set OS version dependent variables
+  include_vars: "el{{ ansible_distribution_major_version }}.yml"
+
 - name: Set Satellite version dependent variables
   include_vars: "satellite_{{ satellite_version }}.yml"
 

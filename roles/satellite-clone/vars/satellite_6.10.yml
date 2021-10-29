@@ -10,6 +10,5 @@ selinux_packages:
   - katello-selinux
   - pulpcore-selinux
 db_packages:
-  - rh-postgresql12-syspaths
-  - rh-postgresql12-postgresql-evr
+  - "{{ postgresql_package_name }}"
 satellite_ansible_version: '2.9'
