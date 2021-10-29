@@ -182,16 +182,8 @@
 # postgres is not happy when initializing if the data folder isn't empty
 - name: remove postgresql.conf
   file:
-    path: /var/lib/pgsql/data/postgresql.conf
+    path: "{{ postgresql_conf_path }}"
     state: absent
-  when: satellite_version in ["6.6", "6.7"]
-
-# postgres is not happy when initializing if the data folder isn't empty
-- name: remove postgresql.conf
-  file:
-    path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
-    state: absent
-  when: satellite_version in ["6.8", "6.9", "6.10"]
 
 - name: Restore selinux context on the filesystem
   command: restorecon -R /
