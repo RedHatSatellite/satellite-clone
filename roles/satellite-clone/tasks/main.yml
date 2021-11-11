@@ -131,11 +131,6 @@
       command: dnf module enable pki-core -y
       when: "'pki-core' not in enabled_modules.stdout"
 
-    - name: List disabled repositories
-      command: dnf repolist --disabled
-      register: disabled_repos
-      changed_when: false
-
 - name: Install Satellite packages
   yum:
     name: "{{ satellite_package }}"
