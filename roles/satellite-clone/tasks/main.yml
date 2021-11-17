@@ -58,7 +58,7 @@
   when: enable_repos and disable_repos_result_fail
 
 - name: Enable required repos for Satellite installation
-  command: subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-rpms --enable rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms --enable rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms --enable rhel-7-server-satellite-maintenance-6-rpms --enable {{ ansible_repository_label }}
+  command: subscription-manager repos --enable {{ repositories | join(" --enable ") }}
   ignore_errors: True
   register: enable_repos_result
   when: enable_repos
@@ -72,9 +72,9 @@
 - name: Check that the repos are enabled without errors
   fail:
     msg: "Enabling required repos failed.  Make sure that your system has access to the following repos:
-         rhel-{{ ansible_distribution_major_version }}-server-rpms,
-         rhel-server-rhscl-{{ ansible_distribution_major_version }}-rpms,
-         rhel-{{ ansible_distribution_major_version }}-server-satellite-{{ satellite_version }}-rpms.
+
+         {{ repositories | join('\n') }}
+
          Alternatively, you can skip this task by specifying `enable_repos` to `False` and provide alternate
          means (e.g., custom repositories) to get the required rpms."
   when: enable_repos and enable_repos_result_fail

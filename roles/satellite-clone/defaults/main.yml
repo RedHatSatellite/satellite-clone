@@ -17,4 +17,3 @@ skip_satellite_rpm_check: False
 overwrite_etc_hosts: True
 check_networking_interfaces: True
 selinux_packages: []
-ansible_repository_label: "rhel-7-server-ansible-{{ satellite_ansible_version }}-rpms"
