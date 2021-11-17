@@ -15,3 +15,4 @@ db_packages:
   - rh-mongodb34-syspaths
   - "{{ postgresql_package_name }}"
 satellite_ansible_version: '2.9'
+satellite_maintenance_version: '6'
