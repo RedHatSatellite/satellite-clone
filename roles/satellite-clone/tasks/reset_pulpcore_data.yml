@@ -1,0 +1,22 @@
+- name: reset pulpcore data
+  command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all; Katello::AnsibleCollection.all.destroy_all" | foreman-rake console
+
+- name: reset 7.0+ specific pulpcore data
+  command: echo "Katello::GenericContentUnit.all.destroy_all" | foreman-rake console
+  when:
+    - satellite_version not in ["6.10"]
+
+- name: stop all services but the database
+  command: foreman-maintain service stop --exclude postgresql
+
+- name: flush pulpcore db (reset pulp data)
+  command: sudo -u pulp PULP_SETTINGS=/etc/pulp/settings.py pulpcore-manager flush --noinput
+
+- name: migrate pulpcore db (reset pulp data)
+  command: sudo -u pulp PULP_SETTINGS=/etc/pulp/settings.py pulpcore-manager migrate --noinput
+
+- name: reset pulpcore admin password (reset pulp data)
+  command: sudo -u pulp PULP_SETTINGS=/etc/pulp/settings.py pulpcore-manager reset-admin-password --random
+
+- name: start services
+  command: foreman-maintain service start
