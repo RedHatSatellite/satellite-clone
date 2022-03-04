@@ -1,0 +1,30 @@
+---
+- name: 'Ensure pulp group exists'
+  group:
+    name: pulp
+    system: true
+
+- name: 'Ensure pulp user exists'
+  user:
+    name: pulp
+    group: pulp
+    create_home: false
+    home: /var/lib/pulp
+    shell: /sbin/nologin
+    system: true
+
+- name: 'Check /var/lib/pulp ownership'
+  stat:
+    path: /var/lib/pulp
+  register: pulp_stat
+
+- name: 'Correct ownership of /var/lib/pulp'
+  file:
+    path: /var/lib/pulp
+    state: directory
+    recurse: true
+    owner: pulp
+    group: pulp
+  when:
+    - pulp_stat.stat.exists
+    - pulp_stat.stat.pw_name != 'pulp' or pulp_stat.stat.gr_name != 'pulp'

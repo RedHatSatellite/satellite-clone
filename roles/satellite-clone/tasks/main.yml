@@ -211,6 +211,12 @@
     state: present
   when: selinux_packages | length > 0
 
+- include_tasks: ensure_pulp_data_permissions.yml
+  when:
+    - not clone_pulp_data_exists
+    - not online_backup
+    - satellite_version in ["6.10", "7.0"]
+
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
 
