@@ -64,3 +64,7 @@
 
 # Disable checking interfaces setup for DHCP and DNS match the interfaces on the target server. (defaults to true)
 #check_networking_interfaces: true
+
+# Reset Pulp data, useful for cases where you need to restore a system, but don't have access to the old /var/lib/pulp content.
+# Don't enable if you want a 1:1 clone with data. Only for support / development!
+#reset_pulp_data: false

@@ -17,3 +17,4 @@ skip_satellite_rpm_check: False
 overwrite_etc_hosts: True
 check_networking_interfaces: True
 selinux_packages: []
+reset_pulp_data: False
