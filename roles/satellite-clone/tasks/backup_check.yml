@@ -75,6 +75,10 @@
   set_fact:
     clone_mongo_dump_exists: "{{ mongo_dump.stat.exists }}"
 
+- name: set fact - has_pulp2
+  set_fact:
+    has_pulp2: "{{ satellite_version in ['6.6', '6.7', '6.8', '6.9'] }}"
+
 - name: Fail if the config tar file is not present or not accessible
   fail: msg="{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
   when: not clone_config_data_exists
@@ -90,14 +94,14 @@
   when:
     - clone_candlepin_dump_exists
     - clone_foreman_dump_exists
-    - clone_mongo_dump_exists or satellite_version in ["6.10"]
+    - clone_mongo_dump_exists or not has_pulp2
 
 - name: Check for standard backup
   set_fact:
     standard_backup: True
   when:
     - clone_pgsql_data_exists
-    - clone_mongo_data_exists or satellite_version in ["6.10"]
+    - clone_mongo_data_exists or not has_pulp2
 
 - name: Check full backup is present
   fail:
