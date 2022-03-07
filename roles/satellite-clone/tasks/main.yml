@@ -322,14 +322,14 @@
       - reset_pulp_data
       - not clone_pulp_data_exists
       - not online_backup
-      - satellite_version in ["6.6", "6.7", "6.8", "6.9"]
+      - has_pulp2
 
   - include_tasks: reset_pulpcore_data.yml
     when:
       - reset_pulp_data
       - not clone_pulp_data_exists
       - not online_backup
-      - satellite_version not in ["6.6", "6.7", "6.8", "6.9"]
+      - not has_pulp2
 
   - name: Wait 60 seconds for services to be fully up
     wait_for: timeout=60
