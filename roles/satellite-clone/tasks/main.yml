@@ -215,7 +215,7 @@
   when:
     - not clone_pulp_data_exists
     - not online_backup
-    - satellite_version in ["6.10", "7.0"]
+    - satellite_version is version('6.10', '>=')
 
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
