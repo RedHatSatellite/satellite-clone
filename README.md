@@ -13,7 +13,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.8
 - 6.9
 - 6.10
-- 7.0
+- 6.11
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
@@ -32,7 +32,7 @@ On the target server:
 2. Enable the Ansible repository corresponding to your Satellite version
    |Satellite Version|RHEL 7 Ansible Repository     |RHEL 8 Ansible Repository         |
    |-----------------|------------------------------|----------------------------------|
-   |7.0              |rhel-7-server-ansible-2.9-rpms|ansible-2.9-for-rhel-8-x86_64-rpms|
+   |6.11             |rhel-7-server-ansible-2.9-rpms|ansible-2.9-for-rhel-8-x86_64-rpms|
    |6.10             |rhel-7-server-ansible-2.9-rpms|N/A                               |
    |6.9              |rhel-7-server-ansible-2.9-rpms|N/A                               |
    |6.8              |rhel-7-server-ansible-2.9-rpms|N/A                               |
