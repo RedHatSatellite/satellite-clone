@@ -1,5 +1,5 @@
 postgresql_package_name: postgresql-server
-postgresql_conf_path: /var/pgsql/data/postgresql.conf
+postgresql_conf_path: /var/lib/pgsql/data/postgresql.conf
 repositories:
   - rhel-8-for-x86_64-baseos-rpms
   - rhel-8-for-x86_64-appstream-rpms
