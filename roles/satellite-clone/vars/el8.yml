@@ -5,4 +5,3 @@ repositories:
   - rhel-8-for-x86_64-appstream-rpms
   - satellite-{{ satellite_version }}-for-rhel-8-x86_64-rpms
   - satellite-maintenance-{{ satellite_maintenance_version }}-for-rhel-8-x86_64-rpms
-  - ansible-{{ satellite_ansible_version }}-for-rhel-8-x86_64-rpms
