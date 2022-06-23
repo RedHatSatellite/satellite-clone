@@ -116,29 +116,15 @@
 
 # Install Satellite packages
 
-- when:
+- name: Enable {{ satellite_module }}:el8 module
+  command: dnf module enable -y {{ satellite_module }}:el8
+  # can't use the `dnf` module for modules without a default stream
+  # https://github.com/ansible/ansible/issues/56504
+  # https://github.com/ansible/ansible/issues/64852
+  args:
+    creates: /etc/dnf/modules.d/{{ satellite_module }}.module
+  when:
     - ansible_distribution_major_version == '8'
-  block:
-    - name: Enable ruby:2.7 module
-      dnf:
-        name: '@ruby:2.7'
-        state: present
-
-    - name: Enable postgresql:12 module
-      dnf:
-        name: '@postgresql:12'
-        state: present
-
-    - name: Get pki-core module info
-      command: dnf module list --enabled
-      register: enabled_modules
-      changed_when: false
-
-    # The dnf module can't enable a module that has no default profile
-    # See https://github.com/ansible/ansible/issues/56504 for details
-    - name: Enable pki-core module
-      command: dnf module enable pki-core -y
-      when: "'pki-core' not in enabled_modules.stdout"
 
 - name: Install Satellite packages
   yum:
