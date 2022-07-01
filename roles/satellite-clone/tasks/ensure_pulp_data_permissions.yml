@@ -27,4 +27,4 @@
     group: pulp
   when:
     - pulp_stat.stat.exists
-    - pulp_stat.stat.pw_name != 'pulp' or pulp_stat.stat.gr_name != 'pulp'
+    - (pulp_stat.stat.pw_name is not defined or pulp_stat.stat.pw_name != 'pulp') or (pulp_stat.stat.gr_name is not defined or pulp_stat.stat.gr_name != 'pulp')
