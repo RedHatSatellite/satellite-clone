@@ -14,6 +14,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.9
 - 6.10
 - 6.11
+- 6.12
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 or RHEL 8 (Satellite 6.11+) machine (target server). You will run the setup commands here.
@@ -56,4 +57,3 @@ Proceed to performing the [cloning process](docs/satellite-clone.md). Please che
 ## Development ##
 
 To make a contribution, please fork the repository and open up a pull request with your branch. All pull requests need to have a corresponding issue, you can comment the issue that your are fixing by putting `Fixes #302` (where 302 is the issue number) in the commit message. If there is no issue yet for your problem, just open one up! Community issues and contributions are always appreciated.
-
