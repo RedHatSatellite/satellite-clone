@@ -14,10 +14,11 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.9
 - 6.10
 - 6.11
+- 6.12
 
 #### What you need: ####
-  - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
-  - A backup from a Satellite server (source server) created with `satellite-maintain`. This backup can be with or without pulp data, and can be from a RHEL 6 or 7 machine.
+  - A blank (vanilla install) RHEL 7 or RHEL 8 (Satellite 6.11+) machine (target server). You will run the setup commands here.
+  - A backup from a Satellite server (source server) created with `satellite-maintain`. This backup can be with or without pulp data, and can be from a RHEL 7 or 8 machine.
   - You will need a Satellite 6 subscription for the cloned machine. With the new Satellite Infrastructure [subscription model](https://access.redhat.com/solutions/3382781) you should have multiple Satellite subscriptions available.
 
 #### Setup ####
@@ -29,23 +30,26 @@ On the target server:
    # yum install git
    # git clone https://github.com/RedHatSatellite/satellite-clone.git
    ```
-2. Enable the Ansible repository corresponding to your Satellite version
-   |Satellite Version|RHEL 7 Ansible Repository     |RHEL 8 Ansible Repository         |
-   |-----------------|------------------------------|----------------------------------|
-   |6.11             |rhel-7-server-ansible-2.9-rpms|ansible-2.9-for-rhel-8-x86_64-rpms|
-   |6.10             |rhel-7-server-ansible-2.9-rpms|N/A                               |
-   |6.9              |rhel-7-server-ansible-2.9-rpms|N/A                               |
-   |6.8              |rhel-7-server-ansible-2.9-rpms|N/A                               |
-   |6.7              |rhel-7-server-ansible-2.8-rpms|N/A                               |
-   |6.6              |rhel-7-server-ansible-2.8-rpms|N/A                               |
+2. When deploying on RHEL 7, enable the Ansible repository corresponding to your Satellite version
+   |Satellite Version|RHEL 7 Ansible Repository     |
+   |-----------------|------------------------------|
+   |6.11             |rhel-7-server-ansible-2.9-rpms|
+   |6.10             |rhel-7-server-ansible-2.9-rpms|
+   |6.9              |rhel-7-server-ansible-2.9-rpms|
+   |6.8              |rhel-7-server-ansible-2.9-rpms|
+   |6.7              |rhel-7-server-ansible-2.8-rpms|
+   |6.6              |rhel-7-server-ansible-2.8-rpms|
 
    ```console
    # subscription-manager repos --enable REPO_NAME
    ```
 
-3. Install the `ansible` package:
+3. Install the `ansible` package on RHEL 7, or `ansible-core` on RHEL 8:
    ```console
    # yum install ansible
+   ```
+   ```console
+   # dnf install ansible-core
    ```
 
 Proceed to performing the [cloning process](docs/satellite-clone.md). Please check our [FAQ section](docs/faqs.md) for frequently asked questions.
@@ -53,4 +57,3 @@ Proceed to performing the [cloning process](docs/satellite-clone.md). Please che
 ## Development ##
 
 To make a contribution, please fork the repository and open up a pull request with your branch. All pull requests need to have a corresponding issue, you can comment the issue that your are fixing by putting `Fixes #302` (where 302 is the issue number) in the commit message. If there is no issue yet for your problem, just open one up! Community issues and contributions are always appreciated.
-
