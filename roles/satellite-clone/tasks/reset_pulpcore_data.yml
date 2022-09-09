@@ -1,3 +1,4 @@
+---
 - name: reset pulpcore data
   command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all; Katello::AnsibleCollection.all.destroy_all" | foreman-rake console
 

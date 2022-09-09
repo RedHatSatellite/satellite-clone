@@ -1,3 +1,4 @@
+---
 postgresql_package_name: rh-postgresql12-syspaths
 postgresql_conf_path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
 repositories:

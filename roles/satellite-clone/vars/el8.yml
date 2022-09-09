@@ -1,3 +1,4 @@
+---
 postgresql_package_name: postgresql-server
 postgresql_conf_path: /var/lib/pgsql/data/postgresql.conf
 repositories:
