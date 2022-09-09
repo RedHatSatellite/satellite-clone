@@ -1,3 +1,4 @@
+---
 - name: Check for metadata.yml file
   stat:
     path: "{{ backup_dir }}/metadata.yml"

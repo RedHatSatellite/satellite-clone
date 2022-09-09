@@ -1,3 +1,4 @@
+---
 - name: Check for config tar file
   stat:
     path: '{{ backup_dir }}/config_files.tar.gz'
