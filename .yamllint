@@ -25,7 +25,7 @@ rules:
 
   hyphens:
     level: error
-  indentation: {spaces: 2, indent-sequences: consistent}
+  indentation: {spaces: 2, indent-sequences: whatever}
   key-duplicates: enable
   line-length: disable
   new-line-at-end-of-file: disable
