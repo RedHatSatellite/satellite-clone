@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  COLORTERM: 'yes'
+  TERM: 'xterm-256color'
+  PYTEST_ADDOPTS: '--color=yes'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: pip install --upgrade ansible-core ansible-lint yamllint
+      - name: ansible-playbook --syntax-check
+        run: ansible-playbook --syntax-check satellite-clone-playbook.yml | grep -v '^$$'
+      - name: yamllint
+        run: yamllint -f parsable roles
+      - name: ansible-lint
+        run: ansible-lint -v roles/*
