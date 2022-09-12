@@ -250,7 +250,8 @@
     --foreman-proxy-tftp false
     {{ satellite_installer_options | default("") }}
 
-- block:
+- name: Finalize clone
+  block:
   # Cron services can interfere with restoring the backup
   - name: stop crond
     systemd:
@@ -334,7 +335,8 @@
       dest: "{{ playbook_dir }}/logs/reassociate_capsules.txt"
     delegate_to: localhost
 
-  - debug:
+  - name: Print final notice
+    debug:
       msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
             ****NOTE**** Your Satellite's password is updated to changeme"
   rescue:
@@ -346,7 +348,8 @@
     become_user: postgres
     become: true
 
-  - fail:
+  - name: Fail as something went wrong
+    fail:
       msg: "Something went wrong! Please check the output above for more information."
 
 - name: "Run foreman-rake katello:reimport for Satellite - Note that this might take hours"
