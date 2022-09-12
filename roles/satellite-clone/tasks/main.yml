@@ -129,7 +129,7 @@
 - name: Install Satellite packages
   yum:
     name: "{{ satellite_package }}"
-    state: latest
+    state: present
 
 - name: Install packages necessary to check DB status
   yum:
