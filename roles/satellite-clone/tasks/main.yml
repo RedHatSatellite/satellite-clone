@@ -329,7 +329,10 @@
       clone_disassociate_capsules: "{{ disassociate_capsules.stdout }}"
 
   - name: copy disassociate_capsules.rb output
-    local_action: copy content={{ clone_disassociate_capsules }} dest={{ playbook_dir }}/logs/reassociate_capsules.txt
+    copy:
+      content: "{{ clone_disassociate_capsules }}"
+      dest: "{{ playbook_dir }}/logs/reassociate_capsules.txt"
+    delegate_to: localhost
 
   - debug:
       msg: "****NOTE**** Your Satellite's hostname is updated to match the original Satellite
