@@ -65,7 +65,7 @@
 
 - name: set fact - enable_repos_result
   set_fact:
-    enable_repos_result_fail: "{{ (enable_repos_result.rc | int) != 0}}"
+    enable_repos_result_fail: "{{ (enable_repos_result.rc | int) != 0 }}"
     caceable: True
   when: enable_repos
 
