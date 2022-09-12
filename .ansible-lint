@@ -1,0 +1,9 @@
+warn_list:
+  - command-instead-of-module
+  - fqcn-builtins
+  - no-changed-when
+  - jinja[spacing]
+  - name[casing]
+  - risky-file-permissions
+  - role-name
+  - var-spacing
