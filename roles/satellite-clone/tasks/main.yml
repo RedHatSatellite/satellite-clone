@@ -1,13 +1,17 @@
 ---
-- include_tasks: pre_install_check.yml
+- name: Run pre-install check
+  include_tasks: pre_install_check.yml
   when: run_pre_install_check
 
-- include_tasks: interface_check.yml
+- name: Run interface check
+  include_tasks: interface_check.yml
   when: run_pre_install_check and check_networking_interfaces
 
-- include_tasks: backup_satellite_version_check.yml
+- name: Run backup version check
+  include_tasks: backup_satellite_version_check.yml
 
-- include_tasks: backup_check.yml
+- name: Run backup check
+  include_tasks: backup_check.yml
 
 - name: Set OS version dependent variables
   include_vars: "el{{ ansible_distribution_major_version }}.yml"
@@ -27,11 +31,13 @@
     hostname: "{{ backup_hostname.value | urlsplit('hostname') }}"
 
 - name: Check that the hostname is not none
-  fail: msg="Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
+  fail:
+    msg: "Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
   when: backup_hostname|length == 0
 
 - name: Check that the registration variables (activationkey, org) are updated
-  fail: msg="Please update the variables in /etc/satellite-clone/satellite-clone-vars.yml"
+  fail:
+    msg: "Please update the variables in /etc/satellite-clone/satellite-clone-vars.yml"
   when: ((activationkey == "changeme") or (org == "changeme")) and register_to_portal
 
 - name: Register/Subscribe the system to Red Hat Portal
@@ -197,7 +203,8 @@
     state: present
   when: selinux_packages | length > 0
 
-- include_tasks: ensure_pulp_data_permissions.yml
+- name: Ensure Pulp data permissions
+  include_tasks: ensure_pulp_data_permissions.yml
   when:
     - not clone_pulp_data_exists
     - not online_backup
@@ -304,14 +311,16 @@
   - name: Test Satellite
     command: hammer ping
 
-  - include_tasks: reset_pulp_data.yml
+  - name: Reset Pulp data
+    include_tasks: reset_pulp_data.yml
     when:
       - reset_pulp_data
       - not clone_pulp_data_exists
       - not online_backup
       - has_pulp2
 
-  - include_tasks: reset_pulpcore_data.yml
+  - name: Reset Pulpcore data
+    include_tasks: reset_pulpcore_data.yml
     when:
       - reset_pulp_data
       - not clone_pulp_data_exists
@@ -319,7 +328,8 @@
       - not has_pulp2
 
   - name: Wait 60 seconds for services to be fully up
-    wait_for: timeout=60
+    wait_for:
+      timeout: 60
 
   - name: Disassociate capsules with lifecycle environments (to avoid the cloned Satellite server talking with live capsules)
     script: disassociate_capsules.rb

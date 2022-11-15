@@ -81,7 +81,8 @@
     has_pulp2: "{{ satellite_version in ['6.6', '6.7', '6.8', '6.9'] }}"
 
 - name: Fail if the config tar file is not present or not accessible
-  fail: msg="{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
+  fail:
+    msg: "{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
   when: not clone_config_data_exists
 
 - name: Set all backup types to False
