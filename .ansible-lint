@@ -4,6 +4,7 @@ warn_list:
   - no-changed-when
   - jinja[spacing]
   - name[casing]
+  - name[template]
   - risky-file-permissions
   - role-name
   - var-spacing
