@@ -15,6 +15,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - 6.10
 - 6.11
 - 6.12
+- 6.13
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 7 or RHEL 8 (Satellite 6.11+) machine (target server). You will run the setup commands here.
