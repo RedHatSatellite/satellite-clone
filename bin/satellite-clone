@@ -1,98 +1,41 @@
-#!/usr/bin/env python
+#!/bin/bash
 
-from __future__ import print_function
-import argparse
-import os
-import sys
+SATELLITE_CLONE_PATH="${SATELLITE_CLONE_PATH:-/usr/share/satellite-clone}"
+DEFAULT_PLAYBOOK_FILE="${SATELLITE_CLONE_PATH}/satellite-clone-playbook.yml"
+INVENTORY_PATH="${SATELLITE_CLONE_PATH}/inventory"
+ANSIBLE_CONFIG="${SATELLITE_CLONE_PATH}/ansible.production.cfg"
+export ANSIBLE_CONFIG
 
+usage() {
+  echo "usage: satellite-clone [-h] [-y]
 
-def get_input(question):
-    try:
-        return raw_input(question)
-    except NameError:
-        return input(question)
+options:
+  -h, --help        show this help message and exit
+  -y, --assume-yes  Assume yes for each question"
+}
 
-def yes_or_no(question):
-    while "the answer is invalid":
-        reply = str(get_input(question + ' (y/n): ')).lower().strip()
-        if reply[0] == 'y':
-            return True
-        if reply[0] == 'n':
-            exit(1)
+if [[ ! -d "${SATELLITE_CLONE_PATH}" ]]; then
+  echo "It looks like satellite-clone has not been installed properly, ${SATELLITE_CLONE_PATH} does not exist."
+  exit 1
+fi
 
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  usage
+  exit 0
+fi
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--step",
-                        action="store_true",
-                        dest="step",
-                        default=False,
-                        help="interactive: confirm each task before running")
-    parser.add_argument("--list-tasks",
-                        action="store_true",
-                        dest="list_tasks",
-                        default=False,
-                        help="list tasks that will be run in the playbook")
-    parser.add_argument("--flush-cache",
-                        action="store_true",
-                        dest="flush_cache",
-                        default=False,
-                        help="clear the fact cache and run playbook")
-    parser.add_argument("-y",
-                        "--assume-yes",
-                        action="store_true",
-                        dest="assume_yes",
-                        default=False,
-                        help="Assume yes for each question")
+if [[ "$1" == "--assume-yes" ]] || [[ "$1" == "-y" ]]; then
+  CONFIRM=true
+  shift
+else
+  CONFIRM=false
+fi
 
-    args = parser.parse_args()
+if [[ "${CONFIRM}" != "true" ]]; then
+  read -r -p "This will initiate satellite-clone. Do you want to proceed? (y/N): " result
+  if [[ "${result}" != y* ]]; then
+    exit 1
+  fi
+fi
 
-    PRODUCTION_INSTALL_PATH = "/usr/share/satellite-clone"
-    DEFAULT_PLAYBOOK_FILE = os.path.join(PRODUCTION_INSTALL_PATH,
-                                         "satellite-clone-playbook.yml")
-
-    if not os.path.isdir(PRODUCTION_INSTALL_PATH):
-        print("It looks like satellite-clone has"
-              " not been installed properly, {0} does not exist.\n"
-              .format(PRODUCTION_INSTALL_PATH))
-        exit(1)
-
-    confirm = False
-    ansible_args = []
-    if args.step:
-        ansible_args.append("--step")
-    if args.list_tasks:
-        ansible_args = []
-        ansible_args.append("--list-tasks")
-        confirm = True
-    if args.flush_cache:
-        ansible_args.append("--flush-cache")
-    if args.assume_yes:
-        confirm = True
-
-    if not confirm:
-        yes_or_no("This will initiate satellite-clone. "
-                  "Do you want to proceed?")
-
-    os.environ["ANSIBLE_CONFIG"] = os.path.join(PRODUCTION_INSTALL_PATH,
-                                                'ansible.production.cfg')
-
-    # We need to import here because the ANSIBLE_CONFIG environment variable is
-    # checked at import time (instead of when calling PlaybookCLI)
-    from ansible.cli.playbook import PlaybookCLI
-
-    inventory_path = os.path.join(PRODUCTION_INSTALL_PATH, 'inventory')
-    ansible_playbook = (["ansible-playbook", "-i", inventory_path] +
-                        ansible_args +
-                        [DEFAULT_PLAYBOOK_FILE])
-
-    print(" ".join(ansible_playbook))
-
-    cli = PlaybookCLI(ansible_playbook)
-    cli.parse()
-    exit_code = cli.run()
-    sys.exit(exit_code)
-
-
-if __name__ == '__main__':
-    main()
+exec -- ansible-playbook -i "${INVENTORY_PATH}" "${DEFAULT_PLAYBOOK_FILE}" "$@"

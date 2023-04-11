@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **satellite-clone** \[**-h**|**--help**] \[**--start-at-task TASK**] \[**--step**] \[**--list-tasks**] \[**--flush-cache**]
+| **satellite-clone** \[**-h**|**\-\-help**] \[**-y**|**\-\-assume-yes**]
 
 
 DESCRIPTION
@@ -25,7 +25,7 @@ Throughout this documentation, the following terminology is used:
 You will need:
 --------------
 
-  - A blank (vanilla install) RHEL 7 server (target server). You will run the setup commands here.
+  - A blank (vanilla install) RHEL 8 machine (target server). You will run the setup commands here.
   - A backup from a Satellite server (source server) created with satellite-maintain backup. This backup can be with or without pulp-data
   - You will need a Satellite 6 subscription for the cloned machine. There are options for obtaining subscriptions at a discounted rate for smaller environments.
 
@@ -44,17 +44,13 @@ On the target server:
 Options
 -------
 
---step
+-h, \-\-help
 
-:  Interactive, confirm each task before running
+:  show help message and exit
 
---list-tasks
+-y, \-\-assume-yes
 
-:  List tasks that will run in the satellite-clone playbook
-
---flush-cache
-
-:  Clear the fact cache
+:  Assume yes for each question
 
 FILES
 =====
