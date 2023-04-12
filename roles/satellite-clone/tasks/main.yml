@@ -197,7 +197,7 @@
   when: clone_foreman_dump_exists and clone_candlepin_dump_exists and (clone_no_foreman_dump_access or clone_no_candlepin_dump_access)
 
   # Because of https://projects.theforeman.org/issues/30506
-- name: Install Satellite SELinux packages for 6.8 and above
+- name: Install Satellite SELinux packages
   yum:
     name: "{{ selinux_packages | join(',') }}"
     state: present
@@ -208,7 +208,6 @@
   when:
     - not clone_pulp_data_exists
     - not online_backup
-    - satellite_version is version('6.10', '>=')
 
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
@@ -238,13 +237,6 @@
   file:
     state: absent
     path: /etc/tomcat/conf.d/jmx.conf
-
-# This no longer is supported in 6.6, but was still found enabled in some backups
-- name: Remove hammer csv module
-  file:
-    state: absent
-    path: /etc/hammer/cli.modules.d/csv.yml
-  when: satellite_version in ["6.6"]
 
 - name: Run Satellite installer
   environment:
@@ -311,21 +303,12 @@
   - name: Test Satellite
     command: hammer ping
 
-  - name: Reset Pulp data
-    include_tasks: reset_pulp_data.yml
-    when:
-      - reset_pulp_data
-      - not clone_pulp_data_exists
-      - not online_backup
-      - has_pulp2
-
   - name: Reset Pulpcore data
     include_tasks: reset_pulpcore_data.yml
     when:
       - reset_pulp_data
       - not clone_pulp_data_exists
       - not online_backup
-      - not has_pulp2
 
   - name: Wait 60 seconds for services to be fully up
     wait_for:

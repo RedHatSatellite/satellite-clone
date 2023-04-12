@@ -1,9 +1,0 @@
----
-postgresql_package_name: rh-postgresql12-syspaths
-postgresql_conf_path: /var/opt/rh/rh-postgresql12/lib/pgsql/data/postgresql.conf
-repositories:
-  - rhel-7-server-rpms
-  - rhel-server-rhscl-7-rpms
-  - rhel-7-server-satellite-{{ satellite_version }}-rpms
-  - rhel-7-server-satellite-maintenance-{{ satellite_maintenance_version }}-rpms
-  - rhel-7-server-ansible-{{ satellite_ansible_version }}-rpms

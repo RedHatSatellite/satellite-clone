@@ -1,11 +1,6 @@
 ---
 - name: reset pulpcore data
-  command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all; Katello::AnsibleCollection.all.destroy_all" | foreman-rake console
-
-- name: reset 6.11+ specific pulpcore data
-  command: echo "Katello::GenericContentUnit.all.destroy_all" | foreman-rake console
-  when:
-    - satellite_version not in ["6.10"]
+  command: echo "Katello::Rpm.all.destroy_all; Katello::Erratum.all.destroy_all; Katello::PackageGroup.all.destroy_all; Katello::DockerManifest.all.destroy_all; Katello::DockerTag.all.destroy_all; Katello::AnsibleCollection.all.destroy_all; Katello::GenericContentUnit.all.destroy_all" | foreman-rake console
 
 - name: stop all services but the database
   command: foreman-maintain service stop --exclude postgresql

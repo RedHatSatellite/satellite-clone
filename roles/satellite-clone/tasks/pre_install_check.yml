@@ -9,7 +9,7 @@
 
 - name: Fail if satellite is already installed
   fail:
-    msg: "Satellite is already installed. Satellite-clone should be run on a clean RHEL7 machine. If you would like to force a skip of this check, please set skip_satellite_rpm_check to true in satellite-clone-vars.yml"
+    msg: "Satellite is already installed. Satellite-clone should be run on a clean RHEL machine. If you would like to force a skip of this check, please set skip_satellite_rpm_check to true in satellite-clone-vars.yml"
   when:
     - not skip_satellite_rpm_check
     - clone_satellite_installed_check is not defined

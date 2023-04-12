@@ -10,4 +10,3 @@ selinux_packages:
   - pulpcore-selinux
 db_packages:
   - "{{ postgresql_package_name }}"
-satellite_maintenance_version: '6.12'
