@@ -188,13 +188,29 @@
   set_fact:
     clone_no_candlepin_dump_access: "{{ access_candlepin_dump is failed }}"
 
+- name: test pulpcore.dump file is readable by postgres user
+  command: "test -r {{ backup_dir }}/pulpcore.dump"
+  become: yes
+  become_user: postgres
+  register: access_pulpcore_dump
+  ignore_errors: yes
+  when: clone_pulpcore_dump_exists
+
+- name: setting fact - access_pulpcore_dump
+  set_fact:
+    clone_no_pulpcore_dump_access: "{{ access_pulpcore_dump is failed }}"
+
 - name: fail if postgres user doesn't have access to files
   fail:
     msg: >
       The postgres user does not have access to the files in {{ backup_dir }}.
       Please move the backup directory to a different directory with the correct
       permissions. Avoid using /root.
-  when: clone_foreman_dump_exists and clone_candlepin_dump_exists and (clone_no_foreman_dump_access or clone_no_candlepin_dump_access)
+  when:
+    - clone_foreman_dump_exists
+    - clone_candlepin_dump_exists
+    - clone_pulpcore_dump_exists
+    - clone_no_foreman_dump_access or clone_no_candlepin_dump_access or clone_no_pulpcore_dump_access
 
   # Because of https://projects.theforeman.org/issues/30506
 - name: Install Satellite SELinux packages
