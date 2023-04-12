@@ -1,9 +1,0 @@
----
-satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath --disable-system-checks"
-satellite_upgrade_options: "--upgrade --disable-system-checks"
-db_packages:
-  - postgresql-server
-  - rh-mongodb34-syspaths
-postgresql_conf_path: /var/pgsql/data/postgresql.conf
-satellite_ansible_version: '2.8'
-satellite_maintenance_version: '6'

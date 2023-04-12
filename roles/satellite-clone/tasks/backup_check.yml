@@ -54,32 +54,6 @@
   set_fact:
     clone_candlepin_dump_exists: "{{ candlepin_dump.stat.exists }}"
 
-- name: Check for mongo backup file
-  stat:
-    path: "{{ backup_dir }}/mongo_data.tar.gz"
-    get_checksum: False
-    get_md5: False
-  register: mongo_data
-
-- name: set fact - mongo_data
-  set_fact:
-    clone_mongo_data_exists: "{{ mongo_data.stat.exists }}"
-
-- name: Check for mongo dump folder
-  stat:
-    path: "{{ backup_dir }}/mongo_dump"
-    get_checksum: False
-    get_md5: False
-  register: mongo_dump
-
-- name: set fact - mongo_dump
-  set_fact:
-    clone_mongo_dump_exists: "{{ mongo_dump.stat.exists }}"
-
-- name: set fact - has_pulp2
-  set_fact:
-    has_pulp2: "{{ satellite_version in ['6.6', '6.7', '6.8', '6.9'] }}"
-
 - name: Fail if the config tar file is not present or not accessible
   fail:
     msg: "{{ backup_dir }}/config_files.tar.gz is not present or not accessible"
@@ -96,21 +70,18 @@
   when:
     - clone_candlepin_dump_exists
     - clone_foreman_dump_exists
-    - clone_mongo_dump_exists or not has_pulp2
 
 - name: Check for standard backup
   set_fact:
     standard_backup: True
   when:
     - clone_pgsql_data_exists
-    - clone_mongo_data_exists or not has_pulp2
 
 - name: Check full backup is present
   fail:
     msg: |
       Backup is missing files. For an online backup, you need candlepin.dump, foreman.dump,
-      and mongo_dump folder. For a standard (offline) backup, you will need mongo_data.tar.gz
-      and pgsql_data.tar.gz files.
+      and pulpcore.dump. For a standard (offline) backup, you will need pgsql_data.tar.gz file.
   when: not online_backup and not standard_backup
 
 - name: Check only one backup is present
@@ -119,6 +90,6 @@
       It looks like there is more than one type of backup present. You will have to
       remove some files so there is only one backup present. Here are the required backup files
       for each scenario.
-      Standard backup - metadata.yml, config_files.tar.gz, mongo_data.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
-      Online backup - metadata.yml, config_files.tar.gz, mongo_dump folder, foreman.dump, candlepin.dump, (optional) pulp_data.tar
+      Standard backup - metadata.yml, config_files.tar.gz, pgsql_data.tar.gz, (optional) pulp_data.tar
+      Online backup - metadata.yml, config_files.tar.gz, foreman.dump, candlepin.dump, pulpcore.dump, (optional) pulp_data.tar
   when: online_backup and standard_backup
