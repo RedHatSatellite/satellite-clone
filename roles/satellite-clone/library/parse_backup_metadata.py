@@ -52,8 +52,8 @@ def parse_backup_metadata(params):
         satellite_version = os.getenv('SATELLITE_CLONE_FORCE_VERSION')
 
     if not satellite_version or tuple(int(x) for x in satellite_version.split('.')) < MINIMUM_SUPPORTED_VERSION:
-        msg = "Satellite version is not supported or found. " \
-              "Only Satellite {0} or newer is supported.".format('.'.join(str(x) for x in MINIMUM_SUPPORTED_VERSION))
+        msg = "Satellite version {0} is not supported or found. " \
+              "Only Satellite {1} or newer is supported.".format(satellite_version, '.'.join(str(x) for x in MINIMUM_SUPPORTED_VERSION))
         return False, dict(msg=msg)
 
     msg = "{0} backup found".format(satellite_version)
