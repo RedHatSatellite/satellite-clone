@@ -8,6 +8,7 @@ warn_list:
   - risky-file-permissions
   - role-name
   - var-spacing
+  - var-naming[no-role-prefix]
 enable_list:
   - only-builtins
 only_builtins_allow_modules:
