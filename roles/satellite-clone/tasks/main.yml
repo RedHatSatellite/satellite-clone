@@ -17,7 +17,14 @@
   include_vars: "el{{ ansible_distribution_major_version }}.yml"
 
 - name: Set Satellite version dependent variables
-  include_vars: "satellite_{{ satellite_version }}.yml"
+  include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "satellite_{{ satellite_version }}.yml"
+        - "satellite.yml"
+      paths:
+        - "vars"
 
 - name: Identify the hostname from the backup config tar file
   get_value_from_yaml_in_tarball:
