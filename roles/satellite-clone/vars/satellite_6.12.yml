@@ -4,5 +4,3 @@
 # https://github.com/RedHatSatellite/satellite-clone/issues/349
 satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath --disable-system-checks"
 satellite_upgrade_options: "--disable-system-checks"
-db_packages:
-  - "{{ postgresql_package_name }}"

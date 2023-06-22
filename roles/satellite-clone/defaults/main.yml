@@ -22,3 +22,5 @@ selinux_packages:
   - katello-selinux
   - pulpcore-selinux
 reset_pulp_data: False
+db_packages:
+  - "{{ postgresql_package_name }}"
