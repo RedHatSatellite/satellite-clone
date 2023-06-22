@@ -1,1 +1,5 @@
 ---
+# this file is intentionally left blank, so that include_vars/first_found
+# can load it as the "fallback".
+# please adjust defaults in defaults/main.yml
+# or create a specific vars/satellite_<version>.yml
