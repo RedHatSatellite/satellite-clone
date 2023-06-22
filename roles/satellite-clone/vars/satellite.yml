@@ -1,5 +1,1 @@
 ---
-# See the following issues for installer options
-# https://github.com/RedHatSatellite/satellite-clone/issues/268
-# https://github.com/RedHatSatellite/satellite-clone/issues/349
-satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath"
