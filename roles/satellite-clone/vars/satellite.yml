@@ -3,7 +3,6 @@
 # https://github.com/RedHatSatellite/satellite-clone/issues/268
 # https://github.com/RedHatSatellite/satellite-clone/issues/349
 satellite_installer_options: "--foreman-ipa-authentication false --reset-puppet-server-ssl-chain-filepath"
-satellite_upgrade_options: ""
 selinux_packages:
   - foreman-selinux
   - katello-selinux
