@@ -17,5 +17,8 @@ restorecon: False
 skip_satellite_rpm_check: False
 overwrite_etc_hosts: True
 check_networking_interfaces: True
-selinux_packages: []
+selinux_packages:
+  - foreman-selinux
+  - katello-selinux
+  - pulpcore-selinux
 reset_pulp_data: False
