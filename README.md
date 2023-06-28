@@ -8,9 +8,7 @@ Throughout this documentation, ensure that you understand the following terminol
 - Target server: new server, to which Satellite server is being cloned.
 
 #### Supported Satellite Versions ####
-- 6.12
-- 6.13
-- 6.14
+Satellite 6.12 and newer
 
 #### What you need: ####
   - A blank (vanilla install) RHEL 8 machine (target server). You will run the setup commands here.
