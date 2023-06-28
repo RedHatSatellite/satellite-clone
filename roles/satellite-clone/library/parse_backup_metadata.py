@@ -18,7 +18,7 @@ from ansible.module_utils.basic import *
 #          - Full path (including file name) to metadata.yml
 #        required: true
 
-SUPPORTED_VERSIONS = ["6.12", "6.13", "6.14"]
+MINIMUM_SUPPORTED_VERSION = (6, 12)
 
 def find_rpm(rpms, pattern):
     rpm_pattern = re.compile(pattern)
@@ -51,9 +51,9 @@ def parse_backup_metadata(params):
     if not satellite_version:
         satellite_version = os.getenv('SATELLITE_CLONE_FORCE_VERSION')
 
-    if not satellite_version or satellite_version not in SUPPORTED_VERSIONS:
+    if not satellite_version or tuple(int(x) for x in satellite_version.split('.')) < MINIMUM_SUPPORTED_VERSION:
         msg = "Satellite version is not supported or found. " \
-              "Only Satellite {0} is supported.".format(", ".join(SUPPORTED_VERSIONS))
+              "Only Satellite {0} or newer is supported.".format('.'.join(str(x) for x in MINIMUM_SUPPORTED_VERSION))
         return False, dict(msg=msg)
 
     msg = "{0} backup found".format(satellite_version)
