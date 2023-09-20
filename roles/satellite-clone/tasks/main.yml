@@ -115,12 +115,6 @@
   hostname:
     name: "{{ hostname }}"
 
-- name: check /etc/hostname
-  lineinfile:
-    dest: /etc/hostname
-    line: "{{ hostname }}"
-  when: ansible_distribution_major_version == "7"
-
 - name: create /etc/hosts
   template:
     src: hosts.j2
