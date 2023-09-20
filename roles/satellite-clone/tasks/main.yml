@@ -115,12 +115,6 @@
   hostname:
     name: "{{ hostname }}"
 
-- name: create /etc/hosts
-  template:
-    src: hosts.j2
-    dest: /etc/hosts
-  when: overwrite_etc_hosts
-
 # Install Satellite packages
 
 - name: Enable {{ satellite_module }}:el8 module
