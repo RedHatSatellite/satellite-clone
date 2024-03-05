@@ -312,11 +312,6 @@
       create: yes
       line: "---\n:foreman:\n  :username: admin\n  :password: changeme"
 
-  - name: Run installer upgrade to match latest z-version
-    command: '{{ satellite_installer_cmd }} {{ satellite_upgrade_options | default("") }}'
-    environment:
-      HOSTNAME: "{{ hostname }}"
-
   - name: Test Satellite
     command: hammer ping
 
