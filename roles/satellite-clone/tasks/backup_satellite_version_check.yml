@@ -22,6 +22,7 @@
     puppetserver_present: "{{ backup_metadata.puppetserver_present }}"
     qpidd_present: "{{ backup_metadata.qpidd_present }}"
     hostname: "{{ backup_metadata.hostname }}"
+    proxy_config: "{{ backup_metadata.proxy_config }}"
   when:
     - clone_metadata_exists
     - backup_metadata is defined
