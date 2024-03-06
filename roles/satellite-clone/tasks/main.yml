@@ -26,21 +26,10 @@
       paths:
         - "vars"
 
-- name: Identify the hostname from the backup config tar file
-  get_value_from_yaml_in_tarball:
-    tarball: "{{ config_files_path }}"
-    target_file: "etc/foreman-proxy/settings.yml"
-    keys: [":foreman_url"]
-  register: backup_hostname
-
-- name: Set backup_hostname variable
-  set_fact:
-    hostname: "{{ backup_hostname.value | urlsplit('hostname') }}"
-
 - name: Check that the hostname is not none
   fail:
-    msg: "Unable to derive Satellite hostname from the backup config file - value ({{ hostname }}) doesn't look right"
-  when: backup_hostname|length == 0
+    msg: "Unable to derive Satellite hostname from the backup metadata file - value ({{ hostname }}) doesn't look right"
+  when: hostname|length == 0
 
 - name: Check that the registration variables (activationkey, org) are updated
   fail:

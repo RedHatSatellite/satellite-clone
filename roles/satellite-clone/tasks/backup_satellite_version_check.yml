@@ -21,6 +21,7 @@
     satellite_version: "{{ backup_metadata.satellite_version }}"
     puppetserver_present: "{{ backup_metadata.puppetserver_present }}"
     qpidd_present: "{{ backup_metadata.qpidd_present }}"
+    hostname: "{{ backup_metadata.hostname }}"
   when:
     - clone_metadata_exists
     - backup_metadata is defined
