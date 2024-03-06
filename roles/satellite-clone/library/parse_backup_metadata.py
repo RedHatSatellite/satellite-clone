@@ -48,6 +48,8 @@ def parse_backup_metadata(params):
     puppetserver_present = bool(find_rpm(rpms, "^puppetserver-[\d+].*"))
     qpidd_present = bool(find_rpm(rpms, "^qpid-cpp-server-[\d+].*"))
 
+    hostname = data['hostname']
+
     if not satellite_version:
         satellite_version = os.getenv('SATELLITE_CLONE_FORCE_VERSION')
 
@@ -60,6 +62,7 @@ def parse_backup_metadata(params):
     result = dict(satellite_version=satellite_version,
                   puppetserver_present=puppetserver_present,
                   qpidd_present=qpidd_present,
+                  hostname=hostname,
                   msg=msg,
                   changed=False)
     return True, result
