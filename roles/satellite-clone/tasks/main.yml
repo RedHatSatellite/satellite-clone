@@ -3,12 +3,12 @@
   include_tasks: pre_install_check.yml
   when: run_pre_install_check
 
+- name: Run backup version check
+  include_tasks: backup_satellite_version_check.yml
+
 - name: Run interface check
   include_tasks: interface_check.yml
   when: run_pre_install_check and check_networking_interfaces
-
-- name: Run backup version check
-  include_tasks: backup_satellite_version_check.yml
 
 - name: Run backup check
   include_tasks: backup_check.yml
