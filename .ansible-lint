@@ -11,5 +11,4 @@ warn_list:
 enable_list:
   - only-builtins
 only_builtins_allow_modules:
-  - get_value_from_yaml_in_tarball
   - parse_backup_metadata
