@@ -1,11 +1,18 @@
 ---
-- name: Fail if interfaces on machine do not match backup metadata interfaces
+- name: Fail if interfaces on machine do not match backup metadata DNS interfaces
   fail:
-    msg: "The network interface {{ proxy_config.dns_interface }} setup for DNS and {{ proxy_config.dhcp_interface }} setup for DHCP do not match the network interfaces on the current machine"
+    msg: "The network interface {{ proxy_config.dns_interface }} setup for DNS do not match the network interfaces on the current machine"
   when:
     - proxy_config.dns
-    - proxy_config.dhcp
     - proxy_config.dns_interface not in network_interfaces
+  vars:
+    network_interfaces: "{{ ansible_interfaces | reject('match', 'lo') | list }}"
+
+- name: Fail if interfaces on machine do not match backup metadata DHCP interfaces
+  fail:
+    msg: "The network interface {{ proxy_config.dhcp_interface }} setup for DHCP do not match the network interfaces on the current machine"
+  when:
+    - proxy_config.dhcp
     - proxy_config.dhcp_interface not in network_interfaces
   vars:
     network_interfaces: "{{ ansible_interfaces | reject('match', 'lo') | list }}"
