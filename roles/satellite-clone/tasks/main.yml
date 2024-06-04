@@ -257,22 +257,8 @@
 
 - name: Finalize clone
   block:
-  # Cron services can interfere with restoring the backup
-  - name: stop crond
-    systemd:
-      name: crond
-      state: stopped
-
   - name: restore using foreman-maintain
     command: foreman-maintain restore --assumeyes {{ backup_dir }}
-
-  - name: start crond
-    systemd:
-      name: crond
-      state: started
-
-  - name: Restart services
-    command: foreman-maintain service start
 
     # We don't use pause module here because it displays a prompt
     # to use ctrl+c which would break out of a production script.
