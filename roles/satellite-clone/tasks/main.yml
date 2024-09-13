@@ -213,7 +213,6 @@
   include_tasks: ensure_pulp_data_permissions.yml
   when:
     - not clone_pulp_data_exists
-    - not online_backup
 
 - name: untar config files (for cloning only)
   command: tar --selinux --overwrite -xf {{ backup_dir }}/config_files.tar.gz -C / --exclude=var/lib/foreman/public
@@ -295,7 +294,6 @@
     when:
       - reset_pulp_data
       - not clone_pulp_data_exists
-      - not online_backup
 
   - name: Wait 60 seconds for services to be fully up
     wait_for:
