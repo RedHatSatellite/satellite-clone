@@ -101,7 +101,6 @@ Cloning a Satellite with external databases can be done using `installer_additio
 3. Set up remote databases according to [Satellite documentation](https://access.redhat.com/documentation/en-us/red_hat_satellite/) in the same way that they were set up on your original Satellite. Do not run any installer steps on the target RHEL8 machine that will become the clone.
 4. The remote databases for the clone will also need to be reached on the same hostname as ones used for the original Satellite. You can use `/etc/hosts` on the target server to associate the original remote database hostnames with the new clone database IP addresses. Make sure they are reachable from the target server.
 5. Install satellite-clone on target server according to [instructions](#instructions), but don't run the playbook yet.
-6. Change “overwrite_etc_hosts: true” to false in the `satellite-clone-vars.yml` config file.
-7. You will need to make sure the backup hostname can resolve to 127.0.0.1 on the target server. You can update /etc/hosts with this hostname before cloning.
-8. Proceed to run the clone playbook as specified in the [instructions](#instructions).
+6. You will need to make sure the backup hostname can resolve to 127.0.0.1 on the target server. You can update /etc/hosts with this hostname before cloning.
+7. Proceed to run the clone playbook as specified in the [instructions](#instructions).
 
