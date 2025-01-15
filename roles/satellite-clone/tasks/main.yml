@@ -155,9 +155,7 @@
     recurse: yes
 
 - name: test foreman.dump file is readable by postgres user
-  command: "test -r {{ backup_dir }}/foreman.dump"
-  become: yes
-  become_user: postgres
+  command: "runuser - postgres -c 'test -r {{ backup_dir }}/foreman.dump'"
   register: access_foreman_dump
   ignore_errors: yes
   when: clone_foreman_dump_exists
@@ -167,9 +165,7 @@
     clone_no_foreman_dump_access: "{{ access_foreman_dump is failed }}"
 
 - name: test candlepin.dump file is readable by postgres user
-  command: "test -r {{ backup_dir }}/candlepin.dump"
-  become: yes
-  become_user: postgres
+  command: "runuser - postgres -c 'test -r {{ backup_dir }}/candlepin.dump'"
   register: access_candlepin_dump
   ignore_errors: yes
   when: clone_candlepin_dump_exists
@@ -179,9 +175,7 @@
     clone_no_candlepin_dump_access: "{{ access_candlepin_dump is failed }}"
 
 - name: test pulpcore.dump file is readable by postgres user
-  command: "test -r {{ backup_dir }}/pulpcore.dump"
-  become: yes
-  become_user: postgres
+  command: "runuser - postgres -c 'test -r {{ backup_dir }}/pulpcore.dump'"
   register: access_pulpcore_dump
   ignore_errors: yes
   when: clone_pulpcore_dump_exists
