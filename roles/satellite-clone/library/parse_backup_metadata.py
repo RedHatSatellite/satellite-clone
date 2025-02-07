@@ -40,7 +40,7 @@ def get_rpm_version(rpms, pattern, hyphen_split=1, version_split=2):
 
 def parse_backup_metadata(params):
     with open(params["metadata_path"]) as data_file:
-        data = yaml.load(data_file)
+        data = yaml.safe_load(data_file)
 
     rpm_key = ":rpms" if ":rpms" in data else "rpms"
     rpms = data[rpm_key]
